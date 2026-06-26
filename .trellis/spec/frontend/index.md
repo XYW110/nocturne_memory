@@ -1,39 +1,76 @@
 # Frontend Development Guidelines
 
-> Best practices for frontend development in this project.
+> Best practices for frontend development in Nocturne Memory.
 
 ---
 
 ## Overview
 
-This directory contains guidelines for frontend development. Fill in each file with your project's specific conventions.
+The frontend is a React SPA (Admin Dashboard) for reviewing AI memory changes, browsing the memory graph, and managing settings.
+
+- **Framework**: React 18 (functional components + hooks)
+- **Build tool**: Vite 7
+- **Styling**: Tailwind CSS 3 (utility classes only)
+- **HTTP**: Axios with interceptors
+- **i18n**: i18next + react-i18next
+- **Testing**: Vitest + React Testing Library
+- **Type system**: Plain JSX (no TypeScript)
 
 ---
 
 ## Guidelines Index
 
-| Guide | Description | Status |
-|-------|-------------|--------|
-| [Directory Structure](./directory-structure.md) | Module organization and file layout | To fill |
-| [Component Guidelines](./component-guidelines.md) | Component patterns, props, composition | To fill |
-| [Hook Guidelines](./hook-guidelines.md) | Custom hooks, data fetching patterns | To fill |
-| [State Management](./state-management.md) | Local state, global state, server state | To fill |
-| [Quality Guidelines](./quality-guidelines.md) | Code standards, forbidden patterns | To fill |
-| [Type Safety](./type-safety.md) | Type patterns, validation | To fill |
+| Guide | Description |
+|-------|-------------|
+| [Directory Structure](./directory-structure.md) | Feature-based layout, component organization, build commands |
+| [Component Guidelines](./component-guidelines.md) | Functional components, Tailwind styling, modals, i18n, accessibility |
+| [Hook Guidelines](./hook-guidelines.md) | Data fetching pattern, custom hooks, event listeners, API interceptors |
+| [State Management](./state-management.md) | useState, localStorage, sessionStorage, custom events |
+| [Quality Guidelines](./quality-guidelines.md) | Required patterns, forbidden patterns, testing, review checklist |
+| [Type Safety](./type-safety.md) | Plain JSX conventions, prop defaults, defensive access |
 
 ---
 
-## How to Fill These Guidelines
+## Pre-Development Checklist
 
-For each guideline file:
+Before writing frontend code:
 
-1. Document your project's **actual conventions** (not ideals)
-2. Include **code examples** from your codebase
-3. List **forbidden patterns** and why
-4. Add **common mistakes** your team has made
-
-The goal is to help AI assistants and new team members understand how YOUR project works.
+- [ ] Read [Directory Structure](./directory-structure.md) to know where your file belongs
+- [ ] Read [Component Guidelines](./component-guidelines.md) for component patterns and styling
+- [ ] Read [Hook Guidelines](./hook-guidelines.md) for data fetching conventions
+- [ ] Check [State Management](./state-management.md) for state storage patterns
+- [ ] Review [Quality Guidelines](./quality-guidelines.md) for required/forbidden patterns
 
 ---
 
-**Language**: All documentation should be written in **English**.
+## Quick Reference
+
+### API Calls
+
+```jsx
+import { getDomains, createMemory } from '../lib/api';
+```
+
+### i18n
+
+```jsx
+const { t } = useTranslation();
+<h1>{t('app.nav.brand')}</h1>
+```
+
+### Conditional Classes
+
+```jsx
+import clsx from 'clsx';
+className={clsx("base", isActive && "active-class")}
+```
+
+### Data Fetching
+
+```jsx
+useEffect(() => {
+  let mounted = true;
+  getData().then(d => { if (mounted) setData(d); });
+  return () => { mounted = false; };
+}, []);
+```
