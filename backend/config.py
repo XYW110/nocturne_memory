@@ -239,38 +239,46 @@ def _load() -> dict:
     if CONFIG_PATH.exists():
         if CONFIG_PATH.is_dir():
             if _IN_DOCKER:
-                raise RuntimeError(_docker_setup_hint())
-            raise RuntimeError(
-                f"{CONFIG_PATH} is a directory, but Nocturne expects a JSON file."
-            )
-
-        try:
-            with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-                _cache = json.load(f)
-        except json.JSONDecodeError as e:
-            if _IN_DOCKER:
+                # Docker bind-mount created a directory instead of a file.
+                # Remove it so we can generate a proper config.json below.
+                shutil.rmtree(str(CONFIG_PATH), ignore_errors=True)
+            else:
                 raise RuntimeError(
-                    f"Failed to parse config.json: {e}\n\n{_docker_setup_hint()}"
-                ) from e
-            raise
-            
-        if _migrate_away_from_demo(_cache):
+                    f"{CONFIG_PATH} is a directory, but Nocturne expects a JSON file."
+                )
+        else:
             try:
-                _save_file(_cache)
-            except ConfigWriteError as e:
-                raise RuntimeError(
-                    t("config.db_migrated_not_writable").format(demo_db=_DEMO_DB)
-                ) from e
+                with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+                    _cache = json.load(f)
+            except json.JSONDecodeError as e:
+                if _IN_DOCKER:
+                    raise RuntimeError(
+                        f"Failed to parse config.json: {e}\n\n{_docker_setup_hint()}"
+                    ) from e
+                raise
 
-        return _cache
+            if _migrate_away_from_demo(_cache):
+                try:
+                    _save_file(_cache)
+                except ConfigWriteError as e:
+                    raise RuntimeError(
+                        t("config.db_migrated_not_writable").format(demo_db=_DEMO_DB)
+                    ) from e
+
+            return _cache
 
     cfg = _migrate_from_dotenv()
     if cfg is None:
         cfg = _migrate_from_env_vars()
     if cfg is None:
         if _IN_DOCKER:
-            raise RuntimeError(_docker_setup_hint())
-        cfg = dict(DEFAULTS)
+            # No config.json and no env vars: use Docker-appropriate defaults
+            cfg = dict(DEFAULTS)
+            cfg["host"] = "0.0.0.0"
+            cfg["auto_open_browser"] = False
+            cfg["database_url"] = "sqlite+aiosqlite:////app/data/nocturne.db"
+        else:
+            cfg = dict(DEFAULTS)
 
     migrated = _migrate_away_from_demo(cfg)
     try:

@@ -53,7 +53,7 @@ COPY --from=frontend-builder /frontend/dist /app/../frontend/dist
 
 # Non-root user
 RUN adduser --disabled-password --gecos '' appuser \
-    && chown -R appuser:appuser /app
+    && chown -R appuser:appuser /app /frontend
 
 # Runtime dirs for SQLite DB, snapshots, backups
 RUN mkdir -p /app/data /app/snapshots /app/backups \
