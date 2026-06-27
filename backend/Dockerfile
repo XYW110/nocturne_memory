@@ -5,15 +5,14 @@ FROM node:22-alpine AS frontend-builder
 
 WORKDIR /frontend
 
-RUN corepack enable
-
-COPY frontend/pnpm-lock.yaml frontend/pnpm-workspace.yaml frontend/package.json ./
-RUN pnpm install --frozen-lockfile
+# 用 npm 代替 pnpm，避免 pnpm 11 的 ERR_PNPM_IGNORED_BUILDS 问题
+COPY frontend/package.json ./
+RUN npm install
 
 COPY frontend/index.html frontend/vite.config.js frontend/tailwind.config.js frontend/postcss.config.js ./
 COPY frontend/src/ ./src/
 
-RUN pnpm build
+RUN npm run build
 
 # ============================================================
 # Stage 2: Build backend deps (compilers for C extensions like jieba)
