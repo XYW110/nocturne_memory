@@ -1,6 +1,5 @@
 {
   "_comment": "Key naming: {section}.{component}.{key}. Example: 'app.nav.review' for Review & Audit nav link. English is canonical.",
-
   "app": {
     "nav": {
       "brand": "Nocturne Admin",
@@ -22,7 +21,11 @@
       "section_database": "Database Connection",
       "section_boot_uris": "Boot URIs",
       "section_presets": "Boot Presets",
-      "section_domains": "Memory Domains"
+      "section_domains": "Memory Domains",
+      "tab_soul": "Soul",
+      "section_soul": "Soul Templates",
+      "section_emotion": "Emotional State",
+      "section_relationship": "Relationship"
     },
     "error": {
       "connection_refused": "Cannot connect to backend service (Connection Refused)",
@@ -37,7 +40,6 @@
       "connecting": "Connecting to Memory Core..."
     }
   },
-
   "auth": {
     "title": "Nocturne Admin",
     "subtitle": "Memory Dashboard",
@@ -49,7 +51,6 @@
     "network_error": "Connection failed, please check server status",
     "footer": "Nocturne Memory"
   },
-
   "settings": {
     "server": {
       "port_label": "Port",
@@ -182,9 +183,71 @@
       "saving": "Saving...",
       "save": "Save",
       "save_failed": "Save failed"
+    },
+    "soul": {
+      "description": "Choose a template to give your AI an initial identity and relationship. After birth, it evolves on its own.",
+      "loading": "Loading templates…",
+      "empty": "No templates available.",
+      "node_count": "{{count}} memory nodes",
+      "birth": "Birth",
+      "birth_title": "Give Your AI a Soul",
+      "step_persona": "Step 1: Persona (fields marked * are required)",
+      "step_relationship": "Step 2: Choose your relationship",
+      "next": "Next",
+      "back": "Back",
+      "birth_success": "Born — {{count}} memory nodes created.",
+      "birth_failed": "Birth failed",
+      "load_failed": "Failed to load template details"
+    },
+    "emotion": {
+      "description": "How the AI feels toward you across six dimensions (0–100, 50 = neutral). The AI adjusts these; every change is logged.",
+      "loading": "Loading emotion data…",
+      "no_target": "No emotion data yet. Complete a birth in Soul Templates first.",
+      "refresh": "Refresh",
+      "ledger_title": "Emotion Ledger",
+      "ledger_empty": "No emotion changes recorded yet.",
+      "dim": {
+        "trust": "Trust",
+        "closeness": "Closeness",
+        "respect": "Respect",
+        "dependency": "Dependency",
+        "security": "Security",
+        "resonance": "Resonance"
+      }
+    },
+    "relationship": {
+      "loading": "Loading relationship…",
+      "current_title": "Current Relationship",
+      "none": "No relationship set yet.",
+      "pending_title": "Pending Requests",
+      "no_pending": "No pending relationship change requests.",
+      "history_title": "History",
+      "approve": "Approve",
+      "reject": "Reject",
+      "cancel": "Cancel",
+      "approved_toast": "Relationship change approved.",
+      "rejected_toast": "Relationship change rejected.",
+      "action_failed": "Action failed",
+      "response": "Response",
+      "reject_title": "Reject Relationship Change",
+      "reject_message": "Explain why — the AI will see this.",
+      "reject_placeholder": "e.g. Not the right time yet…",
+      "type": {
+        "subordinate": "Superior/Subordinate",
+        "partner": "Partner",
+        "friend": "Friend",
+        "family_parent": "Family",
+        "family_spouse": "Spouse",
+        "romantic": "Romantic",
+        "rival": "Rival"
+      },
+      "status": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected"
+      }
     }
   },
-
   "memory": {
     "domains": {
       "already_exists": "Domain already exists",
@@ -291,9 +354,15 @@
     "toast": {
       "save_failed": "Save failed: {{error}}",
       "delete_failed": "Delete failed: {{error}}"
+    },
+    "locked": {
+      "badge": "Locked",
+      "lock_hint": "Lock: block AI from modifying or deleting",
+      "unlock_hint": "Unlock: allow AI to modify",
+      "locked_toast": "Locked — the AI can no longer modify this memory.",
+      "unlocked_toast": "Unlocked — the AI can now modify this memory."
     }
   },
-
   "review": {
     "error": {
       "disconnected": "Disconnected from Neural Core (backend offline).",
@@ -364,7 +433,6 @@
       "select_memory": "Select a memory fragment to inspect"
     }
   },
-
   "maintenance": {
     "error": {
       "load_orphans_failed": "Failed to load orphan memories: {{error}}",
@@ -452,7 +520,6 @@
       "no_path": "Target #{{id}} (no paths)"
     }
   },
-
   "snapshot": {
     "empty_sequence": "Empty Sequence",
     "action_created": "Created",
@@ -460,7 +527,6 @@
     "action_modified": "Modified",
     "rows": "{{count}} rows"
   },
-
   "diff": {
     "no_changes": "No changes detected in content.",
     "removed": "REMOVED",

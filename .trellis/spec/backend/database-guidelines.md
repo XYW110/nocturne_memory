@@ -143,14 +143,37 @@ data = serialize_memory_ref(memory_instance)
 - Runner: `db/migrations/runner.py`
 - Called by `DatabaseManager.init_db()` after table creation
 - Idempotent — safe to run on every startup
-- New migrations: add a migration file and register it in the runner
+- New migrations: add a migration file (`NNN_vX.Y.Z_desc.py` with `async def up(engine)`) and it is auto-discovered by filename order
+- Add columns idempotently: PostgreSQL `ADD COLUMN IF NOT EXISTS`; SQLite `ADD COLUMN` wrapped in try/except swallowing "duplicate column name"
+
+---
+
+## Column / Attribute Name Mismatch (gotcha)
+
+`serialize_row()` (used for changeset snapshots and rollback) keys its output
+dict by **DB column name** but must read values by **mapped attribute name**.
+These usually match, but diverge when you map an attribute to a differently
+named column — e.g. `Edge.relationship_types = Column("relationship", ...)`
+(renamed to avoid shadowing SQLAlchemy's `relationship()` function in the
+class body).
+
+- `getattr(obj, column.name)` then raises `AttributeError` because the Python
+  attribute is `relationship_types`, not `relationship`.
+- `serialize_row()` iterates `inspect(obj).mapper.column_attrs` and uses
+  `prop.key` for `getattr` while keying the dict by `prop.columns[0].name`.
+- **Rule**: if you ever map an attribute to a column of a different name, the
+  snapshot layer already handles it — but any code that does
+  `getattr(model, col.name)` will break. Prefer attribute names that match
+  column names; rename the column (not the attribute) only when forced by a
+  name clash, and document why.
 
 ---
 
 ## Common Mistakes
 
-1. **Forgetting namespace filter** — Every query must filter by `namespace` unless intentionally cross-namespace
+1. **Forgetting namespace filter** — Every query must filter by `namespace` unless intentionally cross-namespace. New services that resolve an edge from a URI must join `Path` and filter `Path.namespace == namespace` (see `EmotionService._resolve_edge`, `RelationshipService._resolve_edge`)
 2. **Committing manually** — `db.session()` auto-commits; don't call `session.commit()` inside the context manager
 3. **Using sync session** — All DB access is async; never use `Session` (sync) from SQLAlchemy
 4. **Direct table creation** — Use `Base.metadata.create_all` only in `init_db()`, not in service code
 5. **Forgetting `expire_on_commit=False`** — Already set in session factory, but don't override it
+6. **Column named like an ORM helper** — A column literally named `relationship` shadows SQLAlchemy's `relationship()` inside the class body; map it to a safe attribute name (see the gotcha above)

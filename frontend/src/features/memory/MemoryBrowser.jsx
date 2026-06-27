@@ -15,9 +15,11 @@ import {
   FileText,
   Loader2,
   Plus,
+  Lock,
+  Unlock,
 } from 'lucide-react';
 import clsx from 'clsx';
-import { api, getSettingsBootUris, toggleSettingsBootUri, deleteNode, searchMemories, createMemory, renameNode, addDomain, removeDomain, getDomains } from '../../lib/api';
+import { api, getSettingsBootUris, toggleSettingsBootUri, deleteNode, searchMemories, createMemory, renameNode, addDomain, removeDomain, getDomains, toggleNodeLocked } from '../../lib/api';
 import { toast } from '../../components/Toast';
 import { useLocale } from '../../i18n/useLocale';
 import CreateMemoryModal from './components/CreateMemoryModal';
@@ -205,6 +207,17 @@ export default function MemoryBrowser() {
       toast(t('memory.toast.save_failed', { error: err.message }), "error");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleToggleLocked = async () => {
+    try {
+      const next = !node?.locked;
+      await toggleNodeLocked(path, domain, next);
+      await refreshData();
+      toast(next ? t('memory.locked.locked_toast') : t('memory.locked.unlocked_toast'), 'success');
+    } catch (err) {
+      toast(t('memory.toast.save_failed', { error: err.response?.data?.detail || err.message }), 'error');
     }
   };
 
@@ -548,6 +561,20 @@ export default function MemoryBrowser() {
                                           </h1>
                                         )}
                                         <PriorityBadge priority={node.priority} size="lg" />
+                                        {!node.is_virtual && (
+                                          <button
+                                            onClick={handleToggleLocked}
+                                            title={node.locked ? t('memory.locked.unlock_hint') : t('memory.locked.lock_hint')}
+                                            className={clsx(
+                                              'p-1.5 rounded-md border transition-colors',
+                                              node.locked
+                                                ? 'border-amber-500/40 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20'
+                                                : 'border-slate-700 text-slate-500 hover:text-slate-300 hover:border-slate-600'
+                                            )}
+                                          >
+                                            {node.locked ? <Lock size={14} /> : <Unlock size={14} />}
+                                          </button>
+                                        )}
                                     </div>
                                     
                                     {node.disclosure && !editing && (

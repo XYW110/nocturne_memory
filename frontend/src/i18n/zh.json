@@ -20,7 +20,11 @@
       "section_database": "数据库连接",
       "section_boot_uris": "启动 URI",
       "section_presets": "启动预设",
-      "section_domains": "记忆域名"
+      "section_domains": "记忆域名",
+      "tab_soul": "灵魂",
+      "section_soul": "灵魂模板",
+      "section_emotion": "情感状态",
+      "section_relationship": "关系"
     },
     "error": {
       "connection_refused": "无法连接到后端服务 (Connection Refused)",
@@ -178,6 +182,69 @@
       "saving": "保存中...",
       "save": "保存",
       "save_failed": "保存失败"
+    },
+    "soul": {
+      "description": "选择一个模板，为你的 AI 注入初始身份和关系。出生之后，它会自我演化。",
+      "loading": "加载模板中…",
+      "empty": "没有可用的模板。",
+      "node_count": "{{count}} 个记忆节点",
+      "birth": "诞生",
+      "birth_title": "为你的 AI 注入灵魂",
+      "step_persona": "第一步：填写人格设定（带 * 为必填）",
+      "step_relationship": "第二步：选择你和 TA 的关系",
+      "next": "下一步",
+      "back": "上一步",
+      "birth_success": "诞生成功，创建了 {{count}} 个记忆节点。",
+      "birth_failed": "诞生失败",
+      "load_failed": "加载模板详情失败"
+    },
+    "emotion": {
+      "description": "AI 对你的情感状态（六个维度，0–100，50 为中性）。由 AI 自行调整，每次变更都有记录。",
+      "loading": "加载情感数据中…",
+      "no_target": "还没有情感数据。先在「灵魂模板」里完成一次诞生。",
+      "refresh": "刷新",
+      "ledger_title": "情感变更账单",
+      "ledger_empty": "还没有任何情感变更记录。",
+      "dim": {
+        "trust": "信任",
+        "closeness": "亲密",
+        "respect": "尊重",
+        "dependency": "依赖",
+        "security": "安全感",
+        "resonance": "共鸣"
+      }
+    },
+    "relationship": {
+      "loading": "加载关系中…",
+      "current_title": "当前关系",
+      "none": "尚未设定关系。",
+      "pending_title": "待审批申请",
+      "no_pending": "没有待审批的关系变更申请。",
+      "history_title": "历史申请",
+      "approve": "同意",
+      "reject": "驳回",
+      "cancel": "取消",
+      "approved_toast": "已同意关系变更。",
+      "rejected_toast": "已驳回关系变更。",
+      "action_failed": "操作失败",
+      "response": "回复",
+      "reject_title": "驳回关系变更",
+      "reject_message": "请说明驳回理由，AI 会看到。",
+      "reject_placeholder": "例如：现在还不是时候……",
+      "type": {
+        "subordinate": "上下级",
+        "partner": "伙伴",
+        "friend": "朋友",
+        "family_parent": "亲人",
+        "family_spouse": "夫妻",
+        "romantic": "情侣",
+        "rival": "竞争对手"
+      },
+      "status": {
+        "pending": "待审批",
+        "approved": "已同意",
+        "rejected": "已驳回"
+      }
     }
   },
   "memory": {
@@ -286,6 +353,13 @@
     "toast": {
       "save_failed": "保存失败：{{error}}",
       "delete_failed": "删除失败：{{error}}"
+    },
+    "locked": {
+      "badge": "已锁定",
+      "lock_hint": "锁定：禁止 AI 修改或删除",
+      "unlock_hint": "解锁：允许 AI 修改",
+      "locked_toast": "已锁定，AI 无法再修改此记忆。",
+      "unlocked_toast": "已解锁，AI 现在可以修改此记忆。"
     }
   },
   "review": {

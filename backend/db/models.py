@@ -45,10 +45,20 @@ def escape_like_literal(value: str) -> str:
 
 
 def serialize_row(obj) -> Dict[str, Any]:
-    """Convert an ORM model instance to a plain dict for snapshot storage."""
+    """Convert an ORM model instance to a plain dict for snapshot storage.
+
+    Keys are DB column names (what the snapshot/rollback layer expects), but
+    values are read via each column's mapped attribute. These usually match,
+    but can differ when an attribute is mapped to a differently-named column
+    (e.g. Edge.relationship_types → column "relationship").
+    """
+    from sqlalchemy import inspect as sa_inspect
+
     d = {}
-    for col in obj.__table__.columns:
-        val = getattr(obj, col.name)
+    mapper = sa_inspect(obj).mapper
+    for prop in mapper.column_attrs:
+        col = prop.columns[0]
+        val = getattr(obj, prop.key)
         if isinstance(val, datetime):
             val = val.isoformat()
         d[col.name] = val
@@ -128,6 +138,26 @@ class Edge(Base):
     priority = Column(Integer, default=0)
     disclosure = Column(Text, nullable=True)
     created_at = Column(DateTime, default=datetime.now)
+
+    # --- Soul template system (v2.6.0) ---
+    # locked: when True, the AI (via MCP tools) cannot modify or delete the
+    # memory behind this edge. The human (via REST API) is never restricted.
+    locked = Column(Boolean, nullable=False, default=False)
+
+    # relationship_types: comma-separated relationship types toward the child
+    # node, e.g. "partner,friend". Empty string for ordinary structural edges.
+    # (DB column is named "relationship"; the Python attribute avoids shadowing
+    # SQLAlchemy's relationship() function used below.)
+    relationship_types = Column("relationship", Text, nullable=False, default="")
+
+    # Six emotional dimensions toward the relationship target (0-100, 50=neutral).
+    # The AI adjusts these via deltas; every change is logged to emotion_ledger.
+    emotion_trust = Column(Integer, nullable=False, default=50)
+    emotion_closeness = Column(Integer, nullable=False, default=50)
+    emotion_respect = Column(Integer, nullable=False, default=50)
+    emotion_dependency = Column(Integer, nullable=False, default=50)
+    emotion_security = Column(Integer, nullable=False, default=50)
+    emotion_resonance = Column(Integer, nullable=False, default=50)
 
     __table_args__ = (
         UniqueConstraint("parent_uuid", "child_uuid", name="uq_edge_parent_child"),
@@ -269,6 +299,72 @@ class Preset(Base):
             sqlite_where=text("is_active = 1"),
         ),
     )
+
+
+class EmotionLedger(Base):
+    """Audit log of every emotional adjustment toward a relationship target.
+
+    The AI never writes absolute values — it submits deltas (e.g. trust +2)
+    with a required reason. Each row records both the delta and the resulting
+    value, so the Dashboard can render the full emotional history without
+    replaying every delta.
+    """
+
+    __tablename__ = "emotion_ledger"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    namespace = Column(String(64), nullable=False, default="")
+    edge_id = Column(
+        Integer,
+        ForeignKey("edges.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+
+    delta_trust = Column(Integer, nullable=False, default=0)
+    delta_closeness = Column(Integer, nullable=False, default=0)
+    delta_respect = Column(Integer, nullable=False, default=0)
+    delta_dependency = Column(Integer, nullable=False, default=0)
+    delta_security = Column(Integer, nullable=False, default=0)
+    delta_resonance = Column(Integer, nullable=False, default=0)
+
+    after_trust = Column(Integer, nullable=False)
+    after_closeness = Column(Integer, nullable=False)
+    after_respect = Column(Integer, nullable=False)
+    after_dependency = Column(Integer, nullable=False)
+    after_security = Column(Integer, nullable=False)
+    after_resonance = Column(Integer, nullable=False)
+
+    reason = Column(Text, nullable=False)
+    context = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.now, index=True)
+
+
+class RelationshipRequest(Base):
+    """An AI-initiated request to change its relationship with the user.
+
+    The AI cannot change the relationship directly. It files a request with a
+    from→to transition and a reason; the human approves or rejects it from the
+    Dashboard. While a request is pending, the AI behaves per the current
+    relationship.
+    """
+
+    __tablename__ = "relationship_requests"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    namespace = Column(String(64), nullable=False, default="")
+    edge_id = Column(
+        Integer,
+        ForeignKey("edges.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    from_relationship = Column(Text, nullable=False)
+    to_relationship = Column(Text, nullable=False)
+    reason = Column(Text, nullable=False)
+    status = Column(Text, nullable=False, default="pending")  # pending|approved|rejected
+    response_reason = Column(Text, nullable=True)
+    emotional_snapshot = Column(Text, nullable=True)  # JSON string
+    created_at = Column(DateTime, default=datetime.now)
+    resolved_at = Column(DateTime, nullable=True)
 
 
 # =============================================================================

@@ -150,6 +150,7 @@ class GraphService:
                 "content": memory.content,
                 "priority": edge.priority,
                 "disclosure": edge.disclosure,
+                "locked": edge.locked,
                 "deprecated": memory.deprecated,
                 "created_at": memory.created_at.isoformat()
                 if memory.created_at
@@ -158,6 +159,25 @@ class GraphService:
                 "path": path_obj.path,
                 "alias_count": alias_count,
             }
+
+    async def is_node_locked(self, node_uuid: str) -> bool:
+        """True if any edge pointing to this node is locked.
+
+        Locking is enforced at the node level (not the path level) so that the
+        AI cannot bypass protection by aliasing a locked node to a fresh,
+        unlocked path and editing through it — all aliases share one node and
+        one content version chain.
+        """
+        if not node_uuid or node_uuid == ROOT_NODE_UUID:
+            return False
+        async with self.session() as session:
+            result = await session.execute(
+                select(Edge.id).where(
+                    Edge.child_uuid == node_uuid,
+                    Edge.locked == True,  # noqa: E712
+                ).limit(1)
+            )
+            return result.first() is not None
 
     async def get_paths_for_node(
         self,
@@ -168,7 +188,7 @@ class GraphService:
     ) -> List[Dict[str, Any]]:
         """
         Get all paths pointing to a specific node.
-        
+
         Args:
             node_uuid: The node UUID to query.
             namespace: If provided, filters to paths in this namespace. 
@@ -353,6 +373,7 @@ class GraphService:
                         else memory.content,
                         "priority": edge.priority,
                         "disclosure": edge.disclosure,
+                        "locked": edge.locked,
                         "approx_children_count": approx_children_count,
                     }
                 )

@@ -142,4 +142,42 @@ export const createDatabase = (path) =>
 export const openDbFolder = () =>
   api.post('/settings/database/open-folder').then(res => res.data);
 
+// ============ Soul Templates API ============
+
+export const listTemplates = () =>
+  api.get('/templates').then(res => res.data.templates);
+
+export const getTemplate = (id) =>
+  api.get(`/templates/${encodeId(id)}`).then(res => res.data);
+
+export const applyTemplate = (id, { persona, relationship, namespace }) =>
+  api.post(`/templates/${encodeId(id)}/apply`, { persona, relationship, namespace }).then(res => res.data);
+
+// ============ Emotion API ============
+
+export const getEmotion = (uri = 'core://my_user') =>
+  api.get('/emotion', { params: { uri } }).then(res => res.data);
+
+export const getEmotionLedger = (uri = 'core://my_user', limit = 50) =>
+  api.get('/emotion/ledger', { params: { uri, limit } }).then(res => res.data);
+
+// ============ Relationship API ============
+
+export const getCurrentRelationship = (uri = 'core://my_user') =>
+  api.get('/relationship/current', { params: { uri } }).then(res => res.data);
+
+export const listRelationshipRequests = (status) =>
+  api.get('/relationship/requests', { params: status ? { status } : {} }).then(res => res.data.requests);
+
+export const approveRelationshipRequest = (id) =>
+  api.post(`/relationship/requests/${id}/approve`).then(res => res.data);
+
+export const rejectRelationshipRequest = (id, reason) =>
+  api.post(`/relationship/requests/${id}/reject`, { reason }).then(res => res.data);
+
+// ============ Locked Protection ============
+
+export const toggleNodeLocked = (path, domain, locked) =>
+  api.patch('/browse/node/locked', { path, domain, locked }).then(res => res.data);
+
 export default api;

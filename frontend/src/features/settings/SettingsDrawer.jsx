@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  Database, Server, Layers, Settings, X, RefreshCw, Globe
+  Database, Server, Layers, Settings, X, RefreshCw, Globe, Sparkles, Heart, Users
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import i18n, { detectLocale } from '../../i18n';
@@ -13,6 +13,9 @@ import BootUrisSection from './BootUrisSection';
 import ServerSection from './ServerSection';
 import AdvancedSection from './AdvancedSection';
 import LocaleSection from './LocaleSection';
+import TemplatesSection from './TemplatesSection';
+import EmotionDashboard from './EmotionDashboard';
+import RelationshipPanel from './RelationshipPanel';
 
 export default function SettingsDrawer() {
   const { t } = useTranslation();
@@ -86,6 +89,7 @@ export default function SettingsDrawer() {
     { id: 'general', label: t('app.settings.tab_general'), icon: Settings },
     { id: 'database', label: t('app.settings.tab_database'), icon: Database },
     { id: 'memory', label: t('app.settings.tab_memory'), icon: Layers },
+    { id: 'soul', label: t('app.settings.tab_soul'), icon: Sparkles },
   ];
 
   return (
@@ -178,6 +182,20 @@ export default function SettingsDrawer() {
                 <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-200">
                   <Section icon={Layers} title={t('app.settings.section_presets')}>
                     <PresetsSection />
+                  </Section>
+                </div>
+              )}
+
+              {activeTab === 'soul' && (
+                <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-200">
+                  <Section icon={Sparkles} title={t('app.settings.section_soul')}>
+                    <TemplatesSection />
+                  </Section>
+                  <Section icon={Heart} title={t('app.settings.section_emotion')}>
+                    <EmotionDashboard />
+                  </Section>
+                  <Section icon={Users} title={t('app.settings.section_relationship')}>
+                    <RelationshipPanel />
                   </Section>
                 </div>
               )}

@@ -53,6 +53,12 @@ class CreateAliasRequest(BaseModel):
     priority: int = Field(default=0, ge=0)
 
 
+class LockedToggle(BaseModel):
+    path: str
+    domain: str = "core"
+    locked: bool
+
+
 @router.get("/namespaces")
 async def list_namespaces():
     """Return all distinct namespaces that exist in the paths table.
@@ -246,6 +252,7 @@ async def get_node(
             "name": c["path"].split("/")[-1],  # Last segment
             "priority": c["priority"],
             "disclosure": c.get("disclosure"),
+            "locked": c.get("locked", False),
             "content_snippet": c["content_snippet"],
             "approx_children_count": c.get("approx_children_count", 0)
         }
@@ -299,6 +306,7 @@ async def get_node(
             "content": memory["content"],
             "priority": memory["priority"],
             "disclosure": memory["disclosure"],
+            "locked": memory.get("locked", False),
             "created_at": memory["created_at"],
             "is_virtual": memory.get("created_at") is None,
             "aliases": aliases,
@@ -479,6 +487,41 @@ async def rename_node(body: RenameRequest):
         "old_path": old_path,
         "new_path": new_path,
     }
+
+
+# =============================================================================
+# Locked Protection (human-only edge lock)
+# =============================================================================
+
+
+@router.patch("/node/locked")
+async def toggle_locked(body: LockedToggle):
+    """Set or clear the locked flag on a node's edge.
+
+    Locked memories cannot be modified or deleted by the AI via MCP tools.
+    This endpoint is the human (Dashboard) override and is never restricted.
+    """
+    db = get_db_manager()
+    async with db.session() as session:
+        result = await session.execute(
+            select(EdgeModel)
+            .join(PathModel, PathModel.edge_id == EdgeModel.id)
+            .where(
+                PathModel.namespace == get_namespace(),
+                PathModel.domain == body.domain,
+                PathModel.path == body.path,
+            )
+            .limit(1)
+        )
+        edge = result.scalar_one_or_none()
+        if not edge:
+            raise HTTPException(
+                status_code=404,
+                detail=t("api.browse.path_not_found").format(uri=f"{body.domain}://{body.path}"),
+            )
+        edge.locked = body.locked
+
+    return {"success": True, "path": body.path, "domain": body.domain, "locked": body.locked}
 
 
 # =============================================================================
