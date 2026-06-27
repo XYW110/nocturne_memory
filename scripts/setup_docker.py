@@ -83,6 +83,13 @@ def main():
         print(f"[OK] Generated {CONFIG_PATH.relative_to(ROOT)}")
 
     # --- Summary ---
+    # --- Create host directories for bind mounts ---
+    opt_dir = Path("/opt/nocturne-memory")
+    for subdir in ("data", "snapshots", "backups"):
+        sub_path = opt_dir / subdir
+        sub_path.mkdir(parents=True, exist_ok=True)
+        print(f"[OK] {sub_path}")
+
     print()
     print("=" * 60)
     print("  Nocturne Memory — Docker Setup Complete")
