@@ -1,30 +1,65 @@
-FROM python:3.12-slim
+# ============================================================
+# Stage 1: Build frontend (pnpm)
+# ============================================================
+FROM node:20-alpine AS frontend-builder
 
-# 安装系统依赖（libpq-dev 供 asyncpg/psycopg2 编译，build-essential 供 C 扩展和标准库头文件，postgresql-client 供 pg_dump 备份）
+WORKDIR /frontend
+
+RUN corepack enable
+
+COPY frontend/pnpm-lock.yaml frontend/pnpm-workspace.yaml frontend/package.json ./
+RUN pnpm install --frozen-lockfile
+
+COPY frontend/index.html frontend/vite.config.js frontend/tailwind.config.js frontend/postcss.config.js ./
+COPY frontend/src/ ./src/
+
+RUN pnpm build
+
+# ============================================================
+# Stage 2: Build backend deps (compilers for C extensions like jieba)
+# ============================================================
+FROM python:3.12-slim AS backend-builder
+
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         build-essential \
-        curl \
-        libc6-dev \
-        libpq-dev \
-        postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# 优先复制 requirements.txt 以利用 Docker 层缓存
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY backend/requirements.txt .
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
-# 复制剩余源码
-COPY . .
+# ============================================================
+# Stage 3: Runtime (minimal, no compilers)
+# ============================================================
+FROM python:3.12-slim
 
-# 创建非 root 用户以提升安全性
+# Only curl for healthcheck
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        curl \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy installed Python packages
+COPY --from=backend-builder /install /usr/local
+
+# Copy backend source
+COPY backend/ ./
+
+# Copy frontend build output (web_app.py expects ../frontend/dist)
+COPY --from=frontend-builder /frontend/dist /app/../frontend/dist
+
+# Non-root user
 RUN adduser --disabled-password --gecos '' appuser \
     && chown -R appuser:appuser /app
 
-# 预创建运行时目录，避免挂载卷后首次写入遇到权限问题
-RUN mkdir -p /app/snapshots /app/backups \
-    && chown appuser:appuser /app/snapshots /app/backups
+# Runtime dirs for SQLite DB, snapshots, backups
+RUN mkdir -p /app/data /app/snapshots /app/backups \
+    && chown appuser:appuser /app/data /app/snapshots /app/backups
 
 USER appuser
+
+EXPOSE 8233
