@@ -25,7 +25,7 @@ services:
       - /opt/nocturne-memory/data:/app/data
       - /opt/nocturne-memory/snapshots:/app/snapshots
       - /opt/nocturne-memory/backups:/app/backups
-      - ./config.json:/app/config.json
+      - /opt/nocturne-memory/config.json:/app/config.json
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8233/health || exit 1"]
       interval: 10s
