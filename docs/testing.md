@@ -23,6 +23,9 @@
 - SearchIndexer 的索引刷新与搜索结果：`backend/tests/service/test_search_indexer.py`
 - 浏览、审核、维护 API：`backend/tests/api/test_api_routes.py`
 - MCP 工具与系统视图：`backend/tests/mcp/test_mcp_tools.py`
+- 灵魂模板系统（出生/锁定/情感/关系）：`backend/tests/test_soul_templates.py`
+
+**当前全量测试数量：112 个**
 
 ## 2. 测试隔离策略
 

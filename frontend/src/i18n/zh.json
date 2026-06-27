@@ -137,6 +137,10 @@
       "saving": "保存中...",
       "save_failed": "保存失败",
       "cancel": "取消",
+      "reset_to_default": "重置为模板默认",
+      "reset_to_default_title": "重置预设为默认模板节点",
+      "reset_to_default_message": "把「{{name}}」的启动记忆重置为灵魂模板的默认节点？这不会删除真实记忆，只修改本方案的启动列表。",
+      "reset_to_default_failed": "重置失败",
       "editor_tip": "💡 提示：这里定制的是智能体苏醒时自动加载的『核心记忆名单』。只需输入记忆路径（如 core://agent ），系统就会在启动时最先想起来。你还可以添加专属 Agent，为不同的分身定制专属的回忆。",
       "edit_title": "编辑预设方案",
       "create_title": "新建预设方案"
@@ -196,7 +200,13 @@
       "back": "上一步",
       "birth_success": "诞生成功，创建了 {{count}} 个记忆节点。",
       "birth_failed": "诞生失败",
-      "load_failed": "加载模板详情失败"
+      "load_failed": "加载模板详情失败",
+      "init_existing": "一键初始化已有数据",
+      "init_existing_description": "应用默认灵魂模板（创建 5 个身份记忆节点），切换 core://my_user 的关系内容，并补齐情感维度。已存在的节点会被跳过。",
+      "init_existing_select": "初始化关系类型",
+      "init_existing_success": "初始化成功：创建了 {{createdCount}} 个记忆节点，补齐 {{emotionCount}} 个情感维度，关系设为 {{relationship}}。",
+      "init_existing_failed": "初始化失败",
+      "init_existing_none": "已有完整数据，无需初始化。"
     },
     "emotion": {
       "description": "AI 对你的情感状态（六个维度，0–100，50 为中性）。由 AI 自行调整，每次变更都有记录。",

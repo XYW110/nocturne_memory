@@ -284,3 +284,70 @@ async def test_templates_api_lists_and_applies(api_client):
     body = apply.json()
     assert body["success"] is True
     assert body["created_count"] == 6
+
+
+async def test_init_existing_applies_template_and_switches_relationship(api_client):
+    """One-click init applies the soul template (creating the 5 identity nodes),
+    patches emotion dimensions, and switches the relationship content on core://my_user."""
+    from db import get_graph_service
+    from db.models import Edge, Path
+    from emotion_service import EMOTION_DIMENSIONS
+    from sqlalchemy import select
+
+    # Manually create a bare my_user node (simulating pre-soul data).
+    graph = get_graph_service()
+    await graph.create_memory(
+        parent_path="",
+        title="my_user",
+        content="The user.",
+        domain="core",
+        priority=0,
+        namespace="",
+    )
+
+    # Simulate an old edge whose emotion columns were never initialized.
+    async with graph.session() as session:
+        result = await session.execute(
+            select(Edge)
+            .join(Path, Path.edge_id == Edge.id)
+            .where(
+                Path.namespace == "",
+                Path.domain == "core",
+                Path.path == "my_user",
+            )
+        )
+        edge = result.scalar_one()
+        for dim in EMOTION_DIMENSIONS:
+            setattr(edge, f"emotion_{dim}", 0)
+
+    resp = await api_client.post("/templates/init-existing", json={"relationship": "partner"})
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["success"] is True
+    # The 5 template nodes (agent, operating_principles, philosophy, showroom_quality,
+    # preferences) should be created; my_user already exists and is skipped.
+    assert len(body["created"]) == 5
+    assert "core://agent" in body["created"]
+    assert len(body["emotion_updated"]) == 6
+    assert body["relationship_updated"] is True
+    assert body["content_updated"] is True
+    assert body["relationship"] == "partner"
+
+
+async def test_init_existing_is_noop_when_already_initialized(api_client):
+    """If the edge already has the same relationship and emotions, init reports no changes."""
+    from db import get_template_loader
+
+    await get_template_loader().apply_template(
+        "default", persona={"name": "Luna", "gender": "女"}, relationship="friend"
+    )
+
+    # Same relationship → nothing to update.
+    resp = await api_client.post("/templates/init-existing", json={"relationship": "friend"})
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["success"] is True
+    assert len(body["emotion_updated"]) == 0
+    assert body["relationship_updated"] is False
+    assert body["content_updated"] is False
+    assert body["relationship"] == "friend"

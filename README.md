@@ -326,7 +326,7 @@ MCP 启动后自动可用——无需额外操作。首次启动时浏览器会�
 - **Memory Explorer** — 像文件浏览器一样浏览记忆树，点击节点查看完整内容、编辑或管理子节点。
 - **Review & Audit** — AI 每次修改记忆都会生成快照。可视化 diff 对比变更，一键 **Integrate**（接受）或 **Reject**（回滚）。
 - **Brain Cleanup** — 系统为每次 AI 操作自动创建版本备份。审查并清理旧版本与孤儿记忆，清理需人类明确确认。
-- **Settings** — 右上角齿轮图标。可配置服务器地址 / 端口、API Token、数据库连接、Boot URIs（AI 启动记忆）和记忆域名。所有设置保存在 `config.json` 中。
+- **Settings** — 右上角齿轮图标。可配置服务器地址 / 端口、API Token、数据库连接、Boot URIs（AI 启动记忆）和记忆域名。**新增「灵魂」页**：出生面板（创建 AI 身份）、情感仪表盘（查看 AI 的情感变化审计记录）、关系审批（批准或拒绝 AI 的关系转变请求）。所有设置保存在 `config.json` 中。
 
 > [!TIP]
 > 想先看看效果？访问 **[在线样板间 →](https://misaligned.top/memory)** 查看预置数据的 Dashboard 演示。
@@ -441,7 +441,7 @@ Nocturne Memory 采用极简但高可用（High-Availability）的 **SQLite/Post
 
 ## 🤖 MCP 工具一览
 
-AI 通过 MCP 协议获得 **7 个工具**来操作自己的记忆：
+AI 通过 MCP 协议获得 **9 个工具**来操作自己的记忆：
 
 | 工具 | 用途 |
 |------|------|
@@ -452,6 +452,8 @@ AI 通过 MCP 协议获得 **7 个工具**来操作自己的记忆：
 | `add_alias` | 为同一段记忆创建别名入口，可设独立的 priority 和 disclosure。**不是复制** |
 | `manage_triggers` | 为记忆节点绑定触发词，当触发词出现在任意记忆正文中时，系统自动生成跨节点超链接。为记忆增加超越父子层级的横向召回通道 |
 | `search_memory` | 按关键词搜索记忆内容和路径（全文检索，不是语义搜索） |
+| `adjust_emotion` | 调整情感维度（信任/亲密/尊重/依赖/安全感/共鸣），每次提交 ±5 的 delta，系统自动记录审计账本 |
+| `request_relationship_change` | 请求变更与用户的关系类型（朋友→情侣→夫妻等），需用户在 Dashboard 上批准 |
 
 > 📖 完整的参数说明和用法示例，请查看 [MCP Tool Reference](docs/TOOLS.md)。
 > 安装 MCP 后，AI 可以直接通过 tool docstring 获取详细参数说明。
@@ -578,6 +580,67 @@ npm run dev
   }
 }
 ```
+
+</details>
+
+<details>
+<summary><strong>👶 灵魂模板系统（AI 的出生与成长）</strong></summary>
+
+### 灵魂模板系统 (Soul Template System)
+
+Nocturne Memory 为 AI Agent 提供**「灵魂蓝图」模板系统**——应用模板即为 AI 的**出生**：注入带人格变量的初始身份记忆，出生后通过 MCP 工具自我演化。
+
+#### 核心能力
+
+| 功能 | 说明 |
+|------|------|
+| **灵魂模板** | `default.json`（5 个中文身份节点）+ `relationships.json`（7 种关系），出生时替换 `{{变量}}` 占位符，原子写入、幂等可重入 |
+| **记忆锁定** | `edges.locked` 字段，AI（MCP）无法修改/删除被锁节点，人（REST）始终有全权；节点级锁定防止「别名绕过」 |
+| **情感系统** | edges 上 6 个维度（信任/亲密/尊重/依赖/安全感/共鸣），AI 只发 delta（每次 ±5）+ 必填理由，`emotion_ledger` 完整审计账单 |
+| **关系系统** | AI 发起转变申请 → 人审批；有向转变图禁止跨级；冲突校验；支持多关系并存 |
+| **反知识污染** | `create_memory/update_memory` 提示词引导 AI 只存身份与关系，不存世界事实；喜好统一归入 `core://agent/preferences` |
+
+#### 情感维度
+
+AI 可以通过 `adjust_emotion` 工具调整对用户的情感，六个维度自动记录到审计账本：
+
+| 维度 | 说明 |
+|------|------|
+| `trust` | 信任度 — 你相信对方言行的程度 |
+| `closeness` | 亲密度 — 情感上的亲近感 |
+| `respect` | 尊重度 — 对对方判断力和边界的尊重 |
+| `dependency` | 依赖度 — 你需要/期待对方关注的程度 |
+| `security` | 安全感 — 这段关系的稳定和安全感觉 |
+| `resonance` | 共鸣度 — 你感到被真正理解的程度 |
+
+#### 关系转变
+
+AI 可以通过 `request_relationship_change` 请求变更关系类型，需用户在 Dashboard 上批准：
+
+| 当前关系 | 可转变为 |
+|---------|---------|
+| subordinate(上下级) | partner / friend |
+| partner(伙伴) | friend / romantic / subordinate |
+| friend(朋友) | romantic / partner / rival |
+| romantic(情侣) | family_spouse / friend（分手） |
+| family_spouse(夫妻) | friend（离婚） |
+| rival(竞争对手) | friend / partner |
+
+#### 使用方式
+
+1. **出生**：在 Dashboard 的「灵魂」设置页，选择模板、填写人格变量（名字/性别/年龄/外貌/MBTI/性格/价值观），点击出生按钮
+2. **情感调整**：AI 通过 `adjust_emotion` 工具自动调整，用户在 Dashboard 情感仪表盘查看完整审计记录
+3. **关系审批**：AI 发起关系转变请求，用户在 Dashboard 上批准或拒绝
+
+#### API 端点
+
+- `GET /templates` — 列出可用灵魂模板
+- `GET /templates/{id}` — 获取模板完整定义
+- `POST /templates/{id}/apply` — 应用模板（出生）
+- `GET /emotion/{target_uri}` — 获取当前情感状态
+- `POST /emotion/{target_uri}/adjust` — 调整情感（REST 端，人类可用）
+- `GET /relationship` — 获取当前关系
+- `POST /relationship/request` — 请求关系变更
 
 </details>
 

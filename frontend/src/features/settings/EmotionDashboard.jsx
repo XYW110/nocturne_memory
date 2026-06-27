@@ -68,7 +68,7 @@ function LedgerEntry({ entry, t }) {
   );
 }
 
-export default function EmotionDashboard() {
+export default function EmotionDashboard({ refreshTrigger = 0 }) {
   const { t } = useTranslation();
   const [values, setValues] = useState(null);
   const [ledger, setLedger] = useState([]);
@@ -92,7 +92,7 @@ export default function EmotionDashboard() {
     }
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { load(); }, [load, refreshTrigger]);
 
   if (loading) {
     return <div className="pt-4 text-sm text-slate-500 flex items-center gap-2"><RefreshCw size={14} className="animate-spin" /> {t('settings.emotion.loading')}</div>;
@@ -115,7 +115,7 @@ export default function EmotionDashboard() {
         </button>
       </div>
 
-      <div className="space-y-2.5 bg-slate-900/40 border border-slate-800 rounded-lg p-3">
+      <div className="space-y-2.5 bg-slate-900/40 border border-slate-800 rounded-lg p-3 max-h-[360px] overflow-y-auto">
         {DIMENSIONS.map(dim => (
           <DimensionBar key={dim} dim={dim} value={values[dim]} label={t(`settings.emotion.dim.${dim}`)} />
         ))}

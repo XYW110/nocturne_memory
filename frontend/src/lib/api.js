@@ -153,6 +153,11 @@ export const getTemplate = (id) =>
 export const applyTemplate = (id, { persona, relationship, namespace }) =>
   api.post(`/templates/${encodeId(id)}/apply`, { persona, relationship, namespace }).then(res => res.data);
 
+export const initExistingSoul = (relationship = 'partner', namespace) =>
+  api.post('/templates/init-existing', { relationship, namespace }).then(res => res.data);
+export const resetExistingSoul = (relationship = 'partner', namespace) =>
+  api.post('/templates/reset-existing', { relationship, namespace }).then(res => res.data);
+
 // ============ Emotion API ============
 
 export const getEmotion = (uri = 'core://my_user') =>

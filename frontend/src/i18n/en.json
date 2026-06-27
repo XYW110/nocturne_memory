@@ -138,6 +138,10 @@
       "saving": "Saving...",
       "save_failed": "Save failed",
       "cancel": "Cancel",
+      "reset_to_default": "Reset to Default",
+      "reset_to_default_title": "Reset scheme to default template nodes",
+      "reset_to_default_message": "Reset the boot memories of \"{{name}}\" to the soul template defaults? This won't delete actual memories; it only changes this scheme's boot list.",
+      "reset_to_default_failed": "Reset failed",
       "editor_tip": "💡 Tip: This defines the list of 'Core Memories' that the agent retrieves upon awakening. Just enter memory paths (like core://agent) to make them the first things loaded at startup. You can also add exclusive agents to customize memories for different personas.",
       "edit_title": "Edit Memory Scheme",
       "create_title": "New Memory Scheme"
@@ -197,7 +201,13 @@
       "back": "Back",
       "birth_success": "Born — {{count}} memory nodes created.",
       "birth_failed": "Birth failed",
-      "load_failed": "Failed to load template details"
+      "load_failed": "Failed to load template details",
+      "init_existing": "Initialize Existing Data",
+      "init_existing_description": "Applies the default soul template (creates 5 identity memory nodes), switches core://my_user's relationship content, and fills emotion dimensions. Existing nodes are skipped.",
+      "init_existing_select": "Relationship type to initialize",
+      "init_existing_success": "Initialized: created {{createdCount}} memory nodes, filled {{emotionCount}} emotion dimensions, relationship set to {{relationship}}.",
+      "init_existing_failed": "Initialization failed",
+      "init_existing_none": "Data is already complete; no initialization needed."
     },
     "emotion": {
       "description": "How the AI feels toward you across six dimensions (0–100, 50 = neutral). The AI adjusts these; every change is logged.",

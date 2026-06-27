@@ -26,6 +26,7 @@ export default function SettingsDrawer() {
   const [configPath, setConfigPath] = useState('');
   const [lockedFields, setLockedFields] = useState([]);
   const [activeTab, setActiveTab] = useState('general');
+  const [soulVersion, setSoulVersion] = useState(0);
 
   useEffect(() => {
     const handleOpen = () => setIsOpen(true);
@@ -189,13 +190,13 @@ export default function SettingsDrawer() {
               {activeTab === 'soul' && (
                 <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-200">
                   <Section icon={Sparkles} title={t('app.settings.section_soul')}>
-                    <TemplatesSection />
+                    <TemplatesSection onBorn={() => setSoulVersion(v => v + 1)} />
                   </Section>
                   <Section icon={Heart} title={t('app.settings.section_emotion')}>
-                    <EmotionDashboard />
+                    <EmotionDashboard refreshTrigger={soulVersion} />
                   </Section>
                   <Section icon={Users} title={t('app.settings.section_relationship')}>
-                    <RelationshipPanel />
+                    <RelationshipPanel refreshTrigger={soulVersion} />
                   </Section>
                 </div>
               )}

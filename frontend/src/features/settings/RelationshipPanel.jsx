@@ -73,7 +73,7 @@ function RequestCard({ req, onApprove, onReject, t }) {
   );
 }
 
-export default function RelationshipPanel() {
+export default function RelationshipPanel({ refreshTrigger = 0 }) {
   const { t } = useTranslation();
   const [current, setCurrent] = useState(null);
   const [requests, setRequests] = useState([]);
@@ -96,7 +96,7 @@ export default function RelationshipPanel() {
     }
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { load(); }, [load, refreshTrigger]);
 
   const handleApprove = async (id) => {
     try {

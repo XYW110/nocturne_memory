@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
-  Plus, Trash2, GripVertical, Save, Copy, Check, Edit2, X, Layers
+  Plus, Trash2, GripVertical, Save, Copy, Check, Edit2, X, Layers, RotateCcw
 } from 'lucide-react';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import {
   listPresets, createPreset, updatePreset, deletePreset,
-  activatePreset, duplicatePreset
+  activatePreset, duplicatePreset, resetExistingSoul
 } from '../../lib/api';
 import { toast } from '../../components/Toast';
 import ConfirmModal from '../../components/ConfirmModal';
@@ -22,6 +22,15 @@ function PresetEditor({ preset, onSaved, onCancel }) {
   const [newNamespace, setNewNamespace] = useState('');
   const dragItem = useRef(null);
   const dragOver = useRef(null);
+
+  // Sync local state when preset prop changes (e.g. switching between edit/create)
+  useEffect(() => {
+    setName(preset.name || '');
+    setBootUris(preset.boot_uris || { '': [] });
+    setDirty(false);
+    setNewUri({});
+    setNewNamespace('');
+  }, [preset]);
 
   const namespaces = Object.keys(bootUris).sort((a, b) => {
     if (a === '') return -1;
@@ -88,15 +97,19 @@ function PresetEditor({ preset, onSaved, onCancel }) {
 
   const handleSave = async () => {
     setSaving(true);
+    console.log('[PresetEditor] handleSave, preset.id:', preset.id, 'name:', name, 'bootUris:', bootUris);
     try {
       if (preset.id) {
-        await updatePreset(preset.id, { name, boot_uris: bootUris });
+        const result = await updatePreset(preset.id, { name, boot_uris: bootUris });
+        console.log('[PresetEditor] updatePreset response:', result);
       } else {
-        await createPreset({ name, boot_uris: bootUris });
+        const result = await createPreset({ name, boot_uris: bootUris });
+        console.log('[PresetEditor] createPreset response:', result);
       }
       setDirty(false);
       onSaved?.();
     } catch (e) {
+      console.error('[PresetEditor] handleSave failed:', e);
       toast(t('settings.presets.save_failed') + ': ' + (e.response?.data?.detail || e.message), 'error');
     } finally {
       setSaving(false);
@@ -217,13 +230,25 @@ function PresetEditor({ preset, onSaved, onCancel }) {
 }
 
 
-function PresetCard({ preset, onActivate, onDelete, onDuplicate, onEdit }) {
+function PresetCard({ preset, onActivate, onDelete, onDuplicate, onEdit, onReset }) {
   const { t } = useTranslation();
   const [confirmState, setConfirmState] = useState(null);
+  const [resetting, setResetting] = useState(false);
 
   const uriCount = Object.values(preset.boot_uris || {}).reduce(
     (sum, uris) => sum + uris.length, 0
   );
+
+  const defaultBootUris = {
+    '': [
+      'core://agent',
+      'core://operating_principles',
+      'core://philosophy',
+      'core://agent/showroom_quality',
+      'core://agent/preferences',
+      'core://my_user',
+    ]
+  };
 
   const handleDelete = () => {
     setConfirmState({
@@ -234,6 +259,15 @@ function PresetCard({ preset, onActivate, onDelete, onDuplicate, onEdit }) {
       onConfirm: () => { setConfirmState(null); onDelete(preset.id); },
       onCancel: () => setConfirmState(null),
     });
+  };
+
+  const handleReset = async () => {
+    setResetting(true);
+    try {
+      await onReset(preset.id, defaultBootUris);
+    } finally {
+      setResetting(false);
+    }
   };
 
   return (
@@ -269,6 +303,14 @@ function PresetCard({ preset, onActivate, onDelete, onDuplicate, onEdit }) {
               {t('settings.presets.activate')}
             </button>
           )}
+          <button
+            onClick={handleReset}
+            disabled={resetting}
+            className="p-1.5 text-slate-500 hover:text-amber-400 disabled:opacity-40 transition-colors"
+            title={t('settings.presets.reset_to_default')}
+          >
+            <RotateCcw size={13} className={resetting ? 'animate-spin' : ''} />
+          </button>
           <button
             onClick={() => onEdit(preset)}
             className="p-1.5 text-slate-500 hover:text-slate-300 transition-colors"
@@ -311,6 +353,7 @@ export default function PresetsSection() {
     setLoading(true);
     try {
       const data = await listPresets();
+      console.log('[PresetsSection] load, received presets:', data);
       setPresets(data);
     } catch (e) {
       console.error('Failed to load presets:', e);
@@ -356,11 +399,45 @@ export default function PresetsSection() {
   };
 
   const handleEdit = (preset) => {
+    console.log('[PresetsSection] handleEdit, preset:', preset);
     setEditing(preset);
   };
 
+  const defaultSoulBootUris = {
+    '': [
+      'core://agent',
+      'core://operating_principles',
+      'core://philosophy',
+      'core://my_user',
+    ]
+  };
+
   const handleNew = () => {
-    setEditing({ name: '', boot_uris: { '': [] }, id: null });
+    console.log('[PresetsSection] handleNew, defaultSoulBootUris:', defaultSoulBootUris);
+    setEditing({
+      name: '',
+      boot_uris: defaultSoulBootUris,
+      id: null,
+    });
+  };
+
+  const handleReset = async (id, bootUris) => {
+    const target = presets.find(p => p.id === id);
+    if (!target) return;
+    try {
+      console.log('[PresetsSection] handleReset, preset:', id, 'calling reset-existing');
+      // 1. Reset preset's boot_uris to default
+      await updatePreset(id, { name: target.name, boot_uris: bootUris });
+      // 2. Force-reset actual memory nodes to template content
+      const result = await resetExistingSoul('partner');
+      console.log('[PresetsSection] resetExistingSoul result:', JSON.stringify(result));
+      await load();
+      const extraCount = result.deleted_extra?.length || 0;
+      toast(t('settings.presets.reset_to_default') + (extraCount > 0 ? `（清理 ${extraCount} 个残留节点）` : ''), 'success');
+    } catch (e) {
+      console.error('[PresetsSection] handleReset error:', e);
+      toast(t('settings.presets.reset_to_default_failed') + ': ' + (e.response?.data?.detail || e.message), 'error');
+    }
   };
 
   if (loading) {
@@ -382,6 +459,7 @@ export default function PresetsSection() {
           </button>
         </div>
         <PresetEditor
+          key={editing.id || 'new'}
           preset={editing}
           onSaved={() => { setEditing(null); load(); }}
           onCancel={() => setEditing(null)}
@@ -403,6 +481,7 @@ export default function PresetsSection() {
             onDelete={handleDelete}
             onDuplicate={handleDuplicate}
             onEdit={handleEdit}
+            onReset={handleReset}
           />
         ))}
       </div>

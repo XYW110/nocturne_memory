@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Sparkles, ArrowRight, ArrowLeft, X, Loader2 } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { Sparkles, ArrowRight, ArrowLeft, X, Loader2, Wand2 } from 'lucide-react';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
-import { listTemplates, getTemplate, applyTemplate } from '../../lib/api';
+import { listTemplates, getTemplate, applyTemplate, initExistingSoul } from '../../lib/api';
 import { toast } from '../../components/Toast';
 
 // Relationship options shown at birth. Labels are resolved via i18n; the
@@ -87,8 +88,8 @@ function BirthDialog({ template, onClose, onBorn }) {
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-slate-900 border border-slate-700 rounded-xl shadow-2xl w-full max-w-md max-h-[85vh] flex flex-col">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-800">
+      <div className="relative bg-slate-900 border border-slate-700 rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-800 flex-shrink-0">
           <div className="flex items-center gap-2 text-slate-100 font-semibold">
             <Sparkles size={16} className="text-indigo-400" />
             {t('settings.soul.birth_title')}
@@ -98,7 +99,7 @@ function BirthDialog({ template, onClose, onBorn }) {
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3">
+        <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3 min-h-0">
           {step === 1 ? (
             <>
               <p className="text-xs text-slate-500">{t('settings.soul.step_persona')}</p>
@@ -136,7 +137,7 @@ function BirthDialog({ template, onClose, onBorn }) {
           )}
         </div>
 
-        <div className="flex items-center justify-between px-5 py-4 border-t border-slate-800">
+        <div className="flex items-center justify-between px-5 py-4 border-t border-slate-800 flex-shrink-0">
           {step === 2 ? (
             <button onClick={() => setStep(1)} className="flex items-center gap-1 text-xs text-slate-400 hover:text-slate-200">
               <ArrowLeft size={14} /> {t('settings.soul.back')}
@@ -166,11 +167,13 @@ function BirthDialog({ template, onClose, onBorn }) {
   );
 }
 
-export default function TemplatesSection() {
+export default function TemplatesSection({ onBorn }) {
   const { t, i18n } = useTranslation();
   const [templates, setTemplates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [birthing, setBirthing] = useState(null); // full template object
+  const [initRelationship, setInitRelationship] = useState('partner');
+  const [initing, setIniting] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -194,13 +197,71 @@ export default function TemplatesSection() {
     }
   };
 
+  const handleBorn = (result) => {
+    load();
+    onBorn?.(result);
+  };
+
+  const handleInitExisting = async () => {
+    setIniting(true);
+    try {
+      const result = await initExistingSoul(initRelationship);
+      const created = result.created?.length || 0;
+      const emotionCount = result.emotion_updated?.length || 0;
+      if (created === 0 && emotionCount === 0 && !result.relationship_updated && !result.content_updated) {
+        toast(t('settings.soul.init_existing_none'), 'info');
+      } else {
+        toast(t('settings.soul.init_existing_success', {
+          createdCount: created,
+          emotionCount,
+          relationship: t(`settings.relationship.type.${result.relationship}`),
+        }), 'success');
+      }
+      onBorn?.(result);
+    } catch (e) {
+      toast(t('settings.soul.init_existing_failed') + ': ' + (e.response?.data?.detail || e.message), 'error');
+    } finally {
+      setIniting(false);
+    }
+  };
+
   if (loading) {
     return <div className="pt-4 text-sm text-slate-500">{t('settings.soul.loading')}</div>;
   }
 
   return (
-    <div className="space-y-3 pt-4">
+    <div className="space-y-4 pt-4">
       <p className="text-xs text-slate-500">{t('settings.soul.description')}</p>
+
+      {/* One-click initialize existing data */}
+      <div className="bg-amber-950/20 border border-amber-500/20 rounded-lg p-3">
+        <div className="flex items-center gap-2 text-xs text-amber-300 mb-2">
+          <Wand2 size={13} className="text-amber-400" />
+          {t('settings.soul.init_existing')}
+        </div>
+        <p className="text-[11px] text-slate-500 leading-relaxed mb-2">
+          {t('settings.soul.init_existing_description')}
+        </p>
+        <div className="flex items-center gap-2">
+          <select
+            value={initRelationship}
+            onChange={e => setInitRelationship(e.target.value)}
+            className="flex-1 bg-slate-950 border border-slate-700 text-slate-200 rounded-md px-2.5 py-1.5 text-xs focus:outline-none focus:border-amber-500"
+          >
+            {RELATIONSHIP_TYPES.map(rel => (
+              <option key={rel} value={rel}>{t(`settings.relationship.type.${rel}`)}</option>
+            ))}
+          </select>
+          <button
+            onClick={handleInitExisting}
+            disabled={initing}
+            className="px-3 py-1.5 bg-amber-600/90 hover:bg-amber-500 disabled:opacity-50 text-white rounded-md text-xs font-medium flex items-center gap-1 flex-shrink-0"
+          >
+            {initing ? <Loader2 size={12} className="animate-spin" /> : <Wand2 size={12} />}
+            {t('settings.soul.init_existing')}
+          </button>
+        </div>
+      </div>
 
       <div className="space-y-2">
         {templates.map(tpl => {
@@ -233,12 +294,13 @@ export default function TemplatesSection() {
         )}
       </div>
 
-      {birthing && (
+      {birthing && createPortal(
         <BirthDialog
           template={birthing}
           onClose={() => setBirthing(null)}
-          onBorn={() => load()}
-        />
+          onBorn={handleBorn}
+        />,
+        document.body
       )}
     </div>
   );
