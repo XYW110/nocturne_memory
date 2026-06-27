@@ -191,6 +191,29 @@ async def test_emotion_rejects_bad_delta_and_missing_reason():
         await emo.adjust("core://my_user", [{"dimension": "bogus", "delta": 1, "reason": "x"}])
 
 
+async def test_emotion_rejects_stacked_same_dimension():
+    """+5 and +5 on the same dimension in one call must be rejected (sum > cap)."""
+    from db import get_template_loader, get_emotion_service
+    from emotion_service import EmotionError
+
+    await get_template_loader().apply_template(
+        "default", persona={"name": "Luna", "gender": "女"}, relationship="romantic"
+    )
+    emo = get_emotion_service()
+
+    with pytest.raises(EmotionError):
+        await emo.adjust("core://my_user", [
+            {"dimension": "trust", "delta": 5, "reason": "a"},
+            {"dimension": "trust", "delta": 5, "reason": "b"},
+        ])
+    # Two sub-reasons that sum within the cap are fine.
+    after = await emo.adjust("core://my_user", [
+        {"dimension": "trust", "delta": 3, "reason": "a"},
+        {"dimension": "trust", "delta": 2, "reason": "b"},
+    ])
+    assert after["trust"] == 55
+
+
 # --------------------------------------------------------------------------- #
 # Relationship requests
 # --------------------------------------------------------------------------- #

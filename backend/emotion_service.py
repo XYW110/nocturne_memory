@@ -104,6 +104,16 @@ class EmotionService:
             deltas[dim] += delta
             reasons.append(f"{dim}{'+' if delta >= 0 else ''}{delta}: {reason}")
 
+        # A single event must not move any one dimension by more than the cap,
+        # even when split across several sub-reasons. This stops an AI from
+        # stacking "+5, +5" in one call to leap past the small-delta intent.
+        for dim, total in deltas.items():
+            if total < MIN_DELTA or total > MAX_DELTA:
+                raise EmotionError(
+                    f"Total change for '{dim}' in one call is {total}, which "
+                    f"exceeds ±{MAX_DELTA}. Keep each event's move small."
+                )
+
         async with self.db.session() as session:
             edge = await self._resolve_edge(session, uri, namespace)
             if not edge:
