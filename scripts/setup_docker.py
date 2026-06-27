@@ -13,7 +13,8 @@ import secrets
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-CONFIG_PATH = ROOT / "config.json"
+OPT_DIR = Path("/opt/nocturne-memory")
+CONFIG_PATH = OPT_DIR / "config.json"
 
 
 def generate_token(nbytes: int = 32) -> str:
@@ -56,7 +57,16 @@ def main():
     }
     docker_defaults = {
         "valid_domains": ["core", "writer", "game", "notes", "narrative"],
-        "boot_uris": {"": ["core://agent", "core://my_user", "core://agent/my_user"]},
+        "boot_uris": {
+            "": [
+                "core://agent",
+                "core://operating_principles",
+                "core://philosophy",
+                "core://agent/showroom_quality",
+                "core://agent/preferences",
+                "core://my_user",
+            ]
+        },
         "cors_origins": None,
         "public_readonly_mcp": False,
     }
@@ -71,22 +81,20 @@ def main():
             json.dump(config, f, indent=2, ensure_ascii=False)
             f.write("\n")
         if patched:
-            print(f"[OK] Updated {CONFIG_PATH.relative_to(ROOT)} (patched: {', '.join(patched)})")
+            print(f"[OK] Updated {CONFIG_PATH} (patched: {', '.join(patched)})")
         else:
-            print(f"[OK] {CONFIG_PATH.relative_to(ROOT)} already up to date")
+            print(f"[OK] {CONFIG_PATH} already up to date")
     else:
         config = dict(docker_defaults)
         config.update(docker_required)
         with open(CONFIG_PATH, "w", encoding="utf-8") as f:
             json.dump(config, f, indent=2, ensure_ascii=False)
             f.write("\n")
-        print(f"[OK] Generated {CONFIG_PATH.relative_to(ROOT)}")
+        print(f"[OK] Generated {CONFIG_PATH}")
 
-    # --- Summary ---
     # --- Create host directories for bind mounts ---
-    opt_dir = Path("/opt/nocturne-memory")
     for subdir in ("data", "snapshots", "backups"):
-        sub_path = opt_dir / subdir
+        sub_path = OPT_DIR / subdir
         sub_path.mkdir(parents=True, exist_ok=True)
         print(f"[OK] {sub_path}")
 

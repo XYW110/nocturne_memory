@@ -1,5 +1,5 @@
 # Before running: python scripts/setup_docker.py
-# The setup script auto-generates config.json with Docker-appropriate defaults.
+# The setup script creates /opt/nocturne-memory/ with config.json and data dirs.
 #
 # Architecture: 1 container (backend only)
 # - SQLite database file on a mounted volume
