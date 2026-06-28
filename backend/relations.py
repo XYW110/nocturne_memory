@@ -14,10 +14,10 @@ All user-facing content here is Chinese by project convention.
 
 from __future__ import annotations
 
-from enum import StrEnum
+from enum import Enum
 
 
-class Relationship(StrEnum):
+class Relationship(str, Enum):
     SUBORDINATE = "subordinate"      # 上下级（AI 是下属）
     PARTNER = "partner"              # 伙伴/搭档
     FRIEND = "friend"                # 朋友
