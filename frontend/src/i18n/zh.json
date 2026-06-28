@@ -5,7 +5,13 @@
       "review": "审查与审计",
       "memory": "记忆浏览器",
       "maintenance": "大脑清理",
-      "settings": "设置"
+      "settings": "设置",
+      "soul": "灵魂"
+    },
+    "soul": {
+      "tab_birth": "诞生",
+      "tab_emotion": "情感",
+      "tab_relationship": "关系"
     },
     "settings": {
       "title": "设置",

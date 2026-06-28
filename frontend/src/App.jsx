@@ -1,30 +1,50 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
-import { BrowserRouter, Routes, Route, NavLink, Navigate, useLocation } from 'react-router-dom';
-import { ShieldCheck, Database, LayoutGrid, Sparkles, AlertCircle, Layers, Settings } from 'lucide-react';
-import clsx from 'clsx';
+import React, { useState, useEffect, useCallback } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  NavLink,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
+import {
+  ShieldCheck,
+  Database,
+  LayoutGrid,
+  Sparkles,
+  AlertCircle,
+  Layers,
+  Settings,
+  Heart,
+} from "lucide-react";
+import clsx from "clsx";
 
-import ReviewPage from './features/review/ReviewPage';
-import MemoryBrowser from './features/memory/MemoryBrowser';
-import MaintenancePage from './features/maintenance/MaintenancePage';
-import SettingsDrawer from './features/settings/SettingsDrawer';
-import TokenAuth from './components/TokenAuth';
-import { ToastContainer } from './components/Toast';
-import { AUTH_ERROR_EVENT, getNamespaces } from './lib/api';
-import { detectLocale } from './i18n/index';
+import ReviewPage from "./features/review/ReviewPage";
+import MemoryBrowser from "./features/memory/MemoryBrowser";
+import MaintenancePage from "./features/maintenance/MaintenancePage";
+import SoulPage from "./features/soul/SoulPage";
+import SettingsDrawer from "./features/settings/SettingsDrawer";
+import TokenAuth from "./components/TokenAuth";
+import { ToastContainer } from "./components/Toast";
+import { AUTH_ERROR_EVENT, getNamespaces } from "./lib/api";
+import { detectLocale } from "./i18n/index";
 
-const NAMESPACE_SWITCH_ROOT_REDIRECT_KEY = 'nocturne:namespace-switch-root-redirect';
+const NAMESPACE_SWITCH_ROOT_REDIRECT_KEY =
+  "nocturne:namespace-switch-root-redirect";
 
 const consumeTokenFromUrl = () => {
   const params = new URLSearchParams(window.location.search);
-  const token = params.get('token');
+  const token = params.get("token");
   if (!token) return false;
 
-  localStorage.setItem('api_token', token);
-  params.delete('token');
+  localStorage.setItem("api_token", token);
+  params.delete("token");
   const query = params.toString();
-  const nextUrl = `${window.location.pathname}${query ? `?${query}` : ''}${window.location.hash}`;
-  window.history.replaceState({}, '', nextUrl);
+  const nextUrl = `${window.location.pathname}${query ? `?${query}` : ""}${
+    window.location.hash
+  }`;
+  window.history.replaceState({}, "", nextUrl);
   return true;
 };
 
@@ -42,16 +62,16 @@ const consumeTokenFromUrl = () => {
 function NamespaceSelector() {
   const [knownNamespaces, setKnownNamespaces] = useState([]);
   const [selected, setSelected] = useState(
-    () => localStorage.getItem('selected_namespace') ?? ''
+    () => localStorage.getItem("selected_namespace") ?? ""
   );
   const [inputValue, setInputValue] = useState(
-    () => localStorage.getItem('selected_namespace') ?? ''
+    () => localStorage.getItem("selected_namespace") ?? ""
   );
   const [showInput, setShowInput] = useState(false);
 
   useEffect(() => {
     getNamespaces()
-      .then(nsList => setKnownNamespaces(nsList.filter(ns => ns !== '')))
+      .then((nsList) => setKnownNamespaces(nsList.filter((ns) => ns !== "")))
       .catch(() => setKnownNamespaces([]));
   }, []);
 
@@ -61,9 +81,9 @@ function NamespaceSelector() {
     setSelected(trimmed);
     setInputValue(trimmed);
     if (trimmed) {
-      localStorage.setItem('selected_namespace', trimmed);
+      localStorage.setItem("selected_namespace", trimmed);
     } else {
-      localStorage.removeItem('selected_namespace');
+      localStorage.removeItem("selected_namespace");
     }
     if (changed) {
       sessionStorage.setItem(
@@ -76,7 +96,7 @@ function NamespaceSelector() {
 
   const handleSelectChange = (e) => {
     const val = e.target.value;
-    if (val === '__custom__') {
+    if (val === "__custom__") {
       setShowInput(true);
       return;
     }
@@ -84,11 +104,11 @@ function NamespaceSelector() {
   };
 
   const handleInputKeyDown = (e) => {
-    if (e.key === 'Enter') applyNamespace(inputValue);
-    if (e.key === 'Escape') setShowInput(false);
+    if (e.key === "Enter") applyNamespace(inputValue);
+    if (e.key === "Escape") setShowInput(false);
   };
 
-  const activeLabel = selected || '(default)';
+  const activeLabel = selected || "(default)";
 
   return (
     <div className="flex items-center gap-2 text-sm">
@@ -98,7 +118,7 @@ function NamespaceSelector() {
           autoFocus
           type="text"
           value={inputValue}
-          onChange={e => setInputValue(e.target.value)}
+          onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleInputKeyDown}
           onBlur={() => setShowInput(false)}
           placeholder="namespace (Enter to apply)"
@@ -112,11 +132,15 @@ function NamespaceSelector() {
           title={`Current namespace: ${activeLabel}`}
         >
           <option value="">(default)</option>
-          {knownNamespaces.map(ns => (
-            <option key={ns} value={ns}>{ns}</option>
+          {knownNamespaces.map((ns) => (
+            <option key={ns} value={ns}>
+              {ns}
+            </option>
           ))}
           {selected && !knownNamespaces.includes(selected) && (
-            <option key={selected} value={selected}>{selected}</option>
+            <option key={selected} value={selected}>
+              {selected}
+            </option>
           )}
           <option value="__custom__">+ enter custom…</option>
         </select>
@@ -128,8 +152,8 @@ function NamespaceSelector() {
 function Layout() {
   const { t } = useTranslation();
   const location = useLocation();
-  const isReviewPage = location.pathname.startsWith('/review');
-  const isMaintenancePage = location.pathname.startsWith('/maintenance');
+  const isReviewPage = location.pathname.startsWith("/review");
+  const isMaintenancePage = location.pathname.startsWith("/maintenance");
 
   return (
     <div className="flex flex-col h-screen bg-slate-950 text-slate-200">
@@ -137,52 +161,81 @@ function Layout() {
       <div className="h-12 border-b border-slate-800 bg-slate-900 flex items-center px-4 gap-6 flex-shrink-0 z-10">
         <div className="font-bold text-slate-100 flex items-center gap-2 mr-4">
           <LayoutGrid className="w-5 h-5 text-indigo-500" />
-          <span data-testid="app-brand">{t('app.nav.brand')}</span>
+          <span data-testid="app-brand">{t("app.nav.brand")}</span>
         </div>
 
         <nav className="flex items-center gap-1 h-full">
           <NavLink
             to="/review"
-            className={({ isActive }) => clsx(
-              "h-full flex items-center gap-2 px-4 text-sm font-medium border-b-2 transition-colors",
-              isActive ? "border-indigo-500 text-indigo-400 bg-slate-800/50" : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
-            )}
+            className={({ isActive }) =>
+              clsx(
+                "h-full flex items-center gap-2 px-4 text-sm font-medium border-b-2 transition-colors",
+                isActive
+                  ? "border-indigo-500 text-indigo-400 bg-slate-800/50"
+                  : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
+              )
+            }
           >
             <ShieldCheck size={16} />
-            {t('app.nav.review')}
+            {t("app.nav.review")}
           </NavLink>
 
           <NavLink
             to="/memory"
-            className={({ isActive }) => clsx(
-              "h-full flex items-center gap-2 px-4 text-sm font-medium border-b-2 transition-colors",
-              isActive ? "border-emerald-500 text-emerald-400 bg-slate-800/50" : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
-            )}
+            className={({ isActive }) =>
+              clsx(
+                "h-full flex items-center gap-2 px-4 text-sm font-medium border-b-2 transition-colors",
+                isActive
+                  ? "border-emerald-500 text-emerald-400 bg-slate-800/50"
+                  : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
+              )
+            }
           >
             <Database size={16} />
-            {t('app.nav.memory')}
+            {t("app.nav.memory")}
+          </NavLink>
+
+          <NavLink
+            to="/soul"
+            className={({ isActive }) =>
+              clsx(
+                "h-full flex items-center gap-2 px-4 text-sm font-medium border-b-2 transition-colors",
+                isActive
+                  ? "border-rose-500 text-rose-400 bg-slate-800/50"
+                  : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
+              )
+            }
+          >
+            <Heart size={16} />
+            {t("app.nav.soul")}
           </NavLink>
 
           <NavLink
             to="/maintenance"
-            className={({ isActive }) => clsx(
-              "h-full flex items-center gap-2 px-4 text-sm font-medium border-b-2 transition-colors",
-              isActive ? "border-amber-500 text-amber-400 bg-slate-800/50" : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
-            )}
+            className={({ isActive }) =>
+              clsx(
+                "h-full flex items-center gap-2 px-4 text-sm font-medium border-b-2 transition-colors",
+                isActive
+                  ? "border-amber-500 text-amber-400 bg-slate-800/50"
+                  : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
+              )
+            }
           >
             <Sparkles size={16} />
-            {t('app.nav.maintenance')}
+            {t("app.nav.maintenance")}
           </NavLink>
         </nav>
 
         <div className="ml-auto flex items-center gap-4">
           {!isReviewPage && !isMaintenancePage && <NamespaceSelector />}
           <button
-            onClick={() => window.dispatchEvent(new CustomEvent('open-settings'))}
+            onClick={() =>
+              window.dispatchEvent(new CustomEvent("open-settings"))
+            }
             className="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
           >
             <Settings size={16} />
-            {t('app.nav.settings')}
+            {t("app.nav.settings")}
           </button>
         </div>
       </div>
@@ -195,6 +248,8 @@ function Layout() {
           <Route path="/review" element={<ReviewPage />} />
 
           <Route path="/memory" element={<MemoryBrowser />} />
+
+          <Route path="/soul" element={<SoulPage />} />
 
           <Route path="/maintenance" element={<MaintenancePage />} />
         </Routes>
@@ -209,7 +264,7 @@ function Layout() {
 function App() {
   const { t } = useTranslation();
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return consumeTokenFromUrl() || !!localStorage.getItem('api_token');
+    return consumeTokenFromUrl() || !!localStorage.getItem("api_token");
   });
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [backendError, setBackendError] = useState(false);
@@ -229,7 +284,7 @@ function App() {
 
     const checkAuthStatus = async () => {
       try {
-        const { getDomains } = await import('./lib/api');
+        const { getDomains } = await import("./lib/api");
         await getDomains();
         if (mounted) {
           setIsAuthenticated(true);
@@ -275,26 +330,37 @@ function App() {
 
   if (isCheckingAuth) {
     return (
-      <div data-testid="app-loading" className="flex flex-col items-center justify-center h-screen bg-slate-950 text-slate-400">
+      <div
+        data-testid="app-loading"
+        className="flex flex-col items-center justify-center h-screen bg-slate-950 text-slate-400"
+      >
         <div className="w-8 h-8 rounded-full border-2 border-indigo-500/30 border-t-indigo-500 animate-spin mb-4"></div>
-        <div className="text-sm">{t('app.loading.connecting')}</div>
+        <div className="text-sm">{t("app.loading.connecting")}</div>
       </div>
     );
   }
 
   if (backendError) {
     return (
-      <div data-testid="error-connection-refused" className="flex flex-col items-center justify-center h-screen bg-slate-950 text-slate-400">
+      <div
+        data-testid="error-connection-refused"
+        className="flex flex-col items-center justify-center h-screen bg-slate-950 text-slate-400"
+      >
         <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-4">
           <AlertCircle className="w-6 h-6 text-red-500" />
         </div>
-        <div className="text-lg font-bold text-slate-100 mb-1">{t('app.error.connection_refused')}</div>
+        <div className="text-lg font-bold text-slate-100 mb-1">
+          {t("app.error.connection_refused")}
+        </div>
         <div className="text-sm text-slate-500 max-w-md text-center mt-2 space-y-2">
-          <p>{t('app.error.troubleshooting')}</p>
+          <p>{t("app.error.troubleshooting")}</p>
           <ul className="list-disc text-left pl-6 space-y-1">
-            <li>{t('app.error.check_backend')}</li>
-            <li><strong>{t('app.error.check_port_title')}</strong>{t('app.error.check_port_detail')}</li>
-            <li>{t('app.error.check_docker')}</li>
+            <li>{t("app.error.check_backend")}</li>
+            <li>
+              <strong>{t("app.error.check_port_title")}</strong>
+              {t("app.error.check_port_detail")}
+            </li>
+            <li>{t("app.error.check_docker")}</li>
           </ul>
         </div>
         <button
@@ -302,7 +368,7 @@ function App() {
           onClick={() => window.location.reload()}
           className="mt-6 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm transition-colors"
         >
-          {t('app.error.retry')}
+          {t("app.error.retry")}
         </button>
       </div>
     );

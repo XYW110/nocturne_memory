@@ -1,21 +1,24 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from "react";
 import {
-  Database, Server, Layers, Settings, X, RefreshCw, Globe, Sparkles, Heart, Users
-} from 'lucide-react';
-import { useTranslation } from 'react-i18next';
-import i18n, { detectLocale } from '../../i18n';
-import { getSettings, updateSettings, getDatabaseStatus } from '../../lib/api';
+  Database,
+  Server,
+  Layers,
+  Settings,
+  X,
+  RefreshCw,
+  Globe,
+} from "lucide-react";
+import { useTranslation } from "react-i18next";
+import i18n, { detectLocale } from "../../i18n";
+import { getSettings, updateSettings, getDatabaseStatus } from "../../lib/api";
 
-import Section from './Section';
-import DatabaseSection from './DatabaseSection';
-import PresetsSection from './PresetsSection';
-import BootUrisSection from './BootUrisSection';
-import ServerSection from './ServerSection';
-import AdvancedSection from './AdvancedSection';
-import LocaleSection from './LocaleSection';
-import TemplatesSection from './TemplatesSection';
-import EmotionDashboard from './EmotionDashboard';
-import RelationshipPanel from './RelationshipPanel';
+import Section from "./Section";
+import DatabaseSection from "./DatabaseSection";
+import PresetsSection from "./PresetsSection";
+import BootUrisSection from "./BootUrisSection";
+import ServerSection from "./ServerSection";
+import AdvancedSection from "./AdvancedSection";
+import LocaleSection from "./LocaleSection";
 
 export default function SettingsDrawer() {
   const { t } = useTranslation();
@@ -23,15 +26,14 @@ export default function SettingsDrawer() {
   const [settings, setSettings] = useState(null);
   const [dbStatus, setDbStatus] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [configPath, setConfigPath] = useState('');
+  const [configPath, setConfigPath] = useState("");
   const [lockedFields, setLockedFields] = useState([]);
-  const [activeTab, setActiveTab] = useState('general');
-  const [soulVersion, setSoulVersion] = useState(0);
+  const [activeTab, setActiveTab] = useState("general");
 
   useEffect(() => {
     const handleOpen = () => setIsOpen(true);
-    window.addEventListener('open-settings', handleOpen);
-    return () => window.removeEventListener('open-settings', handleOpen);
+    window.addEventListener("open-settings", handleOpen);
+    return () => window.removeEventListener("open-settings", handleOpen);
   }, []);
 
   const loadAll = useCallback(async () => {
@@ -46,7 +48,7 @@ export default function SettingsDrawer() {
       setLockedFields(settingsData.locked_fields || []);
       setDbStatus(statusData);
     } catch (e) {
-      console.error('Failed to load settings:', e);
+      console.error("Failed to load settings:", e);
     } finally {
       setLoading(false);
     }
@@ -60,7 +62,7 @@ export default function SettingsDrawer() {
 
   const handleSave = async (updates) => {
     const result = await updateSettings(updates);
-    if (Object.prototype.hasOwnProperty.call(updates, 'locale')) {
+    if (Object.prototype.hasOwnProperty.call(updates, "locale")) {
       // Locale change: no DB/server settings to refresh; skip loadAll()
       // to avoid destroying LocaleSection's local dropdown state.
       // Manually update the locale in settings so other tabs stay in sync.
@@ -69,7 +71,9 @@ export default function SettingsDrawer() {
       } else {
         await i18n.changeLanguage(updates.locale);
       }
-      setSettings(prev => prev ? { ...prev, locale: updates.locale } : prev);
+      setSettings((prev) =>
+        prev ? { ...prev, locale: updates.locale } : prev
+      );
     } else {
       await loadAll();
     }
@@ -80,17 +84,16 @@ export default function SettingsDrawer() {
     try {
       setDbStatus(await getDatabaseStatus());
     } catch (e) {
-      console.error('Failed to refresh DB status:', e);
+      console.error("Failed to refresh DB status:", e);
     }
   };
 
   if (!isOpen) return null;
 
   const tabs = [
-    { id: 'general', label: t('app.settings.tab_general'), icon: Settings },
-    { id: 'database', label: t('app.settings.tab_database'), icon: Database },
-    { id: 'memory', label: t('app.settings.tab_memory'), icon: Layers },
-    { id: 'soul', label: t('app.settings.tab_soul'), icon: Sparkles },
+    { id: "general", label: t("app.settings.tab_general"), icon: Settings },
+    { id: "database", label: t("app.settings.tab_database"), icon: Database },
+    { id: "memory", label: t("app.settings.tab_memory"), icon: Layers },
   ];
 
   return (
@@ -103,9 +106,11 @@ export default function SettingsDrawer() {
         <div className="border-b border-slate-800/80 bg-slate-900/40 px-6 pt-6 backdrop-blur-md flex-shrink-0">
           <div className="flex items-start justify-between mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-slate-100">{t('app.settings.title')}</h1>
+              <h1 className="text-2xl font-bold text-slate-100">
+                {t("app.settings.title")}
+              </h1>
               <p className="text-sm text-slate-400 mt-1">
-                {t('app.settings.subtitle')}
+                {t("app.settings.subtitle")}
               </p>
             </div>
             <button
@@ -117,7 +122,7 @@ export default function SettingsDrawer() {
           </div>
 
           <div className="flex gap-6">
-            {tabs.map(tab => {
+            {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
               return (
@@ -141,13 +146,17 @@ export default function SettingsDrawer() {
         <div className="flex-1 overflow-y-auto px-6 py-8">
           {loading ? (
             <div className="flex items-center justify-center h-full text-slate-500">
-              <RefreshCw size={20} className="animate-spin mr-2" /> {t('app.settings.loading')}
+              <RefreshCw size={20} className="animate-spin mr-2" />{" "}
+              {t("app.settings.loading")}
             </div>
           ) : (
             <>
-              {activeTab === 'general' && (
+              {activeTab === "general" && (
                 <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-200">
-                  <Section icon={Server} title={t('app.settings.section_server')}>
+                  <Section
+                    icon={Server}
+                    title={t("app.settings.section_server")}
+                  >
                     <ServerSection
                       settings={settings}
                       configPath={configPath}
@@ -156,19 +165,33 @@ export default function SettingsDrawer() {
                     />
                   </Section>
 
-                  <Section icon={Globe} title={t('app.settings.section_locale')}>
+                  <Section
+                    icon={Globe}
+                    title={t("app.settings.section_locale")}
+                  >
                     <LocaleSection settings={settings} onSave={handleSave} />
                   </Section>
 
-                  <Section icon={Settings} title={t('app.settings.section_advanced')} defaultOpen={false}>
-                    <AdvancedSection settings={settings} lockedFields={lockedFields} onSave={handleSave} />
+                  <Section
+                    icon={Settings}
+                    title={t("app.settings.section_advanced")}
+                    defaultOpen={false}
+                  >
+                    <AdvancedSection
+                      settings={settings}
+                      lockedFields={lockedFields}
+                      onSave={handleSave}
+                    />
                   </Section>
                 </div>
               )}
 
-              {activeTab === 'database' && (
+              {activeTab === "database" && (
                 <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-200">
-                  <Section icon={Database} title={t('app.settings.section_database')}>
+                  <Section
+                    icon={Database}
+                    title={t("app.settings.section_database")}
+                  >
                     <DatabaseSection
                       settings={settings}
                       dbStatus={dbStatus}
@@ -179,24 +202,13 @@ export default function SettingsDrawer() {
                 </div>
               )}
 
-              {activeTab === 'memory' && (
+              {activeTab === "memory" && (
                 <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-200">
-                  <Section icon={Layers} title={t('app.settings.section_presets')}>
+                  <Section
+                    icon={Layers}
+                    title={t("app.settings.section_presets")}
+                  >
                     <PresetsSection />
-                  </Section>
-                </div>
-              )}
-
-              {activeTab === 'soul' && (
-                <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-200">
-                  <Section icon={Sparkles} title={t('app.settings.section_soul')}>
-                    <TemplatesSection onBorn={() => setSoulVersion(v => v + 1)} />
-                  </Section>
-                  <Section icon={Heart} title={t('app.settings.section_emotion')}>
-                    <EmotionDashboard refreshTrigger={soulVersion} />
-                  </Section>
-                  <Section icon={Users} title={t('app.settings.section_relationship')}>
-                    <RelationshipPanel refreshTrigger={soulVersion} />
                   </Section>
                 </div>
               )}

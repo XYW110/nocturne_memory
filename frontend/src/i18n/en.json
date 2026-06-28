@@ -6,7 +6,13 @@
       "review": "Review & Audit",
       "memory": "Memory Explorer",
       "maintenance": "Brain Cleanup",
-      "settings": "Settings"
+      "settings": "Settings",
+      "soul": "Soul"
+    },
+    "soul": {
+      "tab_birth": "Birth",
+      "tab_emotion": "Emotion",
+      "tab_relationship": "Relationship"
     },
     "settings": {
       "title": "Settings",
