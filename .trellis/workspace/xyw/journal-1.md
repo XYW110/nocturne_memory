@@ -40,3 +40,34 @@
 ### Next Steps
 
 - None - task complete
+
+
+## Session 2: Nocturne Memory Hermes Agent Skill 打包完成
+
+**Date**: 2026-06-28
+**Task**: Nocturne Memory Hermes Agent Skill 打包完成
+**Branch**: `main`
+
+### Summary
+
+整理 hermes-integration 目录，删除多余测试文件，添加 auto_config.py 自动配置脚本，实现 Hermes Agent 完全自动安装流程：用户只需解压 zip 并复制 Skill，启动 Agent 后回复 Token 即可自动完成 MCP 配置。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+(No commits - planning session)
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
