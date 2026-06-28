@@ -183,7 +183,6 @@ def _build_cfg_from_kvs(kvs: dict) -> dict:
     cfg = dict(DEFAULTS)
     for cfg_key, env_key in _ENV_MAP.items():
         val = kvs.get(env_key)
-        # 统一标准：只认 WEB_PORT。PORT 仅作为历史遗留的 fallback。
         if cfg_key == "web_port" and not val:
             val = kvs.get("PORT")
         if val:
@@ -239,8 +238,6 @@ def _load() -> dict:
     if CONFIG_PATH.exists():
         if CONFIG_PATH.is_dir():
             if _IN_DOCKER:
-                # Docker bind-mount created a directory instead of a file.
-                # Remove it so we can generate a proper config.json below.
                 shutil.rmtree(str(CONFIG_PATH), ignore_errors=True)
             else:
                 raise RuntimeError(

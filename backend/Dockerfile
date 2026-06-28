@@ -59,6 +59,11 @@ RUN adduser --disabled-password --gecos '' appuser \
 RUN mkdir -p /app/data /app/snapshots /app/backups \
     && chown appuser:appuser /app/data /app/snapshots /app/backups
 
+RUN chmod +x /app/entrypoint.sh \
+    && chown appuser:appuser /app/entrypoint.sh
+
 USER appuser
+
+ENTRYPOINT ["/app/entrypoint.sh"]
 
 EXPOSE 8233
