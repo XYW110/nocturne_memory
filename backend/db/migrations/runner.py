@@ -144,8 +144,8 @@ async def run_migrations(engine: AsyncEngine):
         import subprocess
         db_name = engine.url.database or "db"
         
-        # Store backups under the app root (<repo>/backend locally, /app in Docker).
-        backup_dir = os.path.join(_get_app_root(), "backups")
+        # Use BACKUP_DIR env var if set (Docker), otherwise default to app root
+        backup_dir = os.environ.get("BACKUP_DIR") or os.path.join(_get_app_root(), "backups")
         os.makedirs(backup_dir, exist_ok=True)
         backup_base = os.path.join(backup_dir, f"{db_name}_{timestamp}")
         dump_backup_path = f"{backup_base}.sql"

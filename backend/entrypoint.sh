@@ -35,5 +35,6 @@ fi
 
 export CONFIG_PATH="$PERSISTENT_DIR/config.json"
 export SNAPSHOT_DIR="$PERSISTENT_DIR/snapshots"
+export BACKUP_DIR="$PERSISTENT_DIR/backups"
 
 exec python run_sse.py
