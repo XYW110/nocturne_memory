@@ -2,7 +2,7 @@
 
 set -e
 
-PERSISTENT_DIR="/app/persistent"
+PERSISTENT_DIR="${PERSISTENT_DIR:-/app/persistent}"
 
 mkdir -p "$PERSISTENT_DIR/data" "$PERSISTENT_DIR/snapshots" "$PERSISTENT_DIR/backups"
 
@@ -13,7 +13,7 @@ if [ ! -f "$PERSISTENT_DIR/config.json" ]; then
     
     cat > "$PERSISTENT_DIR/config.json" << EOF
 {
-  "database_url": "sqlite+aiosqlite:////app/data/nocturne.db",
+  "database_url": "sqlite+aiosqlite:////app/persistent/data/nocturne.db",
   "db_pool_size": 5,
   "db_max_overflow": 5,
   "valid_domains": ["core", "writer", "game", "notes", "narrative"],
@@ -33,9 +33,7 @@ EOF
     echo "[INFO] API Token: $API_TOKEN"
 fi
 
-ln -sf "$PERSISTENT_DIR/config.json" /app/config.json
-ln -sf "$PERSISTENT_DIR/data" /app/data
-ln -sf "$PERSISTENT_DIR/snapshots" /app/snapshots
-ln -sf "$PERSISTENT_DIR/backups" /app/backups
+export CONFIG_PATH="$PERSISTENT_DIR/config.json"
+export SNAPSHOT_DIR="$PERSISTENT_DIR/snapshots"
 
 exec python run_sse.py

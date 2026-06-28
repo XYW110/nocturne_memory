@@ -25,11 +25,14 @@ from typing import Any, Optional
 from locales import t
 
 _BACKEND_DIR = Path(__file__).resolve().parent
-# 兼容 Docker 部署：Dockerfile 把 backend/* 复制到 WORKDIR，所以容器内
-# _BACKEND_DIR 本身就是根目录；本地开发则是 backend/，根目录在上一级。
 _IN_DOCKER = Path("/.dockerenv").exists()
 ROOT_DIR = _BACKEND_DIR if _IN_DOCKER else _BACKEND_DIR.parent
-CONFIG_PATH = ROOT_DIR / "config.json"
+
+_env_config_path = os.environ.get("CONFIG_PATH")
+if _env_config_path:
+    CONFIG_PATH = Path(_env_config_path)
+else:
+    CONFIG_PATH = ROOT_DIR / "config.json"
 
 _DEMO_DB = "demo.db"
 _USER_DB = "nocturne_data.db"

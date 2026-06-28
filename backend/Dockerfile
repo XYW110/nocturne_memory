@@ -55,10 +55,6 @@ COPY --from=frontend-builder /frontend/dist /app/../frontend/dist
 RUN adduser --disabled-password --gecos '' appuser \
     && chown -R appuser:appuser /app /frontend
 
-# Runtime dirs for SQLite DB, snapshots, backups
-RUN mkdir -p /app/data /app/snapshots /app/backups \
-    && chown appuser:appuser /app/data /app/snapshots /app/backups
-
 RUN chmod +x /app/entrypoint.sh \
     && chown appuser:appuser /app/entrypoint.sh
 
