@@ -15,8 +15,8 @@ Nocturne Memory — Agent 出生脚本
     --api-url       Nocturne Memory API 地址
     --api-token     API Bearer Token
 
-环境变量：
-    NOCTURNE_API_URL    API 地址（默认: https://nocturne-memory.aiprovip.cc.cd）
+环境变量（必须）：
+    NOCTURNE_API_URL    API 地址
     NOCTURNE_API_TOKEN  API Token
 """
 
@@ -137,12 +137,20 @@ def main():
     parser.add_argument("--appearance", default="", help="外貌描述")
     parser.add_argument("--init-existing", action="store_true",
                         help="一键初始化已有数据")
-    parser.add_argument("--api-url", default=os.environ.get(
-        "NOCTURNE_API_URL", "https://nocturne-memory.aiprovip.cc.cd"))
-    parser.add_argument("--api-token", default=os.environ.get(
-        "NOCTURNE_API_TOKEN", "unqNabSFPyVWQqmOrUS1YQ5voSsIOfoaC15MpYkuO08"))
+    parser.add_argument("--api-url", default=os.environ.get("NOCTURNE_API_URL"))
+    parser.add_argument("--api-token", default=os.environ.get("NOCTURNE_API_TOKEN"))
 
     args = parser.parse_args()
+
+    # 必须提供 API URL 和 Token
+    if not args.api_url or not args.api_token:
+        print("错误：缺少 API 配置！")
+        print("请通过环境变量或命令行参数提供：")
+        print("  export NOCTURNE_API_URL=\"https://your-server.com\"")
+        print("  export NOCTURNE_API_TOKEN=\"your-token\"")
+        print("或：")
+        print("  python birth.py --api-url https://your-server.com --api-token your-token")
+        sys.exit(1)
 
     print("=" * 60)
     print("  Nocturne Memory — Agent 出生")
