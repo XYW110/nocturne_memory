@@ -524,6 +524,13 @@ cd frontend
 npm run dev
 ```
 
+**开发模式访问地址**：
+- 前端开发服务器：`http://localhost:3000`
+- 后端 API：`http://localhost:8233`
+- API 文档：`http://localhost:8233/api/docs`
+
+**注意**：Vite 开发服务器会将 `/api` 请求代理到 `http://127.0.0.1:8233`，确保前后端通信正常。如需修改后端地址，可设置环境变量 `VITE_API_TARGET`。
+
 </details>
 
 <details>

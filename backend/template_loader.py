@@ -27,6 +27,7 @@ from relations import (
     is_valid_relationship,
     serialize_relationships,
 )
+from emotion_service import EMOTION_DIMENSIONS
 
 _TEMPLATES_DIR = FsPath(__file__).resolve().parent / "templates"
 _VAR_PATTERN = re.compile(r"\{\{(\w+)\}\}")
@@ -63,40 +64,55 @@ class TemplateLoader:
     # Reading templates
     # ------------------------------------------------------------------ #
 
-    def list_templates(self) -> list[dict[str, Any]]:
-        """Return summary metadata for every template in the templates dir."""
+    async def list_templates(self, namespace: str = "") -> list[dict[str, Any]]:
+        """Return summary metadata for all templates (built-in + user-defined)."""
         templates = []
-        if not _TEMPLATES_DIR.is_dir():
-            return templates
-        for f in sorted(_TEMPLATES_DIR.glob("*.json")):
-            if f.name == "relationships.json":
-                continue
-            try:
-                data = json.loads(f.read_text(encoding="utf-8"))
-            except (json.JSONDecodeError, OSError):
-                continue
-            nodes = data.get("memory_nodes", [])
-            domains = sorted({n.get("domain", "core") for n in nodes})
-            templates.append({
-                "id": data.get("id", f.stem),
-                "name": data.get("name", f.stem),
-                "name_en": data.get("name_en"),
-                "description": data.get("description", ""),
-                "node_count": len(nodes),
-                "domains": domains,
-                "persona_fields": list(data.get("persona", {}).keys()),
-            })
+        if _TEMPLATES_DIR.is_dir():
+            for f in sorted(_TEMPLATES_DIR.glob("*.json")):
+                if f.name == "relationships.json":
+                    continue
+                try:
+                    data = json.loads(f.read_text(encoding="utf-8"))
+                except (json.JSONDecodeError, OSError):
+                    continue
+                nodes = data.get("memory_nodes", [])
+                domains = sorted({n.get("domain", "core") for n in nodes})
+                templates.append({
+                    "id": data.get("id", f.stem),
+                    "name": data.get("name", f.stem),
+                    "name_en": data.get("name_en"),
+                    "description": data.get("description", ""),
+                    "node_count": len(nodes),
+                    "domains": domains,
+                    "persona_fields": list(data.get("persona", {}).keys()),
+                    "is_custom": False,
+                })
+
+        from db import get_template_service
+        service = get_template_service()
+        custom_templates = await service.list_templates(namespace)
+        templates.extend(custom_templates)
+
         return templates
 
-    def get_template(self, template_id: str) -> dict[str, Any]:
-        """Return the full template JSON, or raise TemplateError."""
+    async def get_template(self, template_id: str, namespace: str = "") -> dict[str, Any]:
+        """Return the full template JSON (built-in or user-defined), or raise TemplateError."""
         path = _TEMPLATES_DIR / f"{template_id}.json"
-        if not path.is_file():
-            raise TemplateError(f"Template '{template_id}' not found")
-        try:
-            return json.loads(path.read_text(encoding="utf-8"))
-        except (json.JSONDecodeError, OSError) as e:
-            raise TemplateError(f"Template '{template_id}' is malformed: {e}") from e
+        if path.is_file():
+            try:
+                template = json.loads(path.read_text(encoding="utf-8"))
+                template["is_custom"] = False
+                return template
+            except (json.JSONDecodeError, OSError) as e:
+                raise TemplateError(f"Template '{template_id}' is malformed: {e}") from e
+
+        from db import get_template_service
+        service = get_template_service()
+        custom = await service.get_template(template_id, namespace)
+        if custom:
+            return custom
+
+        raise TemplateError(f"Template '{template_id}' not found")
 
     def _load_relationships(self) -> dict[str, Any]:
         path = _TEMPLATES_DIR / "relationships.json"
@@ -145,7 +161,7 @@ class TemplateLoader:
         force: bool = False,
         configure_boot: bool = True,
     ) -> ApplyResult:
-        template = self.get_template(template_id)
+        template = await self.get_template(template_id, namespace)
 
         if not is_valid_relationship(relationship):
             raise TemplateError(f"Unknown relationship type: {relationship}")
@@ -171,6 +187,7 @@ class TemplateLoader:
                 "priority": rel_def.get("priority", 0),
                 "disclosure": rel_def.get("disclosure", ""),
                 "relationship": relationship,
+                "emotions": rel_def.get("emotions", {}),
             }
 
         all_nodes = list(nodes)
@@ -274,6 +291,10 @@ class TemplateLoader:
                         result.locked.append(uri)
                 if node.get("relationship"):
                     edge.relationship_types = serialize_relationships([node["relationship"]])
+                if node.get("emotions"):
+                    for dim in EMOTION_DIMENSIONS:
+                        if dim in node["emotions"]:
+                            setattr(edge, f"emotion_{dim}", node["emotions"][dim])
             return
 
         # Create new node (original logic).
@@ -300,6 +321,10 @@ class TemplateLoader:
             result.locked.append(uri)
         if node.get("relationship"):
             edge.relationship_types = serialize_relationships([node["relationship"]])
+        if node.get("emotions"):
+            for dim in EMOTION_DIMENSIONS:
+                if dim in node["emotions"]:
+                    setattr(edge, f"emotion_{dim}", node["emotions"][dim])
 
         await session.flush()
         await self.graph._search.refresh_search_documents_for_node(

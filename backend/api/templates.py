@@ -33,13 +33,15 @@ class InitExistingRequest(BaseModel):
 class ResetExistingRequest(BaseModel):
     relationship: str = "partner"
     namespace: Optional[str] = None
+    persona: Optional[dict[str, Any]] = None
 
 
 @router.get("")
-async def list_templates():
+async def list_templates(namespace: Optional[str] = None):
     """List available soul templates (summary metadata only)."""
     loader = get_template_loader()
-    return {"templates": loader.list_templates()}
+    ns = namespace if namespace is not None else get_namespace()
+    return {"templates": await loader.list_templates(ns)}
 
 
 # ── Specific routes must come BEFORE /{template_id} (generic) ──
@@ -69,7 +71,7 @@ async def init_existing(body: InitExistingRequest):
 
     # 1. Apply the default soul template with default persona — creates the
     #    5 identity nodes (skips existing ones) and core://my_user if absent.
-    template = loader.get_template("default")
+    template = await loader.get_template("default", namespace)
     default_persona: dict[str, Any] = {}
     for field_name, spec in template.get("persona", {}).items():
         if "default" in spec and spec["default"] is not None:
@@ -147,11 +149,12 @@ async def init_existing(body: InitExistingRequest):
             )
             content_updated = True
 
-        # Initialize emotions to 50 when missing or zero.
+        rel_emotions = rel_def.get("emotions", {})
         for dim in EMOTION_DIMENSIONS:
             current = getattr(edge, f"emotion_{dim}")
+            target_value = rel_emotions.get(dim, 50)
             if current is None or current == 0:
-                setattr(edge, f"emotion_{dim}", 50)
+                setattr(edge, f"emotion_{dim}", target_value)
                 emotion_updated.append(dim)
 
         await session.flush()
@@ -191,17 +194,20 @@ async def reset_existing(body: ResetExistingRequest):
     loader = get_template_loader()
     graph = get_graph_service()
 
-    # 1. Build default persona from template defaults.
-    template = loader.get_template("default")
-    default_persona: dict[str, Any] = {}
-    for field_name, spec in template.get("persona", {}).items():
-        if "default" in spec and spec["default"] is not None:
-            default_persona[field_name] = spec["default"]
+    # 1. Build persona — use provided or fall back to template defaults.
+    template = await loader.get_template("default", namespace)
+    if body.persona:
+        persona = body.persona
+    else:
+        persona: dict[str, Any] = {}
+        for field_name, spec in template.get("persona", {}).items():
+            if "default" in spec and spec["default"] is not None:
+                persona[field_name] = spec["default"]
 
     # 2. Apply template with force=True — overwrites existing nodes.
     apply_result = await loader.apply_template(
         "default",
-        persona=default_persona,
+        persona=persona,
         relationship=body.relationship,
         namespace=namespace,
         force=True,
@@ -318,11 +324,12 @@ async def reset_existing(body: ResetExistingRequest):
                 )
                 content_updated = True
 
-            # Initialize emotions to 50 when missing or zero.
+            rel_emotions = rel_def.get("emotions", {})
             for dim in EMOTION_DIMENSIONS:
                 current = getattr(edge, f"emotion_{dim}")
-                if current is None or current == 0:
-                    setattr(edge, f"emotion_{dim}", 50)
+                target_value = rel_emotions.get(dim, 50)
+                if current != target_value:
+                    setattr(edge, f"emotion_{dim}", target_value)
                     emotion_updated.append(dim)
 
             await session.flush()
@@ -344,11 +351,12 @@ async def reset_existing(body: ResetExistingRequest):
 # ── Generic routes (/{template_id}) must come AFTER specific routes ──
 
 @router.get("/{template_id}")
-async def get_template(template_id: str):
+async def get_template(template_id: str, namespace: Optional[str] = None):
     """Return a template's full definition (persona fields + node previews)."""
     loader = get_template_loader()
+    ns = namespace if namespace is not None else get_namespace()
     try:
-        return loader.get_template(template_id)
+        return await loader.get_template(template_id, ns)
     except TemplateError as e:
         raise HTTPException(status_code=404, detail=str(e))
 
@@ -368,3 +376,64 @@ async def apply_template(template_id: str, body: ApplyRequest):
     except TemplateError as e:
         raise HTTPException(status_code=422, detail=str(e))
     return {"success": True, **result.as_dict()}
+
+
+class CreateTemplateRequest(BaseModel):
+    id: str
+    name: str
+    name_en: Optional[str] = None
+    description: Optional[str] = None
+    description_en: Optional[str] = None
+    persona: dict[str, Any]
+    memory_nodes: list[dict[str, Any]]
+    namespace: Optional[str] = None
+
+
+@router.post("/custom")
+async def create_custom_template(body: CreateTemplateRequest):
+    """Create a new user-defined soul template."""
+    from db import get_template_service
+
+    namespace = body.namespace if body.namespace is not None else get_namespace()
+    service = get_template_service()
+    try:
+        template = await service.create_template(
+            template_id=body.id,
+            name=body.name,
+            name_en=body.name_en,
+            description=body.description,
+            description_en=body.description_en,
+            persona=body.persona,
+            memory_nodes=body.memory_nodes,
+            namespace=namespace,
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    return template
+
+
+@router.put("/custom/{template_id}")
+async def update_custom_template(template_id: str, body: dict[str, Any]):
+    """Update an existing user-defined soul template."""
+    from db import get_template_service
+
+    namespace = body.pop("namespace", None)
+    ns = namespace if namespace is not None else get_namespace()
+    service = get_template_service()
+    template = await service.update_template(template_id, namespace=ns, **body)
+    if not template:
+        raise HTTPException(status_code=404, detail=f"Template '{template_id}' not found")
+    return template
+
+
+@router.delete("/custom/{template_id}")
+async def delete_custom_template(template_id: str, namespace: Optional[str] = None):
+    """Delete a user-defined soul template."""
+    from db import get_template_service
+
+    ns = namespace if namespace is not None else get_namespace()
+    service = get_template_service()
+    success = await service.delete_template(template_id, ns)
+    if not success:
+        raise HTTPException(status_code=404, detail=f"Template '{template_id}' not found")
+    return {"success": True}

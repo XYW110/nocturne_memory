@@ -367,6 +367,31 @@ class RelationshipRequest(Base):
     resolved_at = Column(DateTime, nullable=True)
 
 
+class SoulTemplate(Base):
+    """A user-defined soul template stored in the database.
+
+    Templates define the initial identity and relationship configuration for an AI.
+    Built-in templates are stored as JSON files; user-created templates are stored here.
+    """
+
+    __tablename__ = "soul_templates"
+
+    id = Column(String(64), primary_key=True)
+    namespace = Column(String(64), nullable=False, default="")
+    name = Column(Text, nullable=False)
+    name_en = Column(Text, nullable=True)
+    description = Column(Text, nullable=True)
+    description_en = Column(Text, nullable=True)
+    persona = Column(Text, nullable=False)
+    memory_nodes = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.now)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+
+    __table_args__ = (
+        UniqueConstraint("id", "namespace", name="uq_soul_template_id_namespace"),
+    )
+
+
 # =============================================================================
 # Change Collector
 # =============================================================================

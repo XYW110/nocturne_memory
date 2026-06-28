@@ -26,8 +26,6 @@ frontend/
 ├── vite.config.js              # Vite configuration
 ├── tailwind.config.js          # Tailwind CSS configuration
 ├── postcss.config.js           # PostCSS (autoprefixer + tailwind)
-├── Dockerfile                  # Frontend build container
-├── nginx.conf                  # Nginx config for serving dist/
 │
 └── src/
     ├── main.jsx                # React entry point (renders App)
@@ -67,9 +65,12 @@ frontend/
     │       ├── AdvancedSection.jsx
     │       ├── BootUrisSection.jsx
     │       ├── DatabaseSection.jsx
+    │       ├── EmotionDashboard.jsx        # Emotion dimension visualization
     │       ├── LocaleSection.jsx
     │       ├── PresetsSection.jsx
-    │       └── ServerSection.jsx
+    │       ├── RelationshipPanel.jsx       # Relationship type management
+    │       ├── ServerSection.jsx
+    │       └── TemplatesSection.jsx        # Soul template management (create, select, reset)
     │
     ├── lib/                    # Shared utilities
     │   └── api.js              # Axios instance + API functions
@@ -103,7 +104,14 @@ Components used across multiple features live in `src/components/`:
 All HTTP calls go through `src/lib/api.js`:
 - Axios instance with interceptors (auth token, namespace header)
 - One function per API endpoint
-- Named exports per resource group (`getGroups`, `getDomains`, etc.)
+- Named exports per resource group (`getGroups`, `getDomains`, `initExistingSoul`, `resetExistingSoul`, etc.)
+
+### Settings Sections
+
+Settings drawer organizes related functionality into sections:
+- `TemplatesSection.jsx` — Soul template management (create, delete, select, apply, reset)
+- `EmotionDashboard.jsx` — Emotion dimension visualization and adjustment
+- `RelationshipPanel.jsx` — Relationship type selection and management
 
 ---
 
@@ -111,7 +119,7 @@ All HTTP calls go through `src/lib/api.js`:
 
 | Category | Convention | Example |
 |----------|-----------|---------|
-| Components | PascalCase | `MemoryBrowser.jsx`, `TokenAuth.jsx` |
+| Components | PascalCase | `MemoryBrowser.jsx`, `TokenAuth.jsx`, `TemplatesSection.jsx` |
 | Hooks | camelCase, `use` prefix | `useLocale.js` |
 | Utilities | camelCase | `api.js`, `detectLocale()` |
 | CSS | Tailwind utility classes | `bg-slate-950`, `text-indigo-500` |
@@ -137,3 +145,7 @@ npm run test:run   # Vitest single run
 3. **Settings drawer** — Slide-over panel, not a route
 4. **Feature isolation** — Each feature directory is self-contained
 5. **API interceptors** — Auto-attach `Authorization` and `X-Namespace` headers
+6. **Portal rendering** — Modals rendered via `createPortal` to `document.body` to avoid overflow/crop issues in nested containers
+7. **Version-based refresh** — State updates trigger version increments (e.g., `soulVersion`) to force re-fetching data across components
+8. **Soul template workflow** — Two-step process: (1) Fill persona variables, (2) Apply template with optional force overwrite
+9. **Emotion dimension display** — 6-axis visualization showing trust, closeness, respect, dependency, security, resonance

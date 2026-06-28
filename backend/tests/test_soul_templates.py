@@ -166,12 +166,12 @@ async def test_emotion_adjust_clamps_and_logs():
         [{"dimension": "trust", "delta": 5, "reason": "她信守承诺"}],
         namespace="",
     )
-    assert after["trust"] == 55
+    assert after["trust"] == 80
 
     ledger = await emo.get_ledger("core://my_user", namespace="")
     assert len(ledger) == 1
     assert ledger[0]["deltas"]["trust"] == 5
-    assert ledger[0]["after"]["trust"] == 55
+    assert ledger[0]["after"]["trust"] == 80
 
 
 async def test_emotion_rejects_bad_delta_and_missing_reason():
@@ -211,7 +211,7 @@ async def test_emotion_rejects_stacked_same_dimension():
         {"dimension": "trust", "delta": 3, "reason": "a"},
         {"dimension": "trust", "delta": 2, "reason": "b"},
     ])
-    assert after["trust"] == 55
+    assert after["trust"] == 80
 
 
 # --------------------------------------------------------------------------- #

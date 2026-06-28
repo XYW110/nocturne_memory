@@ -155,8 +155,17 @@ export const applyTemplate = (id, { persona, relationship, namespace }) =>
 
 export const initExistingSoul = (relationship = 'partner', namespace) =>
   api.post('/templates/init-existing', { relationship, namespace }).then(res => res.data);
-export const resetExistingSoul = (relationship = 'partner', namespace) =>
-  api.post('/templates/reset-existing', { relationship, namespace }).then(res => res.data);
+export const resetExistingSoul = (relationship = 'partner', persona, namespace) =>
+  api.post('/templates/reset-existing', { relationship, persona, namespace }).then(res => res.data);
+
+export const createCustomTemplate = (data) =>
+  api.post('/templates/custom', data).then(res => res.data);
+
+export const updateCustomTemplate = (id, data) =>
+  api.put(`/templates/custom/${encodeId(id)}`, data).then(res => res.data);
+
+export const deleteCustomTemplate = (id, namespace) =>
+  api.delete(`/templates/custom/${encodeId(id)}`, { params: { namespace } }).then(res => res.data);
 
 // ============ Emotion API ============
 

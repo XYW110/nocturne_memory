@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { Sparkles, ArrowRight, ArrowLeft, X, Loader2, Wand2 } from 'lucide-react';
+import { Sparkles, ArrowRight, ArrowLeft, X, Loader2, Wand2, Plus, Trash2, FileEdit } from 'lucide-react';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
-import { listTemplates, getTemplate, applyTemplate, initExistingSoul } from '../../lib/api';
+import { listTemplates, getTemplate, applyTemplate, initExistingSoul, resetExistingSoul, createCustomTemplate, deleteCustomTemplate } from '../../lib/api';
 import { toast } from '../../components/Toast';
 
 // Relationship options shown at birth. Labels are resolved via i18n; the
@@ -64,6 +64,7 @@ function BirthDialog({ template, onClose, onBorn }) {
     return init;
   });
   const [relationship, setRelationship] = useState('partner');
+  const [forceOverwrite, setForceOverwrite] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const personaEntries = Object.entries(template.persona || {});
@@ -74,8 +75,20 @@ function BirthDialog({ template, onClose, onBorn }) {
   const handleBirth = async () => {
     setSubmitting(true);
     try {
-      const result = await applyTemplate(template.id, { persona, relationship });
-      toast(t('settings.soul.birth_success', { count: result.created_count }), 'success');
+      let result;
+      if (forceOverwrite) {
+        result = await resetExistingSoul(relationship, persona);
+        toast(t('settings.soul.reset_success', { count: result.created?.length || 0 }), 'success');
+      } else {
+        result = await applyTemplate(template.id, { persona, relationship });
+        const created = result.created_count || 0;
+        const skipped = result.skipped_count || 0;
+        if (skipped > 0 && created === 0) {
+          toast(t('settings.soul.birth_all_skipped', { count: skipped }), 'info');
+        } else {
+          toast(t('settings.soul.birth_success', { count: created, skipped }), 'success');
+        }
+      }
       onBorn?.(result);
       onClose();
     } catch (e) {
@@ -133,6 +146,21 @@ function BirthDialog({ template, onClose, onBorn }) {
                   </button>
                 ))}
               </div>
+              <div className="mt-3 p-3 rounded-lg bg-slate-950/50 border border-slate-700">
+                <label className="flex items-start gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={forceOverwrite}
+                    onChange={e => setForceOverwrite(e.target.checked)}
+                    className="mt-0.5 w-4 h-4 rounded border-slate-600 text-indigo-500 focus:ring-indigo-500 focus:ring-offset-0"
+                  />
+                  <span className="text-xs text-slate-400">
+                    <span className="text-slate-200 font-medium">{t('settings.soul.force_overwrite')}</span>
+                    <br />
+                    {t('settings.soul.force_overwrite_desc')}
+                  </span>
+                </label>
+              </div>
             </>
           )}
         </div>
@@ -171,7 +199,17 @@ export default function TemplatesSection({ onBorn }) {
   const { t, i18n } = useTranslation();
   const [templates, setTemplates] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [birthing, setBirthing] = useState(null); // full template object
+  const [birthing, setBirthing] = useState(null);
+  const [creating, setCreating] = useState(false);
+  const [createData, setCreateData] = useState({
+    id: '',
+    name: '',
+    name_en: '',
+    description: '',
+    description_en: '',
+    persona: {},
+    memory_nodes: [],
+  });
   const [initRelationship, setInitRelationship] = useState('partner');
   const [initing, setIniting] = useState(false);
 
@@ -225,6 +263,41 @@ export default function TemplatesSection({ onBorn }) {
     }
   };
 
+  const handleCreateTemplate = async () => {
+    if (!createData.id.trim() || !createData.name.trim()) {
+      toast(t('settings.soul.template_required'), 'error');
+      return;
+    }
+    try {
+      await createCustomTemplate(createData);
+      toast(t('settings.soul.template_created'), 'success');
+      setCreating(false);
+      setCreateData({
+        id: '',
+        name: '',
+        name_en: '',
+        description: '',
+        description_en: '',
+        persona: {},
+        memory_nodes: [],
+      });
+      load();
+    } catch (e) {
+      toast(t('settings.soul.template_create_failed') + ': ' + (e.response?.data?.detail || e.message), 'error');
+    }
+  };
+
+  const handleDeleteTemplate = async (id) => {
+    if (!window.confirm(t('settings.soul.confirm_delete'))) return;
+    try {
+      await deleteCustomTemplate(id);
+      toast(t('settings.soul.template_deleted'), 'success');
+      load();
+    } catch (e) {
+      toast(t('settings.soul.template_delete_failed') + ': ' + (e.response?.data?.detail || e.message), 'error');
+    }
+  };
+
   if (loading) {
     return <div className="pt-4 text-sm text-slate-500">{t('settings.soul.loading')}</div>;
   }
@@ -263,6 +336,16 @@ export default function TemplatesSection({ onBorn }) {
         </div>
       </div>
 
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs text-slate-500">{t('settings.soul.templates')}</span>
+        <button
+          onClick={() => setCreating(true)}
+          className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300"
+        >
+          <Plus size={12} /> {t('settings.soul.add_template')}
+        </button>
+      </div>
+
       <div className="space-y-2">
         {templates.map(tpl => {
           const desc = i18n.language?.startsWith('zh') ? tpl.description : (tpl.description_en || tpl.description);
@@ -273,18 +356,33 @@ export default function TemplatesSection({ onBorn }) {
                   <div className="text-sm font-medium text-slate-200 flex items-center gap-2">
                     <Sparkles size={14} className="text-indigo-400 flex-shrink-0" />
                     {i18n.language?.startsWith('zh') ? tpl.name : (tpl.name_en || tpl.name)}
+                    {tpl.is_custom && (
+                      <span className="text-[10px] px-1.5 py-0.5 bg-indigo-500/20 text-indigo-400 rounded">
+                        {t('settings.soul.custom')}
+                      </span>
+                    )}
                   </div>
                   <p className="text-xs text-slate-500 mt-1 leading-relaxed">{desc}</p>
                   <div className="text-[11px] text-slate-600 mt-1.5">
                     {t('settings.soul.node_count', { count: tpl.node_count })} · {tpl.domains.join(', ')}
                   </div>
                 </div>
-                <button
-                  onClick={() => openBirth(tpl.id)}
-                  className="px-3 py-1.5 bg-indigo-600/90 hover:bg-indigo-500 text-white rounded-md text-xs font-medium flex items-center gap-1 flex-shrink-0"
-                >
-                  <Sparkles size={12} /> {t('settings.soul.birth')}
-                </button>
+                <div className="flex items-center gap-1.5">
+                  {tpl.is_custom && (
+                    <button
+                      onClick={() => handleDeleteTemplate(tpl.id)}
+                      className="px-2 py-1 bg-red-600/20 hover:bg-red-600/40 text-red-400 rounded-md text-xs flex items-center gap-1"
+                    >
+                      <Trash2 size={12} />
+                    </button>
+                  )}
+                  <button
+                    onClick={() => openBirth(tpl.id)}
+                    className="px-3 py-1.5 bg-indigo-600/90 hover:bg-indigo-500 text-white rounded-md text-xs font-medium flex items-center gap-1 flex-shrink-0"
+                  >
+                    <Sparkles size={12} /> {t('settings.soul.birth')}
+                  </button>
+                </div>
               </div>
             </div>
           );
@@ -300,6 +398,118 @@ export default function TemplatesSection({ onBorn }) {
           onClose={() => setBirthing(null)}
           onBorn={handleBorn}
         />,
+        document.body
+      )}
+
+      {creating && createPortal(
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setCreating(false)} />
+          <div className="relative bg-slate-900 border border-slate-700 rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-800 flex-shrink-0">
+              <div className="flex items-center gap-2 text-slate-100 font-semibold">
+                <FileEdit size={16} className="text-indigo-400" />
+                {t('settings.soul.create_template')}
+              </div>
+              <button onClick={() => setCreating(false)} className="text-slate-400 hover:text-slate-200">
+                <X size={18} />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3 min-h-0">
+              <div>
+                <label className="text-xs text-slate-400 mb-1 block">{t('settings.soul.template_id')} <span className="text-red-400">*</span></label>
+                <input
+                  type="text"
+                  value={createData.id}
+                  onChange={e => setCreateData(d => ({ ...d, id: e.target.value }))}
+                  className="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded-md px-2.5 py-1.5 text-sm focus:outline-none focus:border-indigo-500"
+                  placeholder="my_template"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 mb-1 block">{t('settings.soul.template_name')} <span className="text-red-400">*</span></label>
+                <input
+                  type="text"
+                  value={createData.name}
+                  onChange={e => setCreateData(d => ({ ...d, name: e.target.value }))}
+                  className="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded-md px-2.5 py-1.5 text-sm focus:outline-none focus:border-indigo-500"
+                  placeholder="我的灵魂模板"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 mb-1 block">{t('settings.soul.template_name_en')}</label>
+                <input
+                  type="text"
+                  value={createData.name_en}
+                  onChange={e => setCreateData(d => ({ ...d, name_en: e.target.value }))}
+                  className="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded-md px-2.5 py-1.5 text-sm focus:outline-none focus:border-indigo-500"
+                  placeholder="My Soul Template"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 mb-1 block">{t('settings.soul.template_description')}</label>
+                <textarea
+                  rows={2}
+                  value={createData.description}
+                  onChange={e => setCreateData(d => ({ ...d, description: e.target.value }))}
+                  className="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded-md px-2.5 py-1.5 text-sm focus:outline-none focus:border-indigo-500 resize-none"
+                  placeholder="描述这个模板的特点..."
+                />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 mb-1 block">{t('settings.soul.template_description_en')}</label>
+                <textarea
+                  rows={2}
+                  value={createData.description_en}
+                  onChange={e => setCreateData(d => ({ ...d, description_en: e.target.value }))}
+                  className="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded-md px-2.5 py-1.5 text-sm focus:outline-none focus:border-indigo-500 resize-none"
+                  placeholder="Describe this template..."
+                />
+              </div>
+              <div className="border-t border-slate-800 pt-3">
+                <label className="text-xs text-slate-400 mb-2 block">{t('settings.soul.template_persona')}</label>
+                <textarea
+                  rows={4}
+                  value={JSON.stringify(createData.persona, null, 2)}
+                  onChange={e => {
+                    try {
+                      setCreateData(d => ({ ...d, persona: JSON.parse(e.target.value) }));
+                    } catch {}
+                  }}
+                  className="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded-md px-2.5 py-1.5 text-xs font-mono focus:outline-none focus:border-indigo-500 resize-none"
+                  placeholder='{"name": {"type": "text", "label": "名字", "default": "Nocturne"}}'
+                />
+              </div>
+              <div className="border-t border-slate-800 pt-3">
+                <label className="text-xs text-slate-400 mb-2 block">{t('settings.soul.template_nodes')}</label>
+                <textarea
+                  rows={6}
+                  value={JSON.stringify(createData.memory_nodes, null, 2)}
+                  onChange={e => {
+                    try {
+                      setCreateData(d => ({ ...d, memory_nodes: JSON.parse(e.target.value) }));
+                    } catch {}
+                  }}
+                  className="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded-md px-2.5 py-1.5 text-xs font-mono focus:outline-none focus:border-indigo-500 resize-none"
+                  placeholder='[{"domain": "core", "path": "agent", "content": "..."}, ...]'
+                />
+              </div>
+            </div>
+            <div className="flex items-center justify-end px-5 py-4 border-t border-slate-800 flex-shrink-0 gap-2">
+              <button
+                onClick={() => setCreating(false)}
+                className="px-3 py-1.5 text-slate-400 hover:text-slate-200 text-sm"
+              >
+                {t('settings.soul.cancel')}
+              </button>
+              <button
+                onClick={handleCreateTemplate}
+                className="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-md text-sm font-medium flex items-center gap-1"
+              >
+                <Plus size={14} /> {t('settings.soul.create')}
+              </button>
+            </div>
+          </div>
+        </div>,
         document.body
       )}
     </div>

@@ -7,9 +7,10 @@
 ## Overview
 
 - **ORM**: SQLAlchemy 2.x with async support (`AsyncSession`)
-- **Databases**: SQLite (primary, local) and PostgreSQL (remote, multi-device)
+- **Databases**: SQLite (primary, recommended for production) — PostgreSQL support deprecated
 - **Session management**: `DatabaseManager` in `backend/db/database.py` — constructor injection pattern
 - **Migrations**: Custom runner in `db/migrations/runner.py` (not Alembic)
+- **Persistent Storage**: All persistent data stored under `/opt/nocturne-memory/` (data, snapshots, backups, config.json)
 
 ---
 
@@ -112,6 +113,7 @@ Defined in `backend/db/models.py`. Core tables:
 | `search_documents` | Derived FTS index rows | `(namespace, domain, path)` composite |
 | `memory_access_logs` | Async access frequency tracking | `id: Integer` (auto) |
 | `presets` | Boot URI preset sets | `id: Integer` (auto) |
+| `soul_templates` | User-defined soul templates | `(id, namespace)` composite |
 
 ### Key Relationships
 
@@ -119,6 +121,38 @@ Defined in `backend/db/models.py`. Core tables:
 - `Node` N:N `Node` via `Edge` (parent→child)
 - `Edge` 1:N `Path` (aliases: multiple paths → same edge)
 - `GlossaryKeyword` N:1 `Node`
+
+### Edge Model Extensions
+
+`Edge` model includes 6 emotion dimension columns:
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `emotion_trust` | Integer (0-100) | Trust level |
+| `emotion_closeness` | Integer (0-100) | Closeness level |
+| `emotion_respect` | Integer (0-100) | Respect level |
+| `emotion_dependency` | Integer (0-100) | Dependency level |
+| `emotion_security` | Integer (0-100) | Security level |
+| `emotion_resonance` | Integer (0-100) | Resonance level |
+
+### SoulTemplate Model
+
+Stores user-defined soul templates:
+
+| Column | Type | Description |
+|--------|------|-------------|
+| `id` | String(64) | Template identifier |
+| `namespace` | String(64) | Namespace (default: "") |
+| `name` | Text | Display name |
+| `name_en` | Text | English display name |
+| `description` | Text | Description |
+| `description_en` | Text | English description |
+| `persona` | Text (JSON) | Persona variables |
+| `memory_nodes` | Text (JSON) | Memory node definitions |
+| `created_at` | DateTime | Creation timestamp |
+| `updated_at` | DateTime | Last update timestamp |
+
+Unique constraint: `(id, namespace)`
 
 ---
 
