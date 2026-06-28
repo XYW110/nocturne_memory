@@ -155,6 +155,32 @@ config.set_value("key", value)
 
 ---
 
+## Common Mistakes
+
+### 1. Emotion Initialization Condition Reversed
+
+**Symptom**: `init-existing` endpoint fails to initialize emotion dimensions because values are already set to the database default (50).
+
+**Cause**: Checking for `current == 50` instead of `current == 0`. When an Edge record is created, emotion dimensions default to 50 in the database schema. The condition `current == 50` would overwrite these default values, but skip values that are actually 0 (meaning "not initialized").
+
+**Fix**: Use `current is None or current == 0` to match the "补齐缺失" (fill in missing) semantic.
+
+```python
+# ❌ WRONG — overwrites default 50 values
+if current is None or current == 50:
+    setattr(edge, f"emotion_{dim}", target_value)
+
+# ✅ CORRECT — only initializes None or 0 values
+if current is None or current == 0:
+    setattr(edge, f"emotion_{dim}", target_value)
+```
+
+**Prevention**: Remember the difference between:
+- `init-existing`: Only initialize **missing** values (None or 0)
+- `reset-existing`: Force update **all** values to template defaults
+
+---
+
 ## Testing Requirements
 
 - **Framework**: pytest (configured in `pytest.ini`)
