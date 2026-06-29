@@ -71,3 +71,36 @@
 ### Next Steps
 
 - None - task complete
+
+
+## Session 3: 情感面板重构为独立顶级页面
+
+**Date**: 2026-06-29
+**Task**: 情感面板重构为独立顶级页面
+**Branch**: `main`
+
+### Summary
+
+将情感仪表盘、情感账本、关系管理、灵魂模板从 SettingsDrawer 的 soul Tab 升级为独立顶级页面 /soul。新建 features/soul/ 目录，包含 SoulPage（页内二级Tab：诞生/情感/关系）、EmotionPanel（6维度进度条）、EmotionLedger（变更账本时间线）。原 EmotionDashboard 拆分为两个独立组件，TemplatesSection 和 RelationshipPanel 从 settings/ 移入 soul/。SettingsDrawer 移除 soul Tab。导航栏新增灵魂入口（Heart图标，rose主题色）。构建通过。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `246d80d` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
