@@ -104,3 +104,36 @@
 ### Next Steps
 
 - None - task complete
+
+
+## Session 4: 网页端 UI 风格统一实施
+
+**Date**: 2026-06-30
+**Task**: 网页端 UI 风格统一实施
+**Branch**: `main`
+
+### Summary
+
+引入 nocturne 语义化色板，通过 Tailwind theme.extend + CSS 变量统一全站 5 个页面和 28 个子组件的基础颜色（背景、边框、文字）。保持各页面功能强调色不变（Review→indigo, Memory→indigo/emerald, Soul→rose, Maintenance→amber）。构建通过，3.66s，0 错误。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `264d552` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
