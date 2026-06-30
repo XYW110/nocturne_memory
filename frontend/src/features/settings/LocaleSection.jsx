@@ -30,11 +30,11 @@ export default function LocaleSection({ settings, onSave }) {
   return (
     <div className="space-y-4 pt-4">
       <div className="space-y-2">
-        <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider">{t('settings.locale.label')}</label>
+        <label className="block text-xs font-medium text-nocturne-text-secondary uppercase tracking-wider">{t('settings.locale.label')}</label>
         <select
           value={locale}
           onChange={e => { setLocale(e.target.value); setDirty(true); }}
-          className="bg-slate-950 border border-slate-700 text-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-inner"
+          className="bg-nocturne-bg-primary border border-[var(--color-border-light)] text-nocturne-text-primary rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-inner"
         >
           <option value="auto">{t('settings.locale.auto_option')}</option>
           <option value="en">{t('settings.locale.en_option')}</option>

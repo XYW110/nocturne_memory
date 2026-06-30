@@ -43,7 +43,7 @@ const KeywordManager = ({ keywords, nodeUuid, onUpdate }) => {
   };
 
   return (
-    <div className="flex items-start gap-2 text-xs text-slate-500">
+    <div className="flex items-start gap-2 text-xs text-nocturne-text-muted">
       <Tag size={13} className="flex-shrink-0 mt-0.5 text-amber-700" />
       <div className="flex flex-wrap gap-1.5 items-center">
         <span className="text-amber-700 font-medium">{t('memory.keywords.label')}</span>
@@ -71,7 +71,7 @@ const KeywordManager = ({ keywords, nodeUuid, onUpdate }) => {
               onKeyDown={handleKeyDown}
               onBlur={() => { if (!newKeyword.trim()) setAdding(false); }}
               placeholder={t('memory.keywords.placeholder')}
-              className="w-28 px-1.5 py-0.5 bg-slate-900 border border-amber-800/40 rounded text-amber-300 text-[11px] font-mono focus:outline-none focus:border-amber-500/50"
+              className="w-28 px-1.5 py-0.5 bg-nocturne-bg-tertiary border border-amber-800/40 rounded text-amber-300 text-[11px] font-mono focus:outline-none focus:border-amber-500/50"
             />
             <button onClick={handleAdd} className="text-amber-600 hover:text-amber-400 transition-colors">
               <Save size={11} />

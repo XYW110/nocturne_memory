@@ -102,20 +102,20 @@ export default function SettingsDrawer() {
         className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 animate-in fade-in duration-200"
         onClick={() => setIsOpen(false)}
       />
-      <div className="fixed inset-y-0 right-0 w-[600px] bg-slate-950 border-l border-slate-800 shadow-2xl z-50 flex flex-col animate-in slide-in-from-right duration-300">
-        <div className="border-b border-slate-800/80 bg-slate-900/40 px-6 pt-6 backdrop-blur-md flex-shrink-0">
+      <div className="fixed inset-y-0 right-0 w-[600px] bg-nocturne-bg-primary border-l border-[var(--color-border)] shadow-2xl z-50 flex flex-col animate-in slide-in-from-right duration-300">
+        <div className="border-b border-[var(--color-border-strong)] bg-nocturne-bg-secondary/40 px-6 pt-6 backdrop-blur-md flex-shrink-0">
           <div className="flex items-start justify-between mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-slate-100">
+              <h1 className="text-2xl font-bold text-nocturne-text-primary">
                 {t("app.settings.title")}
               </h1>
-              <p className="text-sm text-slate-400 mt-1">
+              <p className="text-sm text-nocturne-text-secondary mt-1">
                 {t("app.settings.subtitle")}
               </p>
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              className="p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-lg transition-colors"
+              className="p-2 text-nocturne-text-secondary hover:text-nocturne-text-primary hover:bg-nocturne-bg-tertiary rounded-lg transition-colors"
             >
               <X size={20} />
             </button>
@@ -132,7 +132,7 @@ export default function SettingsDrawer() {
                   className={`flex items-center gap-2 pb-3 text-sm font-medium border-b-2 transition-all ${
                     isActive
                       ? "border-indigo-500 text-indigo-300 drop-shadow-sm"
-                      : "border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-700"
+                      : "border-transparent text-nocturne-text-secondary hover:text-nocturne-text-primary hover:border-[var(--color-border-light)]"
                   }`}
                 >
                   <Icon size={16} />
@@ -145,7 +145,7 @@ export default function SettingsDrawer() {
 
         <div className="flex-1 overflow-y-auto px-6 py-8">
           {loading ? (
-            <div className="flex items-center justify-center h-full text-slate-500">
+            <div className="flex items-center justify-center h-full text-nocturne-text-muted">
               <RefreshCw size={20} className="animate-spin mr-2" />{" "}
               {t("app.settings.loading")}
             </div>

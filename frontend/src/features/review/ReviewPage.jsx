@@ -159,8 +159,8 @@ function ReviewPage() {
     const isDeletion = diffData.current_meta.priority == null && diffData.before_meta.priority != null;
 
     return (
-      <div className="mb-8 p-4 bg-slate-900/40 border border-slate-800/60 rounded-lg backdrop-blur-sm">
-        <h3 className="text-xs font-bold text-slate-500 uppercase mb-4 flex items-center gap-2 tracking-widest">
+      <div className="mb-8 p-4 bg-nocturne-bg-tertiary/40 border border-[var(--color-border-strong)] rounded-lg backdrop-blur-sm">
+        <h3 className="text-xs font-bold text-nocturne-text-muted uppercase mb-4 flex items-center gap-2 tracking-widest">
           <Activity size={12} /> {t('review.metadata.title')} {isCreation ? t('review.metadata.initial') : isDeletion ? t('review.metadata.removed') : allPreserved ? t('review.metadata.preserved') : t('review.metadata.shifts')}
         </h3>
         <div className="space-y-3">
@@ -171,14 +171,14 @@ function ReviewPage() {
             
             return (
               <div key={key} className="grid grid-cols-[100px_1fr_20px_1fr] gap-4 text-sm items-start">
-                <span className="text-slate-400 font-medium capitalize text-xs pt-0.5">{key}</span>
-                <div className={clsx("text-xs font-mono text-right break-words", isChanged && !isCreation ? "text-rose-400/70 line-through" : "text-slate-500")}>
+                <span className="text-nocturne-text-secondary font-medium capitalize text-xs pt-0.5">{key}</span>
+                <div className={clsx("text-xs font-mono text-right break-words", isChanged && !isCreation ? "text-rose-400/70 line-through" : "text-nocturne-text-muted")}>
                   {oldVal != null ? String(oldVal) : '∅'}
                 </div>
-                <div className="text-center text-slate-700 pt-0.5">
+                <div className="text-center text-nocturne-text-muted pt-0.5">
                   {isChanged ? '→' : '≡'}
                 </div>
-                <div className={clsx("text-xs font-mono font-bold break-words", isChanged ? "text-emerald-400" : "text-slate-400")}>
+                <div className={clsx("text-xs font-mono font-bold break-words", isChanged ? "text-emerald-400" : "text-nocturne-text-secondary")}>
                   {newVal != null ? String(newVal) : '∅'}
                 </div>
               </div>
@@ -212,12 +212,12 @@ function ReviewPage() {
   };
 
   return (
-    <div className="flex h-full bg-[#05050A] text-slate-300 overflow-hidden font-sans selection:bg-purple-500/30 selection:text-purple-200">
+    <div className="flex h-full bg-nocturne-bg-primary text-nocturne-text-primary overflow-hidden font-sans selection:bg-purple-500/30 selection:text-purple-200">
 
       {/* Sidebar */}
-      <div className="w-72 flex-shrink-0 flex flex-col border-r border-slate-800/30 bg-[#08080E]">
-        <div className="p-5 border-b border-slate-800/30">
-          <div className="flex items-center gap-3 text-slate-100">
+      <div className="w-72 flex-shrink-0 flex flex-col border-r border-[var(--color-border)] bg-nocturne-bg-secondary">
+        <div className="p-5 border-b border-[var(--color-border)]">
+          <div className="flex items-center gap-3 text-nocturne-text-primary">
             <div className="w-8 h-8 rounded bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-900/20">
               <ShieldCheck className="w-4 h-4 text-white" />
             </div>
@@ -243,10 +243,10 @@ function ReviewPage() {
         </div>
 
         {changes.length > 0 && (
-          <div className="p-4 border-t border-slate-800/30 bg-slate-900/20 backdrop-blur-sm">
+          <div className="p-4 border-t border-[var(--color-border)] bg-nocturne-bg-tertiary/20 backdrop-blur-sm">
             <button
               onClick={handleClearAll}
-              className="w-full group flex items-center justify-center gap-2 bg-slate-800/50 hover:bg-emerald-900/20 text-slate-400 hover:text-emerald-400 border border-slate-700 hover:border-emerald-800/50 rounded-md py-2.5 text-xs font-medium transition-all duration-300"
+              className="w-full group flex items-center justify-center gap-2 bg-nocturne-bg-hover/50 hover:bg-emerald-900/20 text-nocturne-text-secondary hover:text-emerald-400 border border-[var(--color-border-light)] hover:border-emerald-800/50 rounded-md py-2.5 text-xs font-medium transition-all duration-300"
             >
               <Check size={14} className="group-hover:scale-110 transition-transform" />
               <span>{t('review.action.integrate_all')}</span>
@@ -256,13 +256,13 @@ function ReviewPage() {
       </div>
 
       {/* Main Stage */}
-      <div className="flex-1 flex flex-col min-w-0 bg-[#05050A] relative">
+      <div className="flex-1 flex flex-col min-w-0 bg-nocturne-bg-primary relative">
         <div className="absolute top-0 left-0 right-0 h-96 bg-gradient-to-b from-purple-900/5 to-transparent pointer-events-none" />
 
         {selectedChange ? (
           <>
             {/* Header */}
-            <div className="h-20 border-b border-slate-800/30 flex items-center justify-between px-8 relative z-10 backdrop-blur-sm">
+            <div className="h-20 border-b border-[var(--color-border)] flex items-center justify-between px-8 relative z-10 backdrop-blur-sm">
               <div className="flex items-center gap-4 min-w-0">
                 <div className={clsx(
                   "w-10 h-10 rounded-full flex items-center justify-center border",
@@ -271,7 +271,7 @@ function ReviewPage() {
                   {changeTypeIcon(selectedChange.top_level_table)}
                 </div>
                 <div className="min-w-0 flex flex-col">
-                  <h2 className="text-lg font-medium text-slate-100 truncate tracking-tight flex items-center gap-3">
+                  <h2 className="text-lg font-medium text-nocturne-text-primary truncate tracking-tight flex items-center gap-3">
                     <span>{selectedChange.display_uri}</span>
                     {selectedChange.namespaces && selectedChange.namespaces.length > 0 && selectedChange.namespaces.some(ns => ns !== "" || selectedChange.namespaces.length > 1) && (
                       <span className="text-[10px] px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 tracking-widest font-mono uppercase">
@@ -279,11 +279,11 @@ function ReviewPage() {
                       </span>
                     )}
                   </h2>
-                  <div className="flex items-center gap-2 text-xs text-slate-500">
-                    <span className="bg-slate-800/50 px-1.5 py-0.5 rounded text-slate-400 capitalize">
+                  <div className="flex items-center gap-2 text-xs text-nocturne-text-muted">
+                    <span className="bg-nocturne-bg-hover/50 px-1.5 py-0.5 rounded text-nocturne-text-secondary capitalize">
                       {selectedChange.top_level_table} {selectedChange.action || t('review.badge.modified')}
                     </span>
-                    <span className="text-slate-600">
+                    <span className="text-nocturne-text-muted">
                       ({t('review.badge.rows_affected', { count: selectedChange.row_count })})
                     </span>
                   </div>
@@ -293,7 +293,7 @@ function ReviewPage() {
               <div className="flex items-center gap-3">
                 <button
                   onClick={handleRollback}
-                  className="flex items-center gap-2 px-5 py-2 bg-slate-900 hover:bg-rose-950/30 border border-slate-700 hover:border-rose-800 text-slate-400 hover:text-rose-400 rounded-md transition-all duration-200 text-xs font-medium uppercase tracking-wider"
+                  className="flex items-center gap-2 px-5 py-2 bg-nocturne-bg-tertiary hover:bg-rose-950/30 border border-[var(--color-border-light)] hover:border-rose-800 text-nocturne-text-secondary hover:text-rose-400 rounded-md transition-all duration-200 text-xs font-medium uppercase tracking-wider"
                 >
                   <RotateCcw size={14} /> {t('review.action.reject_group')}
                 </button>
@@ -320,7 +320,7 @@ function ReviewPage() {
                     </div>
                     <button
                       onClick={() => loadDiff(selectedChange.node_uuid)}
-                      className="px-6 py-2 bg-slate-800/50 hover:bg-slate-800 rounded-full text-slate-300 text-xs transition-colors border border-slate-700"
+                      className="px-6 py-2 bg-nocturne-bg-hover/50 hover:bg-nocturne-bg-hover rounded-full text-nocturne-text-primary text-xs transition-colors border border-[var(--color-border-light)]"
                     >
                       {t('review.action.retry')}
                     </button>
@@ -336,7 +336,7 @@ function ReviewPage() {
                             ? "bg-emerald-500/5 border-emerald-500/20 text-emerald-500"
                             : (diffData.has_changes || diffData.path_changes?.length > 0 || diffData.glossary_changes?.length > 0)
                               ? "bg-amber-500/5 border-amber-500/20 text-amber-500"
-                              : "bg-slate-800/50 border-slate-700 text-slate-500"
+                              : "bg-nocturne-bg-hover/50 border-[var(--color-border-light)] text-nocturne-text-muted"
                       )}>
                         {diffData.action === 'deleted' ? t('review.diff_status.deletion_detected') 
                           : diffData.action === 'created' ? t('review.diff_status.creation_detected') 
@@ -346,8 +346,8 @@ function ReviewPage() {
                     </div>
 
                     {diffData.path_changes && diffData.path_changes.length > 0 && (
-                      <div className="mb-8 p-4 bg-slate-900/40 border border-slate-800/60 rounded-lg backdrop-blur-sm">
-                        <h3 className="text-xs font-bold text-slate-500 uppercase mb-4 flex items-center gap-2 tracking-widest">
+                      <div className="mb-8 p-4 bg-nocturne-bg-tertiary/40 border border-[var(--color-border-strong)] rounded-lg backdrop-blur-sm">
+                        <h3 className="text-xs font-bold text-nocturne-text-muted uppercase mb-4 flex items-center gap-2 tracking-widest">
                           <Database size={12} /> {t('review.path_modifications.title')}
                         </h3>
                         <div className="space-y-2">
@@ -370,8 +370,8 @@ function ReviewPage() {
                           ))}
                         </div>
                         {diffData.active_paths && diffData.active_paths.length > 0 && (
-                          <div className="mt-4 pt-4 border-t border-slate-800/50">
-                            <span className="text-xs text-slate-500 block mb-2">{t('review.path.accessible_at')}</span>
+                          <div className="mt-4 pt-4 border-t border-[var(--color-border)]">
+                            <span className="text-xs text-nocturne-text-muted block mb-2">{t('review.path.accessible_at')}</span>
                             <div className="flex flex-wrap gap-2">
                               {diffData.active_paths.map((uri, i) => (
                                 <span key={i} className="flex items-center gap-2 text-xs font-mono text-indigo-300 bg-indigo-900/10 border border-indigo-500/20 px-2 py-1 rounded">
@@ -392,8 +392,8 @@ function ReviewPage() {
                     )}
 
                     {diffData.glossary_changes && diffData.glossary_changes.length > 0 && (
-                      <div className="mb-8 p-4 bg-slate-900/40 border border-slate-800/60 rounded-lg backdrop-blur-sm">
-                        <h3 className="text-xs font-bold text-slate-500 uppercase mb-4 flex items-center gap-2 tracking-widest">
+                      <div className="mb-8 p-4 bg-nocturne-bg-tertiary/40 border border-[var(--color-border-strong)] rounded-lg backdrop-blur-sm">
+                        <h3 className="text-xs font-bold text-nocturne-text-muted uppercase mb-4 flex items-center gap-2 tracking-widest">
                           <BookOpen size={12} /> {t('review.glossary.title')}
                         </h3>
                         <div className="space-y-2">
@@ -415,7 +415,7 @@ function ReviewPage() {
 
                     {renderMetadataChanges()}
 
-                    <div className="bg-[#0A0A12]/50 rounded-xl border border-slate-800/50 p-1 min-h-[200px] shadow-2xl relative overflow-hidden">
+                    <div className="bg-nocturne-bg-secondary/50 rounded-xl border border-[var(--color-border)] p-1 min-h-[200px] shadow-2xl relative overflow-hidden">
                       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent opacity-50"></div>
                       <div className="p-6 md:p-10">
                         <DiffViewer
@@ -426,7 +426,7 @@ function ReviewPage() {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center justify-center h-64 text-slate-700">
+                  <div className="flex flex-col items-center justify-center h-64 text-nocturne-text-muted">
                     <div className="w-2 h-2 bg-indigo-500 rounded-full animate-ping mb-4"></div>
                     <span className="text-xs tracking-widest uppercase opacity-50">{t('review.status.synchronizing')}</span>
                   </div>
@@ -440,14 +440,14 @@ function ReviewPage() {
             <p className="text-sm font-medium opacity-50">{t('review.status.connection_lost')}</p>
           </div>
         ) : (
-          <div className="flex-1 flex flex-col items-center justify-center text-slate-700 gap-6 select-none">
+          <div className="flex-1 flex flex-col items-center justify-center text-nocturne-text-muted gap-6 select-none">
             <div className="relative">
               <div className="absolute inset-0 bg-indigo-500/20 blur-3xl rounded-full opacity-20 animate-pulse"></div>
               <Layout size={64} className="opacity-20 relative z-10" />
             </div>
             <div className="text-center">
-              <p className="text-lg font-light text-slate-500">{t('review.empty.awaiting_input')}</p>
-              <p className="text-xs text-slate-600 mt-2 tracking-wide uppercase">{t('review.empty.select_memory')}</p>
+              <p className="text-lg font-light text-nocturne-text-muted">{t('review.empty.awaiting_input')}</p>
+              <p className="text-xs text-nocturne-text-muted mt-2 tracking-wide uppercase">{t('review.empty.select_memory')}</p>
             </div>
           </div>
         )}
@@ -458,3 +458,4 @@ function ReviewPage() {
 }
 
 export default ReviewPage;
+

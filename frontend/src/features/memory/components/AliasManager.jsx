@@ -133,14 +133,14 @@ const AliasManager = ({ aliases, currentDomain, currentPath, onUpdate }) => {
   };
 
   return (
-    <div className="flex items-start gap-2 text-xs text-slate-500">
-      <Link2 size={13} className="flex-shrink-0 mt-0.5 text-slate-600" />
+    <div className="flex items-start gap-2 text-xs text-nocturne-text-muted">
+      <Link2 size={13} className="flex-shrink-0 mt-0.5 text-nocturne-text-muted" />
       <div className="flex flex-wrap gap-1.5 items-center">
-        <span className="text-slate-600 font-medium">{t('memory.alias.label')}</span>
+        <span className="text-nocturne-text-muted font-medium">{t('memory.alias.label')}</span>
         {aliases.map(alias => (
           <span
             key={alias}
-            className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-slate-800/60 border border-slate-700/50 rounded text-indigo-400/70 font-mono text-[11px]"
+            className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-nocturne-bg-tertiary/60 border border-[var(--color-border-light)] rounded text-indigo-400/70 font-mono text-[11px]"
           >
             {alias}
             {confirmRemove === alias ? (
@@ -154,7 +154,7 @@ const AliasManager = ({ aliases, currentDomain, currentPath, onUpdate }) => {
                 </button>
                 <button
                   onClick={() => setConfirmRemove(null)}
-                  className="text-slate-500 hover:text-slate-300 text-[10px] transition-colors"
+                  className="text-nocturne-text-muted hover:text-nocturne-text-primary text-[10px] transition-colors"
                 >
                   {t('memory.alias.confirm_no')}
                 </button>
@@ -162,7 +162,7 @@ const AliasManager = ({ aliases, currentDomain, currentPath, onUpdate }) => {
             ) : (
               <button
                 onClick={() => setConfirmRemove(alias)}
-                className="text-slate-600 hover:text-rose-400 transition-colors"
+                className="text-nocturne-text-muted hover:text-rose-400 transition-colors"
                 title={t('memory.alias.remove_tooltip')}
               >
                 <X size={9} />
@@ -174,15 +174,15 @@ const AliasManager = ({ aliases, currentDomain, currentPath, onUpdate }) => {
           <div className="w-full space-y-1.5 mt-1">
             {/* Row 1: cascading path selectors */}
             <div className="flex flex-wrap items-center gap-1.5">
-              <span className="text-xs text-slate-500">{currentDomain}://</span>
+              <span className="text-xs text-nocturne-text-muted">{currentDomain}://</span>
               {childrenByLevel.map((options, level) => (
                 options.length > 0 && (
                   <React.Fragment key={level}>
-                    {level > 0 && <span className="text-slate-600 text-[11px]">/</span>}
+                    {level > 0 && <span className="text-nocturne-text-muted text-[11px]">/</span>}
                     <select
                       value={pathSegments[level] || ''}
                       onChange={e => handleSegmentChange(level, e.target.value)}
-                      className="px-1.5 py-0.5 bg-slate-900 border border-indigo-800/40 rounded text-indigo-300 text-[11px] font-mono focus:outline-none focus:border-indigo-500/50"
+                      className="px-1.5 py-0.5 bg-nocturne-bg-tertiary border border-indigo-800/40 rounded text-indigo-300 text-[11px] font-mono focus:outline-none focus:border-indigo-500/50"
                     >
                       <option value="">{level === 0 ? t('memory.alias.root_option') : '—'}</option>
                       {options.map(name => (
@@ -192,8 +192,8 @@ const AliasManager = ({ aliases, currentDomain, currentPath, onUpdate }) => {
                   </React.Fragment>
                 )
               ))}
-              {loadingLevel >= 0 && <Loader2 size={9} className="animate-spin text-slate-500" />}
-              <span className="text-slate-600 text-[11px]">/</span>
+              {loadingLevel >= 0 && <Loader2 size={9} className="animate-spin text-nocturne-text-muted" />}
+              <span className="text-nocturne-text-muted text-[11px]">/</span>
               <input
                 ref={leafInputRef}
                 type="text"
@@ -201,7 +201,7 @@ const AliasManager = ({ aliases, currentDomain, currentPath, onUpdate }) => {
                 onChange={e => setLeafName(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={t('memory.alias.name_placeholder')}
-                className="w-24 px-1.5 py-0.5 bg-slate-900 border border-indigo-800/40 rounded text-indigo-300 text-[11px] font-mono focus:outline-none focus:border-indigo-500/50"
+                className="w-24 px-1.5 py-0.5 bg-nocturne-bg-tertiary border border-indigo-800/40 rounded text-indigo-300 text-[11px] font-mono focus:outline-none focus:border-indigo-500/50"
               />
             </div>
             {/* Row 2: disclosure, priority, actions (fixed position) */}
@@ -212,14 +212,14 @@ const AliasManager = ({ aliases, currentDomain, currentPath, onUpdate }) => {
                 onChange={e => setNewDisclosure(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={t('memory.alias.disclosure_placeholder')}
-                className="w-48 px-1.5 py-0.5 bg-slate-900 border border-indigo-800/40 rounded text-indigo-300 text-[11px] focus:outline-none focus:border-indigo-500/50"
+                className="w-48 px-1.5 py-0.5 bg-nocturne-bg-tertiary border border-indigo-800/40 rounded text-indigo-300 text-[11px] focus:outline-none focus:border-indigo-500/50"
               />
               <input
                 type="number" min="0"
                 value={newPriority}
                 onChange={e => setNewPriority(parseInt(e.target.value) || 0)}
                 onKeyDown={handleKeyDown}
-                className="w-14 px-1.5 py-0.5 bg-slate-900 border border-indigo-800/40 rounded text-indigo-300 text-[11px] font-mono focus:outline-none focus:border-indigo-500/50"
+                className="w-14 px-1.5 py-0.5 bg-nocturne-bg-tertiary border border-indigo-800/40 rounded text-indigo-300 text-[11px] font-mono focus:outline-none focus:border-indigo-500/50"
                 title={t('memory.alias.priority')}
               />
               <button
@@ -229,7 +229,7 @@ const AliasManager = ({ aliases, currentDomain, currentPath, onUpdate }) => {
               >
                 {saving ? <Loader2 size={11} className="animate-spin" /> : <Save size={11} />}
               </button>
-              <button onClick={cancelAdd} className="text-slate-600 hover:text-slate-400 transition-colors">
+              <button onClick={cancelAdd} className="text-nocturne-text-muted hover:text-nocturne-text-secondary transition-colors">
                 <X size={11} />
               </button>
             </div>
@@ -237,7 +237,7 @@ const AliasManager = ({ aliases, currentDomain, currentPath, onUpdate }) => {
         ) : (
           <button
             onClick={() => setAdding(true)}
-            className="inline-flex items-center gap-0.5 px-1.5 py-0.5 border border-dashed border-slate-700 rounded text-slate-600 hover:text-indigo-400 hover:border-indigo-500/40 transition-colors text-[11px]"
+            className="inline-flex items-center gap-0.5 px-1.5 py-0.5 border border-dashed border-[var(--color-border-light)] rounded text-nocturne-text-muted hover:text-indigo-400 hover:border-indigo-500/40 transition-colors text-[11px]"
           >
             <Plus size={9} /> {t('memory.alias.add')}
           </button>

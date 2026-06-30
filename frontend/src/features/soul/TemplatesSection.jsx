@@ -20,11 +20,11 @@ function localizedLabel(spec, lang) {
 
 function PersonaField({ name, spec, value, onChange, lang }) {
   const label = localizedLabel(spec, lang);
-  const common = "w-full bg-slate-950 border border-slate-700 text-slate-200 rounded-md px-2.5 py-1.5 text-sm placeholder:text-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500";
+  const common = "w-full bg-nocturne-bg-primary border border-[var(--color-border-light)] text-nocturne-text-primary rounded-md px-2.5 py-1.5 text-sm placeholder:text-nocturne-text-muted focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500";
 
   return (
     <div>
-      <label className="text-xs text-slate-400 mb-1 block">
+      <label className="text-xs text-nocturne-text-secondary mb-1 block">
         {label}{spec.required && <span className="text-red-400 ml-0.5">*</span>}
       </label>
       {spec.type === 'select' ? (
@@ -101,13 +101,13 @@ function BirthDialog({ template, onClose, onBorn }) {
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-slate-900 border border-slate-700 rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-800 flex-shrink-0">
-          <div className="flex items-center gap-2 text-slate-100 font-semibold">
+      <div className="relative bg-nocturne-bg-tertiary border border-[var(--color-border-light)] rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--color-border)] flex-shrink-0">
+          <div className="flex items-center gap-2 text-nocturne-text-primary font-semibold">
             <Sparkles size={16} className="text-indigo-400" />
             {t('settings.soul.birth_title')}
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-200">
+          <button onClick={onClose} className="text-nocturne-text-secondary hover:text-nocturne-text-primary">
             <X size={18} />
           </button>
         </div>
@@ -115,7 +115,7 @@ function BirthDialog({ template, onClose, onBorn }) {
         <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3 min-h-0">
           {step === 1 ? (
             <>
-              <p className="text-xs text-slate-500">{t('settings.soul.step_persona')}</p>
+              <p className="text-xs text-nocturne-text-muted">{t('settings.soul.step_persona')}</p>
               {personaEntries.map(([name, spec]) => (
                 <PersonaField
                   key={name}
@@ -129,7 +129,7 @@ function BirthDialog({ template, onClose, onBorn }) {
             </>
           ) : (
             <>
-              <p className="text-xs text-slate-500">{t('settings.soul.step_relationship')}</p>
+              <p className="text-xs text-nocturne-text-muted">{t('settings.soul.step_relationship')}</p>
               <div className="grid grid-cols-2 gap-2">
                 {RELATIONSHIP_TYPES.map(rel => (
                   <button
@@ -139,23 +139,23 @@ function BirthDialog({ template, onClose, onBorn }) {
                       'px-3 py-2 rounded-lg text-sm border transition-all text-left',
                       relationship === rel
                         ? 'border-indigo-500 bg-indigo-500/10 text-indigo-300'
-                        : 'border-slate-700 bg-slate-950/50 text-slate-300 hover:border-slate-600'
+                        : 'border-[var(--color-border-light)] bg-nocturne-bg-primary/50 text-nocturne-text-primary hover:border-[var(--color-border-light)]'
                     )}
                   >
                     {t(`settings.relationship.type.${rel}`)}
                   </button>
                 ))}
               </div>
-              <div className="mt-3 p-3 rounded-lg bg-slate-950/50 border border-slate-700">
+              <div className="mt-3 p-3 rounded-lg bg-nocturne-bg-primary/50 border border-[var(--color-border-light)]">
                 <label className="flex items-start gap-2 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={forceOverwrite}
                     onChange={e => setForceOverwrite(e.target.checked)}
-                    className="mt-0.5 w-4 h-4 rounded border-slate-600 text-indigo-500 focus:ring-indigo-500 focus:ring-offset-0"
+                    className="mt-0.5 w-4 h-4 rounded border-[var(--color-border-light)] text-indigo-500 focus:ring-indigo-500 focus:ring-offset-0"
                   />
-                  <span className="text-xs text-slate-400">
-                    <span className="text-slate-200 font-medium">{t('settings.soul.force_overwrite')}</span>
+                  <span className="text-xs text-nocturne-text-secondary">
+                    <span className="text-nocturne-text-primary font-medium">{t('settings.soul.force_overwrite')}</span>
                     <br />
                     {t('settings.soul.force_overwrite_desc')}
                   </span>
@@ -165,9 +165,9 @@ function BirthDialog({ template, onClose, onBorn }) {
           )}
         </div>
 
-        <div className="flex items-center justify-between px-5 py-4 border-t border-slate-800 flex-shrink-0">
+        <div className="flex items-center justify-between px-5 py-4 border-t border-[var(--color-border)] flex-shrink-0">
           {step === 2 ? (
-            <button onClick={() => setStep(1)} className="flex items-center gap-1 text-xs text-slate-400 hover:text-slate-200">
+            <button onClick={() => setStep(1)} className="flex items-center gap-1 text-xs text-nocturne-text-secondary hover:text-nocturne-text-primary">
               <ArrowLeft size={14} /> {t('settings.soul.back')}
             </button>
           ) : <span />}
@@ -299,12 +299,12 @@ export default function TemplatesSection({ onBorn }) {
   };
 
   if (loading) {
-    return <div className="pt-4 text-sm text-slate-500">{t('settings.soul.loading')}</div>;
+    return <div className="pt-4 text-sm text-nocturne-text-muted">{t('settings.soul.loading')}</div>;
   }
 
   return (
     <div className="space-y-4 pt-4">
-      <p className="text-xs text-slate-500">{t('settings.soul.description')}</p>
+      <p className="text-xs text-nocturne-text-muted">{t('settings.soul.description')}</p>
 
       {/* One-click initialize existing data */}
       <div className="bg-amber-950/20 border border-amber-500/20 rounded-lg p-3">
@@ -312,14 +312,14 @@ export default function TemplatesSection({ onBorn }) {
           <Wand2 size={13} className="text-amber-400" />
           {t('settings.soul.init_existing')}
         </div>
-        <p className="text-[11px] text-slate-500 leading-relaxed mb-2">
+        <p className="text-[11px] text-nocturne-text-muted leading-relaxed mb-2">
           {t('settings.soul.init_existing_description')}
         </p>
         <div className="flex items-center gap-2">
           <select
             value={initRelationship}
             onChange={e => setInitRelationship(e.target.value)}
-            className="flex-1 bg-slate-950 border border-slate-700 text-slate-200 rounded-md px-2.5 py-1.5 text-xs focus:outline-none focus:border-amber-500"
+            className="flex-1 bg-nocturne-bg-primary border border-[var(--color-border-light)] text-nocturne-text-primary rounded-md px-2.5 py-1.5 text-xs focus:outline-none focus:border-amber-500"
           >
             {RELATIONSHIP_TYPES.map(rel => (
               <option key={rel} value={rel}>{t(`settings.relationship.type.${rel}`)}</option>
@@ -337,7 +337,7 @@ export default function TemplatesSection({ onBorn }) {
       </div>
 
       <div className="flex items-center justify-between mb-2">
-        <span className="text-xs text-slate-500">{t('settings.soul.templates')}</span>
+        <span className="text-xs text-nocturne-text-muted">{t('settings.soul.templates')}</span>
         <button
           onClick={() => setCreating(true)}
           className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300"
@@ -350,10 +350,10 @@ export default function TemplatesSection({ onBorn }) {
         {templates.map(tpl => {
           const desc = i18n.language?.startsWith('zh') ? tpl.description : (tpl.description_en || tpl.description);
           return (
-            <div key={tpl.id} className="bg-slate-900/60 border border-slate-800 hover:border-slate-700 rounded-lg p-3 transition-all">
+            <div key={tpl.id} className="bg-nocturne-bg-tertiary/60 border border-[var(--color-border)] hover:border-[var(--color-border-light)] rounded-lg p-3 transition-all">
               <div className="flex items-start gap-3">
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-slate-200 flex items-center gap-2">
+                  <div className="text-sm font-medium text-nocturne-text-primary flex items-center gap-2">
                     <Sparkles size={14} className="text-indigo-400 flex-shrink-0" />
                     {i18n.language?.startsWith('zh') ? tpl.name : (tpl.name_en || tpl.name)}
                     {tpl.is_custom && (
@@ -362,8 +362,8 @@ export default function TemplatesSection({ onBorn }) {
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-500 mt-1 leading-relaxed">{desc}</p>
-                  <div className="text-[11px] text-slate-600 mt-1.5">
+                  <p className="text-xs text-nocturne-text-muted mt-1 leading-relaxed">{desc}</p>
+                  <div className="text-[11px] text-nocturne-text-muted mt-1.5">
                     {t('settings.soul.node_count', { count: tpl.node_count })} · {tpl.domains.join(', ')}
                   </div>
                 </div>
@@ -388,7 +388,7 @@ export default function TemplatesSection({ onBorn }) {
           );
         })}
         {templates.length === 0 && (
-          <p className="text-xs text-slate-600 italic">{t('settings.soul.empty')}</p>
+          <p className="text-xs text-nocturne-text-muted italic">{t('settings.soul.empty')}</p>
         )}
       </div>
 
@@ -404,69 +404,69 @@ export default function TemplatesSection({ onBorn }) {
       {creating && createPortal(
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setCreating(false)} />
-          <div className="relative bg-slate-900 border border-slate-700 rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-800 flex-shrink-0">
-              <div className="flex items-center gap-2 text-slate-100 font-semibold">
+          <div className="relative bg-nocturne-bg-tertiary border border-[var(--color-border-light)] rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--color-border)] flex-shrink-0">
+              <div className="flex items-center gap-2 text-nocturne-text-primary font-semibold">
                 <FileEdit size={16} className="text-indigo-400" />
                 {t('settings.soul.create_template')}
               </div>
-              <button onClick={() => setCreating(false)} className="text-slate-400 hover:text-slate-200">
+              <button onClick={() => setCreating(false)} className="text-nocturne-text-secondary hover:text-nocturne-text-primary">
                 <X size={18} />
               </button>
             </div>
             <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3 min-h-0">
               <div>
-                <label className="text-xs text-slate-400 mb-1 block">{t('settings.soul.template_id')} <span className="text-red-400">*</span></label>
+                <label className="text-xs text-nocturne-text-secondary mb-1 block">{t('settings.soul.template_id')} <span className="text-red-400">*</span></label>
                 <input
                   type="text"
                   value={createData.id}
                   onChange={e => setCreateData(d => ({ ...d, id: e.target.value }))}
-                  className="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded-md px-2.5 py-1.5 text-sm focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-nocturne-bg-primary border border-[var(--color-border-light)] text-nocturne-text-primary rounded-md px-2.5 py-1.5 text-sm focus:outline-none focus:border-indigo-500"
                   placeholder="my_template"
                 />
               </div>
               <div>
-                <label className="text-xs text-slate-400 mb-1 block">{t('settings.soul.template_name')} <span className="text-red-400">*</span></label>
+                <label className="text-xs text-nocturne-text-secondary mb-1 block">{t('settings.soul.template_name')} <span className="text-red-400">*</span></label>
                 <input
                   type="text"
                   value={createData.name}
                   onChange={e => setCreateData(d => ({ ...d, name: e.target.value }))}
-                  className="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded-md px-2.5 py-1.5 text-sm focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-nocturne-bg-primary border border-[var(--color-border-light)] text-nocturne-text-primary rounded-md px-2.5 py-1.5 text-sm focus:outline-none focus:border-indigo-500"
                   placeholder="我的灵魂模板"
                 />
               </div>
               <div>
-                <label className="text-xs text-slate-400 mb-1 block">{t('settings.soul.template_name_en')}</label>
+                <label className="text-xs text-nocturne-text-secondary mb-1 block">{t('settings.soul.template_name_en')}</label>
                 <input
                   type="text"
                   value={createData.name_en}
                   onChange={e => setCreateData(d => ({ ...d, name_en: e.target.value }))}
-                  className="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded-md px-2.5 py-1.5 text-sm focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-nocturne-bg-primary border border-[var(--color-border-light)] text-nocturne-text-primary rounded-md px-2.5 py-1.5 text-sm focus:outline-none focus:border-indigo-500"
                   placeholder="My Soul Template"
                 />
               </div>
               <div>
-                <label className="text-xs text-slate-400 mb-1 block">{t('settings.soul.template_description')}</label>
+                <label className="text-xs text-nocturne-text-secondary mb-1 block">{t('settings.soul.template_description')}</label>
                 <textarea
                   rows={2}
                   value={createData.description}
                   onChange={e => setCreateData(d => ({ ...d, description: e.target.value }))}
-                  className="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded-md px-2.5 py-1.5 text-sm focus:outline-none focus:border-indigo-500 resize-none"
+                  className="w-full bg-nocturne-bg-primary border border-[var(--color-border-light)] text-nocturne-text-primary rounded-md px-2.5 py-1.5 text-sm focus:outline-none focus:border-indigo-500 resize-none"
                   placeholder="描述这个模板的特点..."
                 />
               </div>
               <div>
-                <label className="text-xs text-slate-400 mb-1 block">{t('settings.soul.template_description_en')}</label>
+                <label className="text-xs text-nocturne-text-secondary mb-1 block">{t('settings.soul.template_description_en')}</label>
                 <textarea
                   rows={2}
                   value={createData.description_en}
                   onChange={e => setCreateData(d => ({ ...d, description_en: e.target.value }))}
-                  className="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded-md px-2.5 py-1.5 text-sm focus:outline-none focus:border-indigo-500 resize-none"
+                  className="w-full bg-nocturne-bg-primary border border-[var(--color-border-light)] text-nocturne-text-primary rounded-md px-2.5 py-1.5 text-sm focus:outline-none focus:border-indigo-500 resize-none"
                   placeholder="Describe this template..."
                 />
               </div>
-              <div className="border-t border-slate-800 pt-3">
-                <label className="text-xs text-slate-400 mb-2 block">{t('settings.soul.template_persona')}</label>
+              <div className="border-t border-[var(--color-border)] pt-3">
+                <label className="text-xs text-nocturne-text-secondary mb-2 block">{t('settings.soul.template_persona')}</label>
                 <textarea
                   rows={4}
                   value={JSON.stringify(createData.persona, null, 2)}
@@ -475,12 +475,12 @@ export default function TemplatesSection({ onBorn }) {
                       setCreateData(d => ({ ...d, persona: JSON.parse(e.target.value) }));
                     } catch {}
                   }}
-                  className="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded-md px-2.5 py-1.5 text-xs font-mono focus:outline-none focus:border-indigo-500 resize-none"
+                  className="w-full bg-nocturne-bg-primary border border-[var(--color-border-light)] text-nocturne-text-primary rounded-md px-2.5 py-1.5 text-xs font-mono focus:outline-none focus:border-indigo-500 resize-none"
                   placeholder='{"name": {"type": "text", "label": "名字", "default": "Nocturne"}}'
                 />
               </div>
-              <div className="border-t border-slate-800 pt-3">
-                <label className="text-xs text-slate-400 mb-2 block">{t('settings.soul.template_nodes')}</label>
+              <div className="border-t border-[var(--color-border)] pt-3">
+                <label className="text-xs text-nocturne-text-secondary mb-2 block">{t('settings.soul.template_nodes')}</label>
                 <textarea
                   rows={6}
                   value={JSON.stringify(createData.memory_nodes, null, 2)}
@@ -489,15 +489,15 @@ export default function TemplatesSection({ onBorn }) {
                       setCreateData(d => ({ ...d, memory_nodes: JSON.parse(e.target.value) }));
                     } catch {}
                   }}
-                  className="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded-md px-2.5 py-1.5 text-xs font-mono focus:outline-none focus:border-indigo-500 resize-none"
+                  className="w-full bg-nocturne-bg-primary border border-[var(--color-border-light)] text-nocturne-text-primary rounded-md px-2.5 py-1.5 text-xs font-mono focus:outline-none focus:border-indigo-500 resize-none"
                   placeholder='[{"domain": "core", "path": "agent", "content": "..."}, ...]'
                 />
               </div>
             </div>
-            <div className="flex items-center justify-end px-5 py-4 border-t border-slate-800 flex-shrink-0 gap-2">
+            <div className="flex items-center justify-end px-5 py-4 border-t border-[var(--color-border)] flex-shrink-0 gap-2">
               <button
                 onClick={() => setCreating(false)}
-                className="px-3 py-1.5 text-slate-400 hover:text-slate-200 text-sm"
+                className="px-3 py-1.5 text-nocturne-text-secondary hover:text-nocturne-text-primary text-sm"
               >
                 {t('settings.soul.cancel')}
               </button>

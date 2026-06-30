@@ -112,7 +112,7 @@ function NamespaceSelector() {
 
   return (
     <div className="flex items-center gap-2 text-sm">
-      <Layers size={14} className="text-slate-400 flex-shrink-0" />
+      <Layers size={14} className="text-nocturne-text-muted flex-shrink-0" />
       {showInput ? (
         <input
           autoFocus
@@ -122,13 +122,13 @@ function NamespaceSelector() {
           onKeyDown={handleInputKeyDown}
           onBlur={() => setShowInput(false)}
           placeholder="namespace (Enter to apply)"
-          className="bg-slate-800 border border-indigo-500 text-slate-200 rounded px-2 py-1 text-xs w-40 focus:outline-none"
+          className="bg-nocturne-bg-tertiary border border-indigo-500 text-nocturne-text-primary rounded px-2 py-1 text-xs w-40 focus:outline-none"
         />
       ) : (
         <select
           value={selected}
           onChange={handleSelectChange}
-          className="bg-slate-800 border border-slate-700 text-slate-200 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          className="bg-nocturne-bg-tertiary border border-[var(--color-border-light)] text-nocturne-text-primary rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500"
           title={`Current namespace: ${activeLabel}`}
         >
           <option value="">(default)</option>
@@ -156,10 +156,10 @@ function Layout() {
   const isMaintenancePage = location.pathname.startsWith("/maintenance");
 
   return (
-    <div className="flex flex-col h-screen bg-slate-950 text-slate-200">
+    <div className="flex flex-col h-screen bg-nocturne-bg-primary text-nocturne-text-primary">
       {/* Top Navigation Bar */}
-      <div className="h-12 border-b border-slate-800 bg-slate-900 flex items-center px-4 gap-6 flex-shrink-0 z-10">
-        <div className="font-bold text-slate-100 flex items-center gap-2 mr-4">
+      <div className="h-12 border-b border-[var(--color-border)] bg-nocturne-bg-secondary flex items-center px-4 gap-6 flex-shrink-0 z-10">
+        <div className="font-bold text-nocturne-text-primary flex items-center gap-2 mr-4">
           <LayoutGrid className="w-5 h-5 text-indigo-500" />
           <span data-testid="app-brand">{t("app.nav.brand")}</span>
         </div>
@@ -171,8 +171,8 @@ function Layout() {
               clsx(
                 "h-full flex items-center gap-2 px-4 text-sm font-medium border-b-2 transition-colors",
                 isActive
-                  ? "border-indigo-500 text-indigo-400 bg-slate-800/50"
-                  : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
+                  ? "border-indigo-500 text-indigo-400 bg-nocturne-bg-tertiary/50"
+                  : "border-transparent text-nocturne-text-secondary hover:text-nocturne-text-primary hover:bg-nocturne-bg-tertiary/30"
               )
             }
           >
@@ -186,8 +186,8 @@ function Layout() {
               clsx(
                 "h-full flex items-center gap-2 px-4 text-sm font-medium border-b-2 transition-colors",
                 isActive
-                  ? "border-emerald-500 text-emerald-400 bg-slate-800/50"
-                  : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
+                  ? "border-emerald-500 text-emerald-400 bg-nocturne-bg-tertiary/50"
+                  : "border-transparent text-nocturne-text-secondary hover:text-nocturne-text-primary hover:bg-nocturne-bg-tertiary/30"
               )
             }
           >
@@ -201,8 +201,8 @@ function Layout() {
               clsx(
                 "h-full flex items-center gap-2 px-4 text-sm font-medium border-b-2 transition-colors",
                 isActive
-                  ? "border-rose-500 text-rose-400 bg-slate-800/50"
-                  : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
+                  ? "border-rose-500 text-rose-400 bg-nocturne-bg-tertiary/50"
+                  : "border-transparent text-nocturne-text-secondary hover:text-nocturne-text-primary hover:bg-nocturne-bg-tertiary/30"
               )
             }
           >
@@ -216,8 +216,8 @@ function Layout() {
               clsx(
                 "h-full flex items-center gap-2 px-4 text-sm font-medium border-b-2 transition-colors",
                 isActive
-                  ? "border-amber-500 text-amber-400 bg-slate-800/50"
-                  : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
+                  ? "border-amber-500 text-amber-400 bg-nocturne-bg-tertiary/50"
+                  : "border-transparent text-nocturne-text-secondary hover:text-nocturne-text-primary hover:bg-nocturne-bg-tertiary/30"
               )
             }
           >
@@ -232,7 +232,7 @@ function Layout() {
             onClick={() =>
               window.dispatchEvent(new CustomEvent("open-settings"))
             }
-            className="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors text-nocturne-text-secondary hover:text-nocturne-text-primary hover:bg-nocturne-bg-tertiary/50"
           >
             <Settings size={16} />
             {t("app.nav.settings")}
@@ -332,7 +332,7 @@ function App() {
     return (
       <div
         data-testid="app-loading"
-        className="flex flex-col items-center justify-center h-screen bg-slate-950 text-slate-400"
+        className="flex flex-col items-center justify-center h-screen bg-nocturne-bg-primary text-nocturne-text-secondary"
       >
         <div className="w-8 h-8 rounded-full border-2 border-indigo-500/30 border-t-indigo-500 animate-spin mb-4"></div>
         <div className="text-sm">{t("app.loading.connecting")}</div>
@@ -344,15 +344,15 @@ function App() {
     return (
       <div
         data-testid="error-connection-refused"
-        className="flex flex-col items-center justify-center h-screen bg-slate-950 text-slate-400"
+        className="flex flex-col items-center justify-center h-screen bg-nocturne-bg-primary text-nocturne-text-secondary"
       >
         <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-4">
           <AlertCircle className="w-6 h-6 text-red-500" />
         </div>
-        <div className="text-lg font-bold text-slate-100 mb-1">
+        <div className="text-lg font-bold text-nocturne-text-primary mb-1">
           {t("app.error.connection_refused")}
         </div>
-        <div className="text-sm text-slate-500 max-w-md text-center mt-2 space-y-2">
+        <div className="text-sm text-nocturne-text-muted max-w-md text-center mt-2 space-y-2">
           <p>{t("app.error.troubleshooting")}</p>
           <ul className="list-disc text-left pl-6 space-y-1">
             <li>{t("app.error.check_backend")}</li>

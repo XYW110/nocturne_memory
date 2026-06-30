@@ -12,7 +12,7 @@ const DiffViewer = ({ oldText, newText }) => {
   return (
     <div className="w-full font-sans text-sm leading-7">
       {!hasChanges && (
-        <div data-testid="diff-no-changes" className="text-slate-500 italic p-4 text-center border border-dashed border-slate-800 rounded-lg">
+        <div data-testid="diff-no-changes" className="text-nocturne-text-muted italic p-4 text-center border border-dashed border-[var(--color-border)] rounded-lg">
           {t('diff.no_changes')}
         </div>
       )}
@@ -40,7 +40,7 @@ const DiffViewer = ({ oldText, newText }) => {
           }
 
           return (
-            <div key={index} className="pl-4 pr-2 py-1 text-slate-400 whitespace-pre-wrap hover:text-slate-300 transition-colors border-l-2 border-transparent">
+            <div key={index} className="pl-4 pr-2 py-1 text-nocturne-text-secondary whitespace-pre-wrap hover:text-nocturne-text-primary transition-colors border-l-2 border-transparent">
               {part.value}
             </div>
           );

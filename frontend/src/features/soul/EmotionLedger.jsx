@@ -10,13 +10,13 @@ function LedgerEntry({ entry, t }) {
   const when = entry.created_at ? entry.created_at.slice(0, 16).replace('T', ' ') : '';
 
   return (
-    <div className="border border-slate-800 rounded-md bg-slate-950/40">
+    <div className="border border-[var(--color-border)] rounded-md bg-nocturne-bg-primary/40">
       <button
         onClick={() => setOpen(o => !o)}
-        className="w-full flex items-center gap-2 px-2.5 py-1.5 text-left hover:bg-slate-900/40"
+        className="w-full flex items-center gap-2 px-2.5 py-1.5 text-left hover:bg-nocturne-bg-tertiary/40"
       >
-        {open ? <ChevronDown size={12} className="text-slate-500" /> : <ChevronRight size={12} className="text-slate-500" />}
-        <span className="text-[11px] text-slate-500 font-mono">{when}</span>
+        {open ? <ChevronDown size={12} className="text-nocturne-text-muted" /> : <ChevronRight size={12} className="text-nocturne-text-muted" />}
+        <span className="text-[11px] text-nocturne-text-muted font-mono">{when}</span>
         <span className="flex-1 flex flex-wrap gap-1 justify-end">
           {changed.map(([d, delta]) => (
             <span
@@ -32,9 +32,9 @@ function LedgerEntry({ entry, t }) {
         </span>
       </button>
       {open && (
-        <div className="px-3 pb-2 pt-1 text-xs text-slate-400 border-t border-slate-800/60 space-y-1">
+        <div className="px-3 pb-2 pt-1 text-xs text-nocturne-text-secondary border-t border-[var(--color-border-strong)] space-y-1">
           <p className="whitespace-pre-wrap leading-relaxed">{entry.reason}</p>
-          {entry.context && <p className="text-slate-600 italic">{entry.context}</p>}
+          {entry.context && <p className="text-nocturne-text-muted italic">{entry.context}</p>}
         </div>
       )}
     </div>
@@ -63,7 +63,7 @@ export default function EmotionLedger({ refreshTrigger = 0 }) {
   useEffect(() => { load(); }, [load, refreshTrigger]);
 
   if (loading) {
-    return <div className="pt-2 text-sm text-slate-500 flex items-center gap-2"><RefreshCw size={14} className="animate-spin" /></div>;
+    return <div className="pt-2 text-sm text-nocturne-text-muted flex items-center gap-2"><RefreshCw size={14} className="animate-spin" /></div>;
   }
 
   if (error) {
@@ -72,13 +72,13 @@ export default function EmotionLedger({ refreshTrigger = 0 }) {
 
   return (
     <div className="space-y-3 pt-2">
-      <div className="flex items-center gap-1.5 text-xs text-slate-400">
+      <div className="flex items-center gap-1.5 text-xs text-nocturne-text-secondary">
         <Heart size={12} className="text-rose-400" />
         {t('settings.emotion.ledger_title')}
       </div>
       <div className="space-y-1.5">
         {entries.length === 0 ? (
-          <p className="text-[11px] text-slate-600 italic">{t('settings.emotion.ledger_empty')}</p>
+          <p className="text-[11px] text-nocturne-text-muted italic">{t('settings.emotion.ledger_empty')}</p>
         ) : (
           entries.map(entry => <LedgerEntry key={entry.id} entry={entry} t={t} />)
         )}

@@ -25,9 +25,9 @@ function StatusBadge({ status, t }) {
 function RequestCard({ req, onApprove, onReject, t }) {
   const snap = req.emotional_snapshot;
   return (
-    <div className="bg-slate-900/60 border border-slate-800 rounded-lg p-3 space-y-2">
+    <div className="bg-nocturne-bg-tertiary/60 border border-[var(--color-border)] rounded-lg p-3 space-y-2">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-sm text-slate-200">
+        <div className="flex items-center gap-2 text-sm text-nocturne-text-primary">
           <span>{req.from_label}</span>
           <ArrowRight size={13} className="text-indigo-400" />
           <span className="text-indigo-300">{req.to_label}</span>
@@ -35,12 +35,12 @@ function RequestCard({ req, onApprove, onReject, t }) {
         <StatusBadge status={req.status} t={t} />
       </div>
 
-      <p className="text-xs text-slate-400 leading-relaxed whitespace-pre-wrap">{req.reason}</p>
+      <p className="text-xs text-nocturne-text-secondary leading-relaxed whitespace-pre-wrap">{req.reason}</p>
 
       {snap && (
         <div className="flex flex-wrap gap-1">
           {Object.entries(snap).map(([d, v]) => (
-            <span key={d} className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 font-mono">
+            <span key={d} className="text-[10px] px-1.5 py-0.5 rounded bg-nocturne-bg-tertiary text-nocturne-text-secondary font-mono">
               {t(`settings.emotion.dim.${d}`)} {v}
             </span>
           ))}
@@ -48,7 +48,7 @@ function RequestCard({ req, onApprove, onReject, t }) {
       )}
 
       {req.response_reason && (
-        <p className="text-[11px] text-slate-600 italic">
+        <p className="text-[11px] text-nocturne-text-muted italic">
           {t('settings.relationship.response')}: {req.response_reason}
         </p>
       )}
@@ -63,7 +63,7 @@ function RequestCard({ req, onApprove, onReject, t }) {
           </button>
           <button
             onClick={() => onReject(req)}
-            className="flex-1 flex items-center justify-center gap-1 px-3 py-1.5 bg-slate-700 hover:bg-red-600/80 text-slate-200 rounded-md text-xs font-medium"
+            className="flex-1 flex items-center justify-center gap-1 px-3 py-1.5 bg-nocturne-bg-hover hover:bg-red-600/80 text-nocturne-text-primary rounded-md text-xs font-medium"
           >
             <X size={13} /> {t('settings.relationship.reject')}
           </button>
@@ -121,7 +121,7 @@ export default function RelationshipPanel({ refreshTrigger = 0 }) {
   };
 
   if (loading) {
-    return <div className="pt-4 text-sm text-slate-500 flex items-center gap-2"><RefreshCw size={14} className="animate-spin" /> {t('settings.relationship.loading')}</div>;
+    return <div className="pt-4 text-sm text-nocturne-text-muted flex items-center gap-2"><RefreshCw size={14} className="animate-spin" /> {t('settings.relationship.loading')}</div>;
   }
 
   const pending = requests.filter(r => r.status === 'pending');
@@ -130,8 +130,8 @@ export default function RelationshipPanel({ refreshTrigger = 0 }) {
   return (
     <div className="space-y-4 pt-4">
       {/* Current relationship */}
-      <div className="bg-slate-900/40 border border-slate-800 rounded-lg p-3">
-        <div className="flex items-center gap-1.5 text-xs text-slate-400 mb-2">
+      <div className="bg-nocturne-bg-tertiary/40 border border-[var(--color-border)] rounded-lg p-3">
+        <div className="flex items-center gap-1.5 text-xs text-nocturne-text-secondary mb-2">
           <Users size={12} className="text-indigo-400" />
           {t('settings.relationship.current_title')}
         </div>
@@ -144,13 +144,13 @@ export default function RelationshipPanel({ refreshTrigger = 0 }) {
             ))}
           </div>
         ) : (
-          <p className="text-xs text-slate-600 italic">{t('settings.relationship.none')}</p>
+          <p className="text-xs text-nocturne-text-muted italic">{t('settings.relationship.none')}</p>
         )}
       </div>
 
       {/* Pending requests */}
       <div>
-        <div className="flex items-center gap-1.5 text-xs text-slate-400 mb-2">
+        <div className="flex items-center gap-1.5 text-xs text-nocturne-text-secondary mb-2">
           <Clock size={12} className="text-amber-400" />
           {t('settings.relationship.pending_title')}
           {pending.length > 0 && (
@@ -159,7 +159,7 @@ export default function RelationshipPanel({ refreshTrigger = 0 }) {
         </div>
         <div className="space-y-2">
           {pending.length === 0 ? (
-            <p className="text-[11px] text-slate-600 italic">{t('settings.relationship.no_pending')}</p>
+            <p className="text-[11px] text-nocturne-text-muted italic">{t('settings.relationship.no_pending')}</p>
           ) : (
             pending.map(req => (
               <RequestCard key={req.id} req={req} onApprove={handleApprove} onReject={setRejecting} t={t} />
@@ -171,7 +171,7 @@ export default function RelationshipPanel({ refreshTrigger = 0 }) {
       {/* History */}
       {history.length > 0 && (
         <div>
-          <div className="text-xs text-slate-500 mb-2">{t('settings.relationship.history_title')}</div>
+          <div className="text-xs text-nocturne-text-muted mb-2">{t('settings.relationship.history_title')}</div>
           <div className="space-y-2 opacity-75">
             {history.map(req => (
               <RequestCard key={req.id} req={req} onApprove={handleApprove} onReject={setRejecting} t={t} />

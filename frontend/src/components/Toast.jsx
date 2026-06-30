@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { X, CheckCircle, AlertCircle, Info } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { X, CheckCircle, AlertCircle, Info } from "lucide-react";
 
 // ---------------------------------------------------------------------------
 // Toast — non-blocking notification system
@@ -13,12 +13,18 @@ import { X, CheckCircle, AlertCircle, Info } from 'lucide-react';
 // Same approach as AUTH_ERROR_EVENT (api.js:23) and open-settings (App.jsx:177).
 // ---------------------------------------------------------------------------
 
-const TOAST_EVENT = 'toast-show';
+const TOAST_EVENT = "toast-show";
 
-export function toast(message, type = 'info') {
-  window.dispatchEvent(new CustomEvent(TOAST_EVENT, {
-    detail: { message, type, id: `toast-${Date.now()}-${Math.random().toString(36).slice(2, 7)}` },
-  }));
+export function toast(message, type = "info") {
+  window.dispatchEvent(
+    new CustomEvent(TOAST_EVENT, {
+      detail: {
+        message,
+        type,
+        id: `toast-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      },
+    })
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -27,15 +33,15 @@ export function toast(message, type = 'info') {
 // ---------------------------------------------------------------------------
 
 const ICON_MAP = {
-  error: { Icon: AlertCircle, className: 'text-red-400' },
-  success: { Icon: CheckCircle, className: 'text-emerald-400' },
-  info: { Icon: Info, className: 'text-slate-400' },
+  error: { Icon: AlertCircle, className: "text-red-400" },
+  success: { Icon: CheckCircle, className: "text-emerald-400" },
+  info: { Icon: Info, className: "text-nocturne-text-secondary" },
 };
 
 const TOAST_STYLE = {
-  error: 'bg-red-950/90 border-red-800 text-red-200',
-  success: 'bg-emerald-950/90 border-emerald-800 text-emerald-200',
-  info: 'bg-slate-900/90 border-slate-700 text-slate-200',
+  error: "bg-red-950/90 border-red-800 text-red-200",
+  success: "bg-emerald-950/90 border-emerald-800 text-emerald-200",
+  info: "bg-nocturne-bg-secondary/90 border-[var(--color-border-light)] text-nocturne-text-primary",
 };
 
 function ToastItem({ toast: t, onDismiss }) {
@@ -51,7 +57,7 @@ function ToastItem({ toast: t, onDismiss }) {
       <span className="text-sm flex-1">{t.message}</span>
       <button
         onClick={() => onDismiss(t.id)}
-        className="text-slate-500 hover:text-slate-300 flex-shrink-0 p-0.5 -mr-1"
+        className="text-nocturne-text-muted hover:text-nocturne-text-primary flex-shrink-0 p-0.5 -mr-1"
         aria-label="Dismiss"
       >
         <X size={14} />
@@ -65,7 +71,7 @@ export function ToastContainer() {
   const timersRef = useRef({});
 
   const dismiss = useCallback((id) => {
-    setToasts(prev => prev.filter(t => t.id !== id));
+    setToasts((prev) => prev.filter((t) => t.id !== id));
     if (timersRef.current[id]) {
       clearTimeout(timersRef.current[id]);
       delete timersRef.current[id];
@@ -77,9 +83,9 @@ export function ToastContainer() {
       const { message, type, id } = e.detail;
       const toast = { message, type, id };
 
-      setToasts(prev => [...prev, toast]);
+      setToasts((prev) => [...prev, toast]);
 
-      if (type !== 'error') {
+      if (type !== "error") {
         timersRef.current[id] = setTimeout(() => {
           dismiss(id);
         }, 5000);
@@ -98,7 +104,7 @@ export function ToastContainer() {
 
   return (
     <div className="fixed top-4 right-4 z-[100] flex flex-col gap-2 max-w-sm">
-      {toasts.map(t => (
+      {toasts.map((t) => (
         <ToastItem key={t.id} toast={t} onDismiss={dismiss} />
       ))}
     </div>

@@ -17,22 +17,22 @@ const NodeGridCard = ({ node, currentDomain, isInBoot, onBootToggle, onClick }) 
   <button 
     onClick={onClick}
     className={clsx(
-      "group relative flex flex-col items-start p-5 bg-[#0A0A12] border rounded-xl transition-all duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.1)] hover:-translate-y-1 text-left w-full h-full overflow-hidden",
+      "group relative flex flex-col items-start p-5 bg-nocturne-bg-secondary border rounded-xl transition-all duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.1)] hover:-translate-y-1 text-left w-full h-full overflow-hidden",
       isInBoot
         ? "border-amber-800/40 hover:border-amber-600/50"
         : isCrossDomain
           ? "border-violet-800/40 hover:border-violet-500/40"
-          : "border-slate-800/50 hover:border-indigo-500/30"
+          : "border-[var(--color-border)] hover:border-indigo-500/30"
     )}
   >
     <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
     
     <div className="flex items-center gap-3 mb-3 w-full">
-      <div className="p-2 rounded-lg bg-slate-900 group-hover:bg-indigo-900/20 text-slate-500 group-hover:text-indigo-400 transition-colors flex-shrink-0">
+      <div className="p-2 rounded-lg bg-nocturne-bg-tertiary group-hover:bg-indigo-900/20 text-nocturne-text-muted group-hover:text-indigo-400 transition-colors flex-shrink-0">
          {node.approx_children_count > 0 ? <Folder size={18} /> : <FileText size={18} />}
       </div>
       <div className="min-w-0 flex-1">
-        <h3 className="text-sm font-semibold text-slate-300 group-hover:text-indigo-200 transition-colors break-words line-clamp-2">
+        <h3 className="text-sm font-semibold text-nocturne-text-primary group-hover:text-indigo-200 transition-colors break-words line-clamp-2">
           {node.name || node.path.split('/').pop()}
         </h3>
         {isCrossDomain && (
@@ -58,7 +58,7 @@ const NodeGridCard = ({ node, currentDomain, isInBoot, onBootToggle, onClick }) 
             "p-1 rounded-md transition-all z-10",
             isInBoot
               ? "text-amber-400 bg-amber-950/50 border border-amber-700/40 shadow-[0_0_8px_rgba(245,158,11,0.15)]"
-              : "text-slate-700 hover:text-amber-400/70 hover:bg-slate-800/60 opacity-0 group-hover:opacity-100 border border-transparent"
+              : "text-nocturne-text-muted hover:text-amber-400/70 hover:bg-nocturne-bg-tertiary/60 opacity-0 group-hover:opacity-100 border border-transparent"
           )}
         >
           <Zap size={13} className={isInBoot ? "fill-amber-400" : ""} />
@@ -77,11 +77,11 @@ const NodeGridCard = ({ node, currentDomain, isInBoot, onBootToggle, onClick }) 
     
     <div className="w-full flex-1">
         {node.content_snippet ? (
-            <p className="text-xs text-slate-500 leading-relaxed line-clamp-3">
+            <p className="text-xs text-nocturne-text-muted leading-relaxed line-clamp-3">
                 {node.content_snippet}
             </p>
         ) : (
-            <p className="text-xs text-slate-700 italic">{t('memory.card.no_preview')}</p>
+            <p className="text-xs text-nocturne-text-muted italic">{t('memory.card.no_preview')}</p>
         )}
     </div>
 

@@ -11,7 +11,7 @@ const PriorityBadge = ({ priority, size = 'sm' }) => {
     ? 'bg-amber-950/30 text-amber-400 border-amber-800/30'
     : priority <= 5
     ? 'bg-sky-950/30 text-sky-400 border-sky-800/30'
-    : 'bg-slate-800/30 text-slate-500 border-slate-700/30';
+    : 'bg-nocturne-bg-tertiary/30 text-nocturne-text-muted border-[var(--color-border-light)]';
   
   const sizeClass = size === 'lg' 
     ? 'px-2.5 py-1 text-xs gap-1.5' 
