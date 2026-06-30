@@ -137,3 +137,36 @@
 ### Next Steps
 
 - None - task complete
+
+
+## Session 5: 手机端网页适配 — 实现 /m/* 路由 + 5个移动端页面 + 11个数据流Bug修复
+
+**Date**: 2026-06-30
+**Task**: 手机端网页适配 — 实现 /m/* 路由 + 5个移动端页面 + 11个数据流Bug修复
+**Branch**: `main`
+
+### Summary
+
+实现手机端独立路由 /m/*，创建 MobileLayout（TopBar + BottomTabBar + 子路由）和 5 个移动端页面（Review/Memory/Soul/Maintenance/Settings）。提取 NamespaceSelector，App.jsx 增加设备检测和 Layout 分流。添加 i18n mobile 命名空间（zh + en）和 safe-area CSS 变量。修复 11 个数据流 Bug（props 对齐、API 参数修正、React Error #31 等），npm run build 验证通过。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `ed38b2e` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
