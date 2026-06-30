@@ -14,7 +14,6 @@ import {
   LayoutGrid,
   Sparkles,
   AlertCircle,
-  Layers,
   Settings,
   Heart,
 } from "lucide-react";
@@ -26,12 +25,11 @@ import MaintenancePage from "./features/maintenance/MaintenancePage";
 import SoulPage from "./features/soul/SoulPage";
 import SettingsDrawer from "./features/settings/SettingsDrawer";
 import TokenAuth from "./components/TokenAuth";
+import NamespaceSelector from "./components/NamespaceSelector";
+import MobileLayout from "./features/mobile/MobileLayout";
 import { ToastContainer } from "./components/Toast";
-import { AUTH_ERROR_EVENT, getNamespaces } from "./lib/api";
+import { AUTH_ERROR_EVENT } from "./lib/api";
 import { detectLocale } from "./i18n/index";
-
-const NAMESPACE_SWITCH_ROOT_REDIRECT_KEY =
-  "nocturne:namespace-switch-root-redirect";
 
 const consumeTokenFromUrl = () => {
   const params = new URLSearchParams(window.location.search);
@@ -48,110 +46,83 @@ const consumeTokenFromUrl = () => {
   return true;
 };
 
-// ---------------------------------------------------------------------------
-// NamespaceSelector — lets the user switch between agent namespaces.
-//
-// The selector is always visible so that users can manually enter a namespace
-// even before any memories have been written (e.g. after a fresh deployment).
-// Known namespaces fetched from the DB are offered as dropdown options, but
-// the user can also type a custom value into the input box.
-//
-// Selected namespace is stored in localStorage; the axios interceptor in
-// api.js attaches it as X-Namespace on every request.
-// ---------------------------------------------------------------------------
-function NamespaceSelector() {
-  const [knownNamespaces, setKnownNamespaces] = useState([]);
-  const [selected, setSelected] = useState(
-    () => localStorage.getItem("selected_namespace") ?? ""
-  );
-  const [inputValue, setInputValue] = useState(
-    () => localStorage.getItem("selected_namespace") ?? ""
-  );
-  const [showInput, setShowInput] = useState(false);
+// ===== Device detection =====
+
+const isMobileDevice = () => {
+  const ua = navigator.userAgent;
+  return /Mobile|Android|iPhone|iPad|WebOS/i.test(ua);
+};
+
+const getMobilePreference = () =>
+  localStorage.getItem("mobile_preference") || "auto";
+
+/**
+ * Redirects between / and /m/ routes based on device type and user preference.
+ * Must be called inside BrowserRouter (uses useLocation).
+ */
+function useDeviceRedirect() {
+  const location = useLocation();
 
   useEffect(() => {
-    getNamespaces()
-      .then((nsList) => setKnownNamespaces(nsList.filter((ns) => ns !== "")))
-      .catch(() => setKnownNamespaces([]));
-  }, []);
+    const pref = getMobilePreference();
+    const isMobile = isMobileDevice();
+    const isMobilePath = location.pathname.startsWith("/m/");
 
-  const applyNamespace = (ns) => {
-    const trimmed = ns.trim();
-    const changed = trimmed !== selected;
-    setSelected(trimmed);
-    setInputValue(trimmed);
-    if (trimmed) {
-      localStorage.setItem("selected_namespace", trimmed);
+    let shouldRedirect = false;
+    let targetPath = "";
+
+    if (pref === "mobile") {
+      if (!isMobilePath) {
+        shouldRedirect = true;
+        const mapping = {
+          "/review": "/m/review",
+          "/memory": "/m/memory",
+          "/soul": "/m/soul",
+          "/maintenance": "/m/maintenance",
+        };
+        const match = Object.entries(mapping).find(([k]) =>
+          location.pathname.startsWith(k)
+        );
+        targetPath = match ? match[1] : "/m/review";
+      }
+    } else if (pref === "desktop") {
+      if (isMobilePath) {
+        shouldRedirect = true;
+        targetPath = "/review";
+      }
     } else {
-      localStorage.removeItem("selected_namespace");
+      // auto mode
+      if (isMobile && !isMobilePath) {
+        shouldRedirect = true;
+        targetPath = "/m/review";
+      } else if (!isMobile && isMobilePath) {
+        shouldRedirect = true;
+        targetPath = "/review";
+      }
     }
-    if (changed) {
-      sessionStorage.setItem(
-        NAMESPACE_SWITCH_ROOT_REDIRECT_KEY,
-        JSON.stringify({ from: selected, to: trimmed, at: Date.now() })
-      );
+
+    if (shouldRedirect) {
+      window.location.replace(targetPath);
     }
-    window.location.reload();
-  };
-
-  const handleSelectChange = (e) => {
-    const val = e.target.value;
-    if (val === "__custom__") {
-      setShowInput(true);
-      return;
-    }
-    applyNamespace(val);
-  };
-
-  const handleInputKeyDown = (e) => {
-    if (e.key === "Enter") applyNamespace(inputValue);
-    if (e.key === "Escape") setShowInput(false);
-  };
-
-  const activeLabel = selected || "(default)";
-
-  return (
-    <div className="flex items-center gap-2 text-sm">
-      <Layers size={14} className="text-nocturne-text-muted flex-shrink-0" />
-      {showInput ? (
-        <input
-          autoFocus
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          onKeyDown={handleInputKeyDown}
-          onBlur={() => setShowInput(false)}
-          placeholder="namespace (Enter to apply)"
-          className="bg-nocturne-bg-tertiary border border-indigo-500 text-nocturne-text-primary rounded px-2 py-1 text-xs w-40 focus:outline-none"
-        />
-      ) : (
-        <select
-          value={selected}
-          onChange={handleSelectChange}
-          className="bg-nocturne-bg-tertiary border border-[var(--color-border-light)] text-nocturne-text-primary rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500"
-          title={`Current namespace: ${activeLabel}`}
-        >
-          <option value="">(default)</option>
-          {knownNamespaces.map((ns) => (
-            <option key={ns} value={ns}>
-              {ns}
-            </option>
-          ))}
-          {selected && !knownNamespaces.includes(selected) && (
-            <option key={selected} value={selected}>
-              {selected}
-            </option>
-          )}
-          <option value="__custom__">+ enter custom…</option>
-        </select>
-      )}
-    </div>
-  );
+  }, [location.pathname]);
 }
+
+// ===== Layout =====
 
 function Layout() {
   const { t } = useTranslation();
   const location = useLocation();
+
+  // Redirect between desktop and mobile based on device + preference
+  useDeviceRedirect();
+
+  // Mobile route? Delegate to MobileLayout
+  const isMobileRoute = location.pathname.startsWith("/m/");
+  if (isMobileRoute) {
+    return <MobileLayout />;
+  }
+
+  // === Desktop layout ===
   const isReviewPage = location.pathname.startsWith("/review");
   const isMaintenancePage = location.pathname.startsWith("/maintenance");
 
@@ -237,6 +208,16 @@ function Layout() {
             <Settings size={16} />
             {t("app.nav.settings")}
           </button>
+          {/* Desktop → Mobile switch */}
+          <button
+            onClick={() => {
+              localStorage.setItem("mobile_preference", "mobile");
+              window.location.replace("/m/review");
+            }}
+            className="text-[10px] text-nocturne-text-muted hover:text-nocturne-text-secondary px-2"
+          >
+            📱
+          </button>
         </div>
       </div>
 
@@ -261,6 +242,8 @@ function Layout() {
   );
 }
 
+// ===== App =====
+
 function App() {
   const { t } = useTranslation();
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -278,7 +261,6 @@ function App() {
     setBackendError(false);
   }, []);
 
-  // 组件挂载时，尝试发送一个无 token 的请求探测后端是否连通及鉴权状态
   useEffect(() => {
     let mounted = true;
 
@@ -294,7 +276,6 @@ function App() {
       } catch (error) {
         if (mounted) {
           if (!error.response) {
-            // 没有响应，说明是网络错误（后端未启动）
             setBackendError(true);
           } else if (error.response.status === 401) {
             setIsAuthenticated(false);
@@ -314,7 +295,6 @@ function App() {
     };
   }, []);
 
-  // 监听 401 事件，切换回认证界面
   useEffect(() => {
     window.addEventListener(AUTH_ERROR_EVENT, handleAuthError);
     return () => {

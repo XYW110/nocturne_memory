@@ -1,0 +1,111 @@
+{
+  "nav": {
+    "review": "审查",
+    "memory": "记忆",
+    "soul": "灵魂",
+    "maintenance": "维护",
+    "switchDesktop": "切换到桌面版",
+    "switchMobile": "切换到手机版"
+  },
+  "review": {
+    "title": "变更审查",
+    "empty": "暂无待审查变更",
+    "action": {
+      "approve": "集成",
+      "reject": "驳回",
+      "integrateAll": "全部集成"
+    },
+    "detail": {
+      "back": "返回列表",
+      "modified": "已修改",
+      "created": "已创建",
+      "deleted": "已删除",
+      "rowsAffected": "{{count}} 行受影响"
+    },
+    "confirm": {
+      "rejectTitle": "驳回变更",
+      "rejectMessage": "驳回此变更组？将还原记忆状态。",
+      "integrateAllTitle": "全部集成",
+      "integrateAllMessage": "集成所有待处理的记忆变更？"
+    },
+    "namespace": {
+      "default": "默认"
+    }
+  },
+  "memory": {
+    "title": "记忆浏览",
+    "search": {
+      "placeholder": "搜索记忆…",
+      "noResults": "未找到 \"{{query}}\" 的结果",
+      "back": "返回浏览",
+      "results": "{{count}} 条匹配"
+    },
+    "domain": {
+      "all": "全部域名",
+      "label": "域名"
+    },
+    "detail": {
+      "back": "返回记忆列表"
+    },
+    "empty": {
+      "noDomain": "暂无记忆"
+    }
+  },
+  "soul": {
+    "title": "灵魂",
+    "tab": {
+      "birth": "诞生",
+      "emotion": "情感",
+      "relationship": "关系"
+    },
+    "settingsEntry": "设置",
+    "loading": "正在加载…"
+  },
+  "maintenance": {
+    "title": "大脑清理",
+    "section": {
+      "deprecated": "已弃用版本",
+      "orphaned": "孤儿记忆"
+    },
+    "action": {
+      "deleteSelected": "删除已选 ({{count}})",
+      "refresh": "刷新",
+      "clearLogs": "清除日志"
+    },
+    "select": {
+      "all": "全选",
+      "none": "取消全选"
+    },
+    "empty": {
+      "title": "系统干净",
+      "desc": "未检测到孤儿记忆"
+    },
+    "detail": {
+      "back": "返回列表",
+      "restore": "恢复此记忆",
+      "diff": "差异对比"
+    },
+    "longPress": {
+      "hint": "长按进入多选模式"
+    }
+  },
+  "settings": {
+    "title": "设置",
+    "back": "返回",
+    "tab": {
+      "general": "通用",
+      "database": "数据库",
+      "memory": "记忆",
+      "soul": "灵魂"
+    },
+    "server": {
+      "title": "服务器配置"
+    },
+    "locale": {
+      "title": "语言 / 区域"
+    },
+    "advanced": {
+      "title": "高级"
+    }
+  }
+}

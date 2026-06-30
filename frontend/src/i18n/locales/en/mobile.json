@@ -1,0 +1,111 @@
+{
+  "nav": {
+    "review": "Review",
+    "memory": "Memory",
+    "soul": "Soul",
+    "maintenance": "Cleanup",
+    "switchDesktop": "Switch to Desktop",
+    "switchMobile": "Switch to Mobile"
+  },
+  "review": {
+    "title": "Change Review",
+    "empty": "No pending changes",
+    "action": {
+      "approve": "Integrate",
+      "reject": "Reject",
+      "integrateAll": "Integrate All"
+    },
+    "detail": {
+      "back": "Back to list",
+      "modified": "Modified",
+      "created": "Created",
+      "deleted": "Deleted",
+      "rowsAffected": "{{count}} rows affected"
+    },
+    "confirm": {
+      "rejectTitle": "Reject Change",
+      "rejectMessage": "Reject this change group? Memory will be reverted.",
+      "integrateAllTitle": "Integrate All",
+      "integrateAllMessage": "Integrate all pending memory changes?"
+    },
+    "namespace": {
+      "default": "Default"
+    }
+  },
+  "memory": {
+    "title": "Memory Browser",
+    "search": {
+      "placeholder": "Search memories…",
+      "noResults": "No results for \"{{query}}\"",
+      "back": "Back to browse",
+      "results": "{{count}} results"
+    },
+    "domain": {
+      "all": "All Domains",
+      "label": "Domain"
+    },
+    "detail": {
+      "back": "Back to memory list"
+    },
+    "empty": {
+      "noDomain": "No memories"
+    }
+  },
+  "soul": {
+    "title": "Soul",
+    "tab": {
+      "birth": "Birth",
+      "emotion": "Emotion",
+      "relationship": "Relationship"
+    },
+    "settingsEntry": "Settings",
+    "loading": "Loading…"
+  },
+  "maintenance": {
+    "title": "Brain Cleanup",
+    "section": {
+      "deprecated": "Deprecated Versions",
+      "orphaned": "Orphaned Memories"
+    },
+    "action": {
+      "deleteSelected": "Delete Selected ({{count}})",
+      "refresh": "Refresh",
+      "clearLogs": "Clear Logs"
+    },
+    "select": {
+      "all": "Select All",
+      "none": "Deselect All"
+    },
+    "empty": {
+      "title": "System Clean",
+      "desc": "No orphaned memories detected"
+    },
+    "detail": {
+      "back": "Back to list",
+      "restore": "Restore this memory",
+      "diff": "Diff Comparison"
+    },
+    "longPress": {
+      "hint": "Long press for multi-select"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "back": "Back",
+    "tab": {
+      "general": "General",
+      "database": "Database",
+      "memory": "Memory",
+      "soul": "Soul"
+    },
+    "server": {
+      "title": "Server Configuration"
+    },
+    "locale": {
+      "title": "Language / Locale"
+    },
+    "advanced": {
+      "title": "Advanced"
+    }
+  }
+}
