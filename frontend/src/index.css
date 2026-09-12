@@ -1,6 +1,13 @@
+@import './styles/tokens.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+}
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
@@ -8,12 +15,12 @@
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #0f172a; 
+  background: var(--bg-base);
 }
 ::-webkit-scrollbar-thumb {
-  background: #334155; 
+  background: var(--text-faint);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569; 
+  background: var(--text-muted);
 }

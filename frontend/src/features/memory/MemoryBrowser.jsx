@@ -338,24 +338,24 @@ export default function MemoryBrowser() {
   const currentUri = `${domain}://${path}`;
 
   return (
-    <div className="flex h-full bg-[#05050A] text-slate-300 font-sans selection:bg-indigo-500/30 selection:text-indigo-200 overflow-hidden">
-      
+    <div className="flex h-full bg-[var(--bg-base)] text-[var(--text-secondary)] font-sans gap-[var(--gap-island)] p-[var(--gap-island)] overflow-hidden">
+
       {/* Sidebar */}
-      <div className="w-64 flex-shrink-0 bg-[#08080E] border-r border-slate-800/30 flex flex-col">
-        <div className="p-5 border-b border-slate-800/30">
-          <div className="flex items-center gap-2 text-indigo-400 mb-1">
+      <div className="w-64 flex-shrink-0 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-xl)] shadow-[var(--island-shadow)] flex flex-col overflow-hidden">
+        <div className="p-5 border-b border-[var(--border)]">
+          <div className="flex items-center gap-2 text-[var(--text-primary)] mb-1">
             <Cpu size={18} />
-            <h1 className="font-bold tracking-tight text-sm text-slate-100">{t('memory.sidebar.title')}</h1>
+            <h1 className="font-bold tracking-tight text-sm text-[var(--text-primary)]">{t('memory.sidebar.title')}</h1>
           </div>
-          <p className="text-[10px] text-slate-600 pl-6 uppercase tracking-wider">{t('memory.sidebar.subtitle')}</p>
+          <p className="text-[10px] text-[var(--text-faint)] pl-6 uppercase tracking-wider">{t('memory.sidebar.subtitle')}</p>
         </div>
-        
+
         <div className="p-3 flex-1 overflow-y-auto custom-scrollbar">
              <div className="mb-4 space-y-2">
                  <div className="px-3 flex items-center justify-between mb-2">
-                     <h3 className="text-[10px] font-bold text-slate-600 uppercase tracking-widest">{t('memory.sidebar.domains')}</h3>
+                     <h3 className="text-[10px] font-bold text-[var(--text-faint)] uppercase tracking-widest">{t('memory.sidebar.domains')}</h3>
                  </div>
-                 
+
                  <div className="space-y-1">
                    {domains.map(d => (
                      <DomainNode
@@ -380,7 +380,7 @@ export default function MemoryBrowser() {
                  {/* 域名追加交互 - 放在列表最下方 */}
                  <div className="mt-1 px-1">
                    {showAddDomainInput ? (
-                     <div className="flex items-center gap-1.5 animate-in slide-in-from-bottom-1 duration-200 px-2 py-1.5 rounded-lg bg-white/[0.02] border border-slate-800/40">
+                     <div className="flex items-center gap-1.5 animate-in slide-in-from-bottom-1 duration-200 px-2 py-1.5 rounded-[var(--radius-md)] bg-[var(--surface-solid)] border border-[var(--border)]">
                        <input
                          type="text"
                          ref={addDomainInputRef}
@@ -395,17 +395,17 @@ export default function MemoryBrowser() {
                          }}
                          disabled={addingDomain}
                          placeholder={t('memory.domains.add_domain_placeholder')}
-                         className="flex-1 min-w-0 bg-transparent text-slate-300 text-xs focus:outline-none placeholder:text-slate-700"
+                         className="flex-1 min-w-0 bg-transparent text-[var(--text-primary)] text-xs focus:outline-none placeholder:text-[var(--text-faint)]"
                          spellCheck={false}
                        />
                        <button
                          onClick={handleAddDomain}
                          disabled={addingDomain || !newDomainName.trim()}
-                         className="p-1 text-slate-500 hover:text-indigo-400 disabled:opacity-30 transition-colors flex-shrink-0"
+                         className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] disabled:opacity-30 transition-colors duration-150 flex-shrink-0"
                          title={t('memory.domains.add_domain')}
                        >
                          {addingDomain ? (
-                           <div className="w-3 h-3 border border-slate-500 border-t-transparent rounded-full animate-spin" />
+                           <div className="w-3 h-3 border border-[var(--text-faint)] border-t-transparent rounded-full animate-spin" />
                          ) : (
                            <Plus size={13} />
                          )}
@@ -413,7 +413,7 @@ export default function MemoryBrowser() {
                        <button
                          onClick={() => { setShowAddDomainInput(false); setNewDomainName(''); }}
                          disabled={addingDomain}
-                         className="p-1 text-slate-500 hover:text-rose-400 disabled:opacity-40 transition-colors flex-shrink-0"
+                         className="p-1 text-[var(--text-muted)] hover:text-[var(--semantic-danger-fg)] disabled:opacity-40 transition-colors duration-150 flex-shrink-0"
                        >
                          <X size={13} />
                        </button>
@@ -424,10 +424,10 @@ export default function MemoryBrowser() {
                          setShowAddDomainInput(true);
                          setTimeout(() => addDomainInputRef.current?.focus(), 50);
                        }}
-                       className="w-full flex items-center gap-1.5 px-2 py-2 rounded-lg text-slate-500 hover:bg-white/[0.03] hover:text-slate-300 text-sm transition-all text-left group"
+                       className="w-full flex items-center gap-1.5 px-2 py-2 rounded-[var(--radius-md)] text-[var(--text-muted)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)] text-sm transition-colors duration-150 text-left group"
                      >
                        <div className="w-5 h-5 flex items-center justify-center flex-shrink-0">
-                         <Plus size={14} className="text-slate-600 group-hover:text-slate-400 transition-colors" />
+                         <Plus size={14} className="text-[var(--text-faint)] group-hover:text-[var(--text-muted)] transition-colors duration-150" />
                        </div>
                        <span className="font-medium truncate ml-1">{t('memory.domains.add_domain')}</span>
                      </button>
@@ -436,13 +436,13 @@ export default function MemoryBrowser() {
              </div>
         </div>
 
-        <div className="mt-auto p-4 border-t border-slate-800/30">
-             <div className="bg-slate-900/50 rounded p-3 border border-slate-800/50">
-                 <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
+        <div className="mt-auto p-4 border-t border-[var(--border)]">
+             <div className="bg-[var(--surface-hover)] rounded-[var(--radius-md)] p-3 border border-[var(--border)]">
+                 <div className="flex items-center gap-2 text-xs text-[var(--text-muted)] mb-2">
                     <Hash size={12} />
                     <span>{t('memory.sidebar.current_path')}</span>
                  </div>
-                 <code className="block text-[10px] font-mono text-indigo-300/80 break-all leading-tight">
+                 <code className="block text-[10px] font-mono text-[var(--text-secondary)] break-all leading-tight">
                     {domain}://{path || 'root'}
                  </code>
              </div>
@@ -450,21 +450,21 @@ export default function MemoryBrowser() {
       </div>
 
       {/* Main Area */}
-      <div className="flex-1 flex flex-col min-w-0 bg-[#05050A] relative">
-         <div className="h-14 flex-shrink-0 border-b border-slate-800/30 flex items-center px-6 bg-[#05050A]/80 backdrop-blur-md sticky top-0 z-20 gap-4">
+      <div className="flex-1 flex flex-col min-w-0 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-xl)] shadow-[var(--island-shadow)] relative overflow-hidden">
+         <div className="h-14 flex-shrink-0 border-b border-[var(--border)] flex items-center px-6 sticky top-0 z-20 gap-4">
              <Breadcrumb items={data.breadcrumbs} onNavigate={navigateTo} />
              <div className="ml-auto relative flex-shrink-0 w-72">
-               <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600 pointer-events-none" />
+               <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-faint)] pointer-events-none" />
                <input
                  type="text"
                  value={searchQuery}
                  onChange={e => handleSearch(e.target.value)}
                  placeholder={t('memory.search.placeholder')}
-                 className="w-full bg-slate-900/60 border border-slate-800/50 rounded-lg pl-9 pr-8 py-1.5 text-sm text-slate-300 placeholder-slate-600 focus:outline-none focus:border-indigo-500/50 transition-colors"
+                 className="w-full bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-md)] pl-9 pr-8 py-1.5 text-sm text-[var(--text-primary)] placeholder-[var(--text-faint)] focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150"
                />
                {searchQuery && (searching
-                 ? <Loader2 size={14} className="absolute right-2 top-1/2 -translate-y-1/2 text-indigo-400 animate-spin" />
-                 : <button onClick={clearSearch} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-600 hover:text-slate-400 transition-colors">
+                 ? <Loader2 size={14} className="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--text-muted)] animate-spin" />
+                 : <button onClick={clearSearch} className="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--text-faint)] hover:text-[var(--text-primary)] transition-colors duration-150">
                      <X size={14} />
                    </button>
                )}
@@ -476,12 +476,12 @@ export default function MemoryBrowser() {
            <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
              <div className="max-w-7xl mx-auto space-y-4">
                <div className="flex items-center justify-between">
-                  <h2 className="text-sm font-bold text-slate-400 uppercase tracking-widest">
-                    {searchResults.length > 0 
+                  <h2 className="text-sm font-bold text-[var(--text-muted)] uppercase tracking-widest">
+                    {searchResults.length > 0
                       ? t('memory.search.results', { count: searchResults.length, query: searchQuery })
                       : t('memory.search.no_results', { query: searchQuery })}
                   </h2>
-                 <button onClick={clearSearch} className="text-xs text-slate-600 hover:text-slate-400 transition-colors px-3 py-1 border border-slate-800 rounded hover:border-slate-700">
+                 <button onClick={clearSearch} className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] transition-colors duration-150 px-3 py-1 border border-[var(--border)] rounded-[var(--radius-md)]">
                    {t('memory.search.back')}
                  </button>
                </div>
@@ -489,20 +489,20 @@ export default function MemoryBrowser() {
                  <button
                    key={`${item.uri}-${i}`}
                    onClick={() => { clearSearch(); navigateTo(item.path, item.domain); }}
-                   className="w-full flex items-start gap-4 p-4 bg-[#0A0A12] border border-slate-800/50 rounded-xl hover:border-indigo-500/30 hover:shadow-[0_0_20px_rgba(99,102,241,0.08)] transition-all text-left group"
+                   className="w-full flex items-start gap-4 p-4 bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-lg)] shadow-[var(--island-shadow-soft)] hover:shadow-[var(--island-shadow)] hover:border-[var(--text-faint)] transition-all duration-150 text-left group"
                  >
-                   <div className="p-2 rounded-lg bg-slate-900 text-slate-500 group-hover:text-indigo-400 group-hover:bg-indigo-900/20 transition-colors flex-shrink-0 mt-0.5">
+                   <div className="p-2 rounded-[var(--radius-lg)] bg-[var(--surface-hover)] text-[var(--text-muted)] group-hover:text-[var(--text-primary)] transition-colors duration-150 flex-shrink-0 mt-0.5">
                      <FileText size={16} />
                    </div>
                    <div className="min-w-0 flex-1">
                      <div className="flex items-center gap-2 mb-1">
-                       <span className="text-sm font-semibold text-slate-300 group-hover:text-indigo-200 transition-colors">{item.name}</span>
+                       <span className="text-sm font-semibold text-[var(--text-primary)] transition-colors duration-150">{item.name}</span>
                        <PriorityBadge priority={item.priority} />
                      </div>
-                     <code className="text-[11px] font-mono text-slate-600 block mb-1.5">{item.uri}</code>
-                     {item.snippet && <p className="text-xs text-slate-500 leading-relaxed line-clamp-2">{item.snippet}</p>}
+                     <code className="text-[11px] font-mono text-[var(--text-faint)] block mb-1.5">{item.uri}</code>
+                     {item.snippet && <p className="text-xs text-[var(--text-muted)] leading-relaxed line-clamp-2">{item.snippet}</p>}
                      {item.disclosure && (
-                       <p className="text-[11px] text-amber-500/70 mt-1.5 flex items-center gap-1">
+                       <p className="text-[11px] text-[var(--semantic-warning-fg)] mt-1.5 flex items-center gap-1">
                          <AlertTriangle size={10} className="flex-shrink-0" />
                          <span className="italic truncate">{item.disclosure}</span>
                        </p>
@@ -516,15 +516,15 @@ export default function MemoryBrowser() {
 
          <div className={clsx("flex-1 overflow-y-auto p-6 custom-scrollbar", searchResults !== null && "hidden")}>
             {loading ? (
-                <div className="h-full flex flex-col items-center justify-center gap-4 text-slate-600">
-                    <div className="w-8 h-8 border-2 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
+                <div className="h-full flex flex-col items-center justify-center gap-4 text-[var(--text-faint)]">
+                    <div className="w-8 h-8 border-2 border-[var(--border)] border-t-[var(--text-primary)] rounded-full animate-spin" />
                     <span className="text-xs tracking-widest uppercase">{t('memory.status.loading')}</span>
                 </div>
             ) : error ? (
-                <div className="h-full flex flex-col items-center justify-center text-rose-500 gap-4">
+                <div className="h-full flex flex-col items-center justify-center text-[var(--semantic-danger-fg)] gap-4">
                     <p className="text-lg">{t('memory.status.error')}</p>
                     <p className="text-sm opacity-60">{error}</p>
-                    <button onClick={() => navigateTo('')} className="text-xs bg-slate-800 px-4 py-2 rounded hover:text-white transition-colors">{t('memory.status.return_root')}</button>
+                    <button onClick={() => navigateTo('')} className="text-xs bg-[var(--surface-hover)] text-[var(--text-muted)] px-4 py-2 rounded-[var(--radius-md)] hover:text-[var(--text-primary)] transition-colors duration-150">{t('memory.status.return_root')}</button>
                 </div>
             ) : (
                 <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -539,19 +539,19 @@ export default function MemoryBrowser() {
                                             type="text"
                                             value={editTitle}
                                             onChange={e => setEditTitle(e.target.value)}
-                                            className="bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-2xl font-bold text-slate-100 tracking-tight w-64 focus:outline-none focus:border-indigo-500/50 transition-colors font-mono"
+                                            className="bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-md)] px-3 py-1.5 text-2xl font-bold text-[var(--text-primary)] tracking-tight w-64 focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150 font-mono"
                                             spellCheck={false}
                                           />
                                         ) : (
-                                          <h1 className="text-2xl font-bold text-slate-100 tracking-tight">
+                                          <h1 className="text-2xl font-bold text-[var(--text-primary)] tracking-tight">
                                             {node.name || path.split('/').pop()}
                                           </h1>
                                         )}
                                         <PriorityBadge priority={node.priority} size="lg" />
                                     </div>
-                                    
+
                                     {node.disclosure && !editing && (
-                                        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-amber-950/20 border border-amber-900/30 rounded-lg text-amber-500/80 text-xs max-w-full">
+                                        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[var(--semantic-warning-bg)] rounded-[var(--radius-md)] text-[var(--semantic-warning-fg)] text-xs max-w-full">
                                             <AlertTriangle size={14} className="flex-shrink-0" />
                                             <span className="font-medium mr-1">{t('memory.edit.disclosure_label')}</span>
                                             <span className="italic truncate">{node.disclosure}</span>
@@ -581,20 +581,20 @@ export default function MemoryBrowser() {
                                             onClick={() => handleBootToggle(currentUri)}
                                             title={bootUris.includes(currentUri) ? t('memory.boot.remove') : t('memory.boot.add')}
                                             className={clsx(
-                                                "flex items-center gap-2 px-4 py-2 rounded text-sm font-medium transition-all border",
+                                                "flex items-center gap-2 px-4 py-2 rounded-[var(--radius-md)] text-sm font-medium transition-colors duration-150 border",
                                                 bootUris.includes(currentUri)
-                                                    ? "bg-amber-950/40 border-amber-700/50 text-amber-400 hover:bg-amber-950/60 hover:border-amber-600/60 shadow-[0_0_12px_rgba(245,158,11,0.1)]"
-                                                    : "bg-slate-800 border-slate-700 text-slate-500 hover:text-amber-400 hover:border-amber-800/40 hover:bg-slate-800/80"
+                                                    ? "bg-[var(--semantic-warning-bg)] border-[var(--semantic-warning-fg)] text-[var(--semantic-warning-fg)]"
+                                                    : "bg-transparent border-[var(--border)] text-[var(--text-muted)] hover:bg-[var(--surface-hover)] hover:text-[var(--semantic-warning-fg)]"
                                             )}
                                         >
-                                            <Zap size={15} className={bootUris.includes(currentUri) ? "fill-amber-400" : ""} />
+                                            <Zap size={15} className={bootUris.includes(currentUri) ? "fill-[var(--semantic-warning-fg)]" : ""} />
                                             {t('memory.boot.label')}
                                         </button>
                                     )}
                                     {!editing && (
                                         <button
                                             onClick={() => setShowCreateModal(true)}
-                                            className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-sm font-medium transition-colors border border-slate-700 hover:border-slate-600"
+                                            className="flex items-center gap-2 px-4 py-2 bg-[var(--surface-solid)] hover:bg-[var(--surface-hover)] text-[var(--text-primary)] rounded-[var(--radius-md)] text-sm font-medium transition-colors duration-150 border border-[var(--border)]"
                                         >
                                             <Plus size={16} />
                                             {t('memory.create.button')}
@@ -602,19 +602,19 @@ export default function MemoryBrowser() {
                                     )}
                                     {editing ? (
                                         <>
-                                            <button onClick={cancelEditing} className="p-2 hover:bg-slate-800 rounded text-slate-400 transition-colors"><X size={18} /></button>
-                                            <button onClick={handleSave} disabled={saving} className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded text-sm font-medium transition-colors shadow-lg shadow-indigo-900/20">
+                                            <button onClick={cancelEditing} className="p-2 hover:bg-[var(--surface-hover)] rounded-[var(--radius-md)] text-[var(--text-muted)] transition-colors duration-150"><X size={18} /></button>
+                                            <button onClick={handleSave} disabled={saving} className="flex items-center gap-2 px-4 py-2 bg-[var(--accent)] hover:opacity-90 text-white rounded-[var(--radius-md)] text-sm font-medium transition-opacity duration-150">
                                                 <Save size={16} /> {saving ? t('memory.edit.saving') : t('memory.edit.save')}
                                             </button>
                                         </>
                                     ) : !node.is_virtual && (
                                         <>
-                                            <button onClick={startEditing} className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-sm font-medium transition-colors border border-slate-700 hover:border-slate-600">
+                                            <button onClick={startEditing} className="flex items-center gap-2 px-4 py-2 bg-[var(--surface-solid)] hover:bg-[var(--surface-hover)] text-[var(--text-primary)] rounded-[var(--radius-md)] text-sm font-medium transition-colors duration-150 border border-[var(--border)]">
                                                 <Edit3 size={16} /> {t('memory.edit.edit')}
                                             </button>
                                             <button
                                               onClick={() => setDeleteTarget({ domain, path })}
-                                              className="flex items-center gap-2 px-3 py-2 bg-slate-800 hover:bg-rose-950/60 text-slate-500 hover:text-rose-400 rounded text-sm font-medium transition-colors border border-slate-700 hover:border-rose-800/50"
+                                              className="flex items-center gap-2 px-3 py-2 bg-transparent hover:bg-[var(--semantic-danger-bg)] text-[var(--text-muted)] hover:text-[var(--semantic-danger-fg)] rounded-[var(--radius-md)] text-sm font-medium transition-colors duration-150 border border-[var(--border)]"
                                               title={t('memory.delete.tooltip')}
                                             >
                                               <Trash2 size={16} />
@@ -625,33 +625,33 @@ export default function MemoryBrowser() {
                             </div>
 
                             {editing && (
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-slate-900/50 border border-slate-800/50 rounded-xl">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-xl)]">
                                     <div className="space-y-1.5">
-                                        <label className="flex items-center gap-1.5 text-xs font-medium text-slate-400">
+                                        <label className="flex items-center gap-1.5 text-xs font-medium text-[var(--text-muted)]">
                                             <Star size={12} />
                                             {t('memory.edit.priority')}
-                                            <span className="text-slate-600 font-normal">{t('memory.edit.priority_hint')}</span>
+                                            <span className="text-[var(--text-faint)] font-normal">{t('memory.edit.priority_hint')}</span>
                                         </label>
-                                        <input 
+                                        <input
                                             type="number"
                                             min="0"
                                             value={editPriority}
                                             onChange={e => setEditPriority(parseInt(e.target.value) || 0)}
-                                            className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 font-mono focus:outline-none focus:border-indigo-500/50 transition-colors"
+                                            className="w-full bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-md)] px-3 py-2 text-sm text-[var(--text-primary)] font-mono tabular-nums focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150"
                                         />
                                     </div>
                                     <div className="space-y-1.5">
-                                        <label className="flex items-center gap-1.5 text-xs font-medium text-slate-400">
+                                        <label className="flex items-center gap-1.5 text-xs font-medium text-[var(--text-muted)]">
                                             <AlertTriangle size={12} />
                                             {t('memory.edit.disclosure')}
-                                            <span className="text-slate-600 font-normal">{t('memory.edit.disclosure_hint')}</span>
+                                            <span className="text-[var(--text-faint)] font-normal">{t('memory.edit.disclosure_hint')}</span>
                                         </label>
-                                        <input 
+                                        <input
                                             type="text"
                                             value={editDisclosure}
                                             onChange={e => setEditDisclosure(e.target.value)}
                                             placeholder={t('memory.edit.disclosure_placeholder')}
-                                            className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500/50 transition-colors"
+                                            className="w-full bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-md)] px-3 py-2 text-sm text-[var(--text-primary)] focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150"
                                         />
                                     </div>
                                 </div>
@@ -659,18 +659,18 @@ export default function MemoryBrowser() {
 
                             {(!node.is_virtual || editing) && (
                                 <div className={clsx(
-                                    "relative rounded-xl border overflow-hidden transition-all duration-300",
-                                    editing ? "bg-slate-900 border-indigo-500/50 shadow-[0_0_30px_rgba(99,102,241,0.1)]" : "bg-[#0A0A12]/50 border-slate-800/50"
+                                    "relative rounded-[var(--radius-xl)] border overflow-hidden transition-colors duration-200",
+                                    editing ? "bg-[var(--surface-solid)] border-[var(--text-faint)]" : "bg-[var(--surface)] border-[var(--border)]"
                                 )}>
                                     {editing ? (
-                                        <textarea 
+                                        <textarea
                                             value={editContent}
                                             onChange={e => setEditContent(e.target.value)}
-                                            className="w-full h-96 p-6 bg-transparent text-slate-200 font-mono text-sm leading-relaxed focus:outline-none resize-y"
+                                            className="w-full h-96 p-6 bg-transparent text-[var(--text-primary)] font-mono text-sm leading-relaxed focus:outline-none resize-y"
                                             spellCheck={false}
                                         />
                                     ) : (
-                                        <div className="p-6 md:p-8 prose prose-invert prose-sm max-w-none">
+                                        <div className="p-6 md:p-8 prose prose-sm max-w-none">
                                             <GlossaryHighlighter
                                               key={node.node_uuid}
                                               content={node.content || ''}
@@ -687,12 +687,12 @@ export default function MemoryBrowser() {
 
                     {data.children && data.children.length > 0 && (
                         <div className="space-y-4 pt-4">
-                            <div className="flex items-center gap-3 text-slate-500">
+                            <div className="flex items-center gap-3 text-[var(--text-muted)]">
                                 <h2 className="text-xs font-bold uppercase tracking-widest">
                                     {isRoot ? t('memory.grid.memory_clusters') : t('memory.grid.sub_nodes')}
                                 </h2>
-                                <div className="h-px flex-1 bg-slate-800/50"></div>
-                                <span className="text-xs bg-slate-800/50 px-2 py-0.5 rounded-full">{data.children.length}</span>
+                                <div className="h-px flex-1 bg-[var(--border)]"></div>
+                                <span className="text-xs bg-[var(--surface-hover)] border border-[var(--border)] px-2 py-0.5 rounded-full text-[var(--text-muted)] tabular-nums">{data.children.length}</span>
                             </div>
                             
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -711,13 +711,13 @@ export default function MemoryBrowser() {
                     )}
                     
                     {!loading && !data.children?.length && (!node || node.is_virtual) && (
-                        <div className="flex flex-col items-center justify-center py-20 text-slate-600 gap-4 animate-in fade-in duration-300">
+                        <div className="flex flex-col items-center justify-center py-20 text-[var(--text-faint)] gap-4 animate-in fade-in duration-300">
                             <Folder size={48} className="opacity-20" />
                             <p className="text-sm">{t('memory.empty.empty_sector')}</p>
                             {isRoot && domain !== 'core' && (
                                 <button
                                     onClick={() => setShowDeleteDomainConfirm(true)}
-                                    className="mt-2 flex items-center gap-2 px-4 py-2 bg-rose-950/20 hover:bg-rose-950/40 text-rose-400 border border-rose-900/30 hover:border-rose-800/50 rounded-lg text-xs font-semibold transition-all shadow-[0_0_12px_rgba(244,63,94,0.05)]"
+                                    className="mt-2 flex items-center gap-2 px-4 py-2 bg-transparent hover:bg-[var(--semantic-danger-bg)] text-[var(--semantic-danger-fg)] border border-[var(--border)] rounded-[var(--radius-md)] text-xs font-semibold transition-colors duration-150"
                                 >
                                     <Trash2 size={13} />
                                     {t('memory.domains.delete_domain')}
@@ -742,35 +742,35 @@ export default function MemoryBrowser() {
 
       {/* Delete Confirmation Dialog */}
       {deleteTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={() => !deleting && setDeleteTarget(null)}>
-          <div className="bg-[#0C0C14] border border-slate-800 rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => !deleting && setDeleteTarget(null)}>
+          <div className="bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-xl)] shadow-[var(--island-shadow)] p-6 max-w-md w-full mx-4" onClick={e => e.stopPropagation()}>
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2.5 rounded-lg bg-rose-950/40 text-rose-400">
+              <div className="p-2.5 rounded-[var(--radius-lg)] bg-[var(--semantic-danger-bg)] text-[var(--semantic-danger-fg)]">
                 <Trash2 size={20} />
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-100">{t('memory.delete.title')}</h3>
-                <p className="text-xs text-slate-500 mt-0.5">{t('memory.delete.irreversible')}</p>
+                <h3 className="text-base font-bold text-[var(--text-primary)]">{t('memory.delete.title')}</h3>
+                <p className="text-xs text-[var(--text-muted)] mt-0.5">{t('memory.delete.irreversible')}</p>
               </div>
             </div>
-            <div className="mb-5 p-3 bg-slate-900/60 border border-slate-800/50 rounded-lg">
-              <code className="text-sm font-mono text-rose-300/80 break-all">{deleteTarget.domain}://{deleteTarget.path}</code>
+            <div className="mb-5 p-3 bg-[var(--surface-hover)] border border-[var(--border)] rounded-[var(--radius-md)]">
+              <code className="text-sm font-mono text-[var(--semantic-danger-fg)] break-all">{deleteTarget.domain}://{deleteTarget.path}</code>
             </div>
-            <p className="text-sm text-slate-400 mb-6">
+            <p className="text-sm text-[var(--text-muted)] mb-6">
               {t('memory.delete.confirm_message')}
             </p>
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => setDeleteTarget(null)}
                 disabled={deleting}
-                className="px-4 py-2 text-sm text-slate-400 hover:text-slate-200 bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 transition-colors"
+                className="px-4 py-2 text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] rounded-[var(--radius-md)] border border-[var(--border)] transition-colors duration-150"
               >
                 {t('memory.delete.cancel')}
               </button>
               <button
                 onClick={handleDelete}
                 disabled={deleting}
-                className="px-4 py-2 text-sm font-medium text-white bg-rose-600 hover:bg-rose-500 rounded-lg transition-colors shadow-lg shadow-rose-900/20 disabled:opacity-50"
+                className="px-4 py-2 text-sm font-medium text-white bg-[var(--semantic-danger-fg)] hover:opacity-90 rounded-[var(--radius-md)] transition-opacity duration-150 disabled:opacity-50"
               >
                 {deleting ? t('memory.delete.deleting') : t('memory.delete.button')}
               </button>
@@ -781,35 +781,35 @@ export default function MemoryBrowser() {
 
       {/* Delete Domain Confirmation Dialog */}
       {showDeleteDomainConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={() => !deletingDomain && setShowDeleteDomainConfirm(false)}>
-          <div className="bg-[#0C0C14] border border-slate-800 rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => !deletingDomain && setShowDeleteDomainConfirm(false)}>
+          <div className="bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-xl)] shadow-[var(--island-shadow)] p-6 max-w-md w-full mx-4" onClick={e => e.stopPropagation()}>
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2.5 rounded-lg bg-rose-950/40 text-rose-400">
+              <div className="p-2.5 rounded-[var(--radius-lg)] bg-[var(--semantic-danger-bg)] text-[var(--semantic-danger-fg)]">
                 <Trash2 size={20} />
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-100">{t('memory.domains.delete_confirm_title')}</h3>
-                <p className="text-xs text-rose-400/80 mt-0.5">{t('memory.domains.delete_confirm_warning')}</p>
+                <h3 className="text-base font-bold text-[var(--text-primary)]">{t('memory.domains.delete_confirm_title')}</h3>
+                <p className="text-xs text-[var(--semantic-danger-fg)] mt-0.5">{t('memory.domains.delete_confirm_warning')}</p>
               </div>
             </div>
-            <div className="mb-5 p-3 bg-slate-900/60 border border-slate-800/50 rounded-lg">
-              <code className="text-sm font-mono text-rose-300/80 break-all">{domain}://</code>
+            <div className="mb-5 p-3 bg-[var(--surface-hover)] border border-[var(--border)] rounded-[var(--radius-md)]">
+              <code className="text-sm font-mono text-[var(--semantic-danger-fg)] break-all">{domain}://</code>
             </div>
-            <p className="text-sm text-slate-400 mb-6 leading-relaxed">
+            <p className="text-sm text-[var(--text-muted)] mb-6 leading-relaxed">
               {t('memory.domains.delete_confirm_message')}
             </p>
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => setShowDeleteDomainConfirm(false)}
                 disabled={deletingDomain}
-                className="px-4 py-2 text-sm text-slate-400 hover:text-slate-200 bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 transition-colors"
+                className="px-4 py-2 text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] rounded-[var(--radius-md)] border border-[var(--border)] transition-colors duration-150"
               >
                 {t('memory.delete.cancel')}
               </button>
               <button
                 onClick={handleDeleteDomain}
                 disabled={deletingDomain}
-                className="px-4 py-2 text-sm font-medium text-white bg-rose-600 hover:bg-rose-500 rounded-lg transition-colors shadow-lg shadow-rose-900/20 disabled:opacity-50"
+                className="px-4 py-2 text-sm font-medium text-white bg-[var(--semantic-danger-fg)] hover:opacity-90 rounded-[var(--radius-md)] transition-opacity duration-150 disabled:opacity-50"
               >
                 {deletingDomain ? t('memory.delete.deleting') : t('memory.delete.button')}
               </button>

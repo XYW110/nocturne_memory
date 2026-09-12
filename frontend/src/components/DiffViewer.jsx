@@ -12,7 +12,7 @@ const DiffViewer = ({ oldText, newText }) => {
   return (
     <div className="w-full font-sans text-sm leading-7">
       {!hasChanges && (
-        <div data-testid="diff-no-changes" className="text-slate-500 italic p-4 text-center border border-dashed border-slate-800 rounded-lg">
+        <div data-testid="diff-no-changes" className="text-[var(--text-muted)] italic p-4 text-center border border-dashed border-[var(--border)] rounded-[var(--radius-lg)]">
           {t('diff.no_changes')}
         </div>
       )}
@@ -21,26 +21,26 @@ const DiffViewer = ({ oldText, newText }) => {
         {diff.map((part, index) => {
           if (part.removed) {
             return (
-              <div key={index} className="group relative bg-red-950/20 hover:bg-red-950/30 transition-colors border-l-2 border-red-900/50 pl-4 pr-2 py-1 select-text">
-                <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-red-800 opacity-50 group-hover:opacity-100 transition-opacity"></div>
-                <span data-testid="diff-removed" className="text-red-300/50 line-through decoration-red-800/50 font-mono text-xs block mb-1 opacity-50 select-none">{t('diff.removed')}</span>
-                <span className="text-red-200/60 font-serif whitespace-pre-wrap">{part.value}</span>
+              <div key={index} className="group relative bg-[var(--semantic-danger-bg)] hover:opacity-90 transition-opacity border-l-2 border-[var(--semantic-danger-fg)] pl-4 pr-2 py-1 select-text">
+                <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-[var(--semantic-danger-fg)] opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                <span data-testid="diff-removed" className="text-[var(--semantic-danger-fg)] line-through font-mono text-xs block mb-1 opacity-60 select-none">{t('diff.removed')}</span>
+                <span className="text-[var(--semantic-danger-fg)] font-serif whitespace-pre-wrap">{part.value}</span>
               </div>
             );
           }
-          
+
           if (part.added) {
             return (
-               <div key={index} className="group relative bg-emerald-950/20 hover:bg-emerald-950/30 transition-colors border-l-2 border-emerald-500/50 pl-4 pr-2 py-2 my-1 rounded-r select-text">
-                 <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]"></div>
-                 <span data-testid="diff-added" className="text-emerald-500/50 font-mono text-xs block mb-1 opacity-70 select-none">{t('diff.added')}</span>
-                 <span className="text-emerald-100 font-medium font-serif whitespace-pre-wrap">{part.value}</span>
+               <div key={index} className="group relative bg-[var(--semantic-success-bg)] hover:opacity-90 transition-opacity border-l-2 border-[var(--semantic-success-fg)] pl-4 pr-2 py-2 my-1 rounded-r select-text">
+                 <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-[var(--semantic-success-fg)]"></div>
+                 <span data-testid="diff-added" className="text-[var(--semantic-success-fg)] font-mono text-xs block mb-1 opacity-70 select-none">{t('diff.added')}</span>
+                 <span className="text-[var(--semantic-success-fg)] font-medium font-serif whitespace-pre-wrap">{part.value}</span>
                </div>
             );
           }
 
           return (
-            <div key={index} className="pl-4 pr-2 py-1 text-slate-400 whitespace-pre-wrap hover:text-slate-300 transition-colors border-l-2 border-transparent">
+            <div key={index} className="pl-4 pr-2 py-1 text-[var(--text-muted)] whitespace-pre-wrap hover:text-[var(--text-secondary)] transition-colors duration-150 border-l-2 border-transparent">
               {part.value}
             </div>
           );

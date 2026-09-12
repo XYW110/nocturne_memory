@@ -117,38 +117,38 @@ export default function DatabaseSection({ settings, dbStatus, onRefreshStatus, o
     <div className="space-y-5 pt-4">
       {/* Status card */}
       {dbStatus && (
-        <div className="bg-slate-900 border border-slate-700/50 shadow-sm rounded-lg p-3 text-sm space-y-1.5">
+        <div className="bg-[var(--surface-solid)] border border-[var(--border)] shadow-[var(--island-shadow-soft)] rounded-[var(--radius-lg)] p-3 text-sm space-y-1.5">
           <div className="flex items-center justify-between">
-            <span className="text-slate-400">{t('settings.database.type_label')}</span>
-            <span className="text-slate-200 font-medium">{dbStatus.type === 'sqlite' ? t('settings.database.sqlite') : t('settings.database.postgresql')}</span>
+            <span className="text-[var(--text-muted)]">{t('settings.database.type_label')}</span>
+            <span className="text-[var(--text-primary)] font-medium">{dbStatus.type === 'sqlite' ? t('settings.database.sqlite') : t('settings.database.postgresql')}</span>
           </div>
           {dbStatus.type === 'sqlite' && dbStatus.path && (
             <>
               <div className="flex items-center justify-between gap-4">
-                <span className="text-slate-400 flex-shrink-0">{t('settings.database.path_label')}</span>
-                <span className="text-slate-300 font-mono text-xs truncate max-w-[380px]" title={dbStatus.path}>{dbStatus.path}</span>
+                <span className="text-[var(--text-muted)] flex-shrink-0">{t('settings.database.path_label')}</span>
+                <span className="text-[var(--text-secondary)] font-mono text-xs truncate max-w-[380px]" title={dbStatus.path}>{dbStatus.path}</span>
               </div>
               {dbStatus.size_display && (
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-400">{t('settings.database.size_label')}</span>
-                  <span className="text-slate-200">{dbStatus.size_display}</span>
+                  <span className="text-[var(--text-muted)]">{t('settings.database.size_label')}</span>
+                  <span className="text-[var(--text-primary)] tabular-nums">{dbStatus.size_display}</span>
                 </div>
               )}
             </>
           )}
           {dbStatus.type === 'postgresql' && dbStatus.url_masked && (
             <div className="flex items-center justify-between">
-              <span className="text-slate-400">{t('settings.database.url_label')}</span>
-              <span className="text-slate-300 font-mono text-xs">{dbStatus.url_masked}</span>
+              <span className="text-[var(--text-muted)]">{t('settings.database.url_label')}</span>
+              <span className="text-[var(--text-secondary)] font-mono text-xs">{dbStatus.url_masked}</span>
             </div>
           )}
           <div className="flex items-center justify-end gap-3 pt-1">
             {dbStatus.type === 'sqlite' && dbStatus.path && (
-              <button onClick={handleOpenFolder} className="text-xs text-slate-400 hover:text-slate-200 flex items-center gap-1 transition-colors">
+              <button onClick={handleOpenFolder} className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center gap-1 transition-colors duration-150">
                 <FolderOpen size={11} /> {t('settings.database.open_folder')}
               </button>
             )}
-            <button onClick={onRefreshStatus} className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
+            <button onClick={onRefreshStatus} className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center gap-1 transition-colors duration-150">
               <RefreshCw size={11} /> {t('settings.database.refresh')}
             </button>
           </div>
@@ -157,8 +157,8 @@ export default function DatabaseSection({ settings, dbStatus, onRefreshStatus, o
 
       {/* Mode toggle */}
       <div className="space-y-2">
-        <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider">{t('settings.database.type_selector_label')}</label>
-        <div className="flex rounded-lg overflow-hidden border border-slate-700 w-fit">
+        <label className="block text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">{t('settings.database.type_selector_label')}</label>
+        <div className="flex rounded-[var(--radius-md)] overflow-hidden border border-[var(--border)] w-fit">
           {[
             { id: 'sqlite', label: t('settings.database.sqlite') },
             { id: 'postgresql', label: t('settings.database.postgresql') },
@@ -167,10 +167,10 @@ export default function DatabaseSection({ settings, dbStatus, onRefreshStatus, o
               key={opt.id}
               onClick={() => { setMode(opt.id); setDirty(true); setTestResult(null); }}
               className={clsx(
-                "px-4 py-1.5 text-sm font-medium transition-colors",
+                "px-4 py-1.5 text-sm font-medium transition-colors duration-150",
                 mode === opt.id
-                  ? "bg-indigo-600 text-white"
-                  : "bg-slate-900 text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+                  ? "bg-[var(--accent)] text-white"
+                  : "bg-[var(--surface-solid)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]"
               )}
             >
               {opt.label}
@@ -181,7 +181,7 @@ export default function DatabaseSection({ settings, dbStatus, onRefreshStatus, o
 
       {/* Connection input */}
       <div className="space-y-2">
-        <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider">
+        <label className="block text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">
           {mode === 'sqlite' ? t('settings.database.file_path_label') : t('settings.database.connection_url_label')}
         </label>
         {mode === 'sqlite' ? (
@@ -190,7 +190,7 @@ export default function DatabaseSection({ settings, dbStatus, onRefreshStatus, o
             value={sqlitePath}
             onChange={e => { setSqlitePath(e.target.value); setDirty(true); setTestResult(null); }}
             placeholder={t('settings.database.sqlite_placeholder')}
-            className="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded-lg px-3 py-2 text-sm font-mono placeholder:text-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-inner"
+            className="w-full bg-[var(--surface-solid)] border border-[var(--border)] text-[var(--text-primary)] placeholder:text-[var(--text-faint)] rounded-[var(--radius-md)] px-3 py-2 text-sm font-mono focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150"
           />
         ) : (
           <input
@@ -198,7 +198,7 @@ export default function DatabaseSection({ settings, dbStatus, onRefreshStatus, o
             value={pgUrl}
             onChange={e => { setPgUrl(e.target.value); setDirty(true); setTestResult(null); }}
             placeholder={t('settings.database.pg_placeholder')}
-            className="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded-lg px-3 py-2 text-sm font-mono placeholder:text-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-inner"
+            className="w-full bg-[var(--surface-solid)] border border-[var(--border)] text-[var(--text-primary)] placeholder:text-[var(--text-faint)] rounded-[var(--radius-md)] px-3 py-2 text-sm font-mono focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150"
           />
         )}
 
@@ -206,7 +206,7 @@ export default function DatabaseSection({ settings, dbStatus, onRefreshStatus, o
           <button
             onClick={dirty ? handleTestAndSave : handleTestOnly}
             disabled={busy}
-            className="mt-1 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white rounded-lg text-sm flex items-center gap-1.5 transition-colors"
+            className="mt-1 px-4 py-2 bg-[var(--accent)] hover:opacity-90 disabled:opacity-40 text-white rounded-[var(--radius-md)] text-sm flex items-center gap-1.5 transition-opacity duration-150"
           >
             <TestTube size={14} />
             {busy ? t('settings.database.testing') : (dirty ? t('settings.database.test_save') : t('settings.database.test_connection'))}
@@ -214,7 +214,7 @@ export default function DatabaseSection({ settings, dbStatus, onRefreshStatus, o
         )}
 
         {testResult && (
-          <div className={`flex items-center gap-2 text-sm ${testResult.success ? 'text-emerald-400' : 'text-red-400'}`}>
+          <div className={`flex items-center gap-2 text-sm rounded-[var(--radius-sm)] px-2 py-1 w-fit ${testResult.success ? 'text-[var(--semantic-success-fg)] bg-[var(--semantic-success-bg)]' : 'text-[var(--semantic-danger-fg)] bg-[var(--semantic-danger-bg)]'}`}>
             {testResult.success ? <CheckCircle size={14} /> : <XCircle size={14} />}
             {testResult.message}
           </div>
@@ -223,9 +223,9 @@ export default function DatabaseSection({ settings, dbStatus, onRefreshStatus, o
 
       {/* Create new SQLite DB */}
       {mode === 'sqlite' && (
-        <div className="space-y-2 pt-2 border-t border-slate-800/50">
-          <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider">{t('settings.database.create_new_label')}</label>
-          <p className="text-xs text-slate-500">{t('settings.database.create_new_desc')}</p>
+        <div className="space-y-2 pt-2 border-t border-[var(--border)]">
+          <label className="block text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">{t('settings.database.create_new_label')}</label>
+          <p className="text-xs text-[var(--text-muted)]">{t('settings.database.create_new_desc')}</p>
           <div className="flex gap-2">
             <input
               type="text"
@@ -233,12 +233,12 @@ export default function DatabaseSection({ settings, dbStatus, onRefreshStatus, o
               onChange={e => setNewDbPath(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleCreate()}
               placeholder={t('settings.database.new_db_placeholder')}
-              className="flex-1 bg-slate-950 border border-slate-700 text-slate-200 rounded-lg px-3 py-2 text-sm font-mono placeholder:text-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-inner"
+              className="flex-1 bg-[var(--surface-solid)] border border-[var(--border)] text-[var(--text-primary)] placeholder:text-[var(--text-faint)] rounded-[var(--radius-md)] px-3 py-2 text-sm font-mono focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150"
             />
             <button
               onClick={handleCreate}
               disabled={creating || !newDbPath.trim()}
-              className="px-3 py-2 bg-slate-700 hover:bg-slate-600 disabled:opacity-40 text-slate-200 rounded-lg text-sm flex items-center gap-1.5 transition-colors whitespace-nowrap"
+              className="px-3 py-2 bg-[var(--surface-hover)] hover:bg-[var(--border)] disabled:opacity-40 text-[var(--text-secondary)] hover:text-[var(--text-primary)] rounded-[var(--radius-md)] text-sm flex items-center gap-1.5 transition-colors duration-150 whitespace-nowrap"
             >
               <Plus size={14} />
               {creating ? t('settings.database.creating') : t('settings.database.create')}

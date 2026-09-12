@@ -133,14 +133,14 @@ const AliasManager = ({ aliases, currentDomain, currentPath, onUpdate }) => {
   };
 
   return (
-    <div className="flex items-start gap-2 text-xs text-slate-500">
-      <Link2 size={13} className="flex-shrink-0 mt-0.5 text-slate-600" />
+    <div className="flex items-start gap-2 text-xs text-[var(--text-muted)]">
+      <Link2 size={13} className="flex-shrink-0 mt-0.5 text-[var(--text-faint)]" />
       <div className="flex flex-wrap gap-1.5 items-center">
-        <span className="text-slate-600 font-medium">{t('memory.alias.label')}</span>
+        <span className="text-[var(--text-faint)] font-medium">{t('memory.alias.label')}</span>
         {aliases.map(alias => (
           <span
             key={alias}
-            className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-slate-800/60 border border-slate-700/50 rounded text-indigo-400/70 font-mono text-[11px]"
+            className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-[var(--surface-hover)] border border-[var(--border)] rounded-[var(--radius-sm)] text-[var(--text-secondary)] font-mono text-[11px]"
           >
             {alias}
             {confirmRemove === alias ? (
@@ -148,13 +148,13 @@ const AliasManager = ({ aliases, currentDomain, currentPath, onUpdate }) => {
                 <button
                   onClick={() => { setConfirmRemove(null); handleRemove(alias); }}
                   disabled={removing === alias}
-                  className="text-rose-400 hover:text-rose-300 text-[10px] font-medium transition-colors disabled:opacity-50"
+                  className="text-[var(--semantic-danger-fg)] hover:opacity-80 text-[10px] font-medium transition-opacity duration-150 disabled:opacity-50"
                 >
                   {removing === alias ? <Loader2 size={9} className="animate-spin" /> : t('memory.alias.confirm_yes')}
                 </button>
                 <button
                   onClick={() => setConfirmRemove(null)}
-                  className="text-slate-500 hover:text-slate-300 text-[10px] transition-colors"
+                  className="text-[var(--text-muted)] hover:text-[var(--text-primary)] text-[10px] transition-colors duration-150"
                 >
                   {t('memory.alias.confirm_no')}
                 </button>
@@ -162,7 +162,7 @@ const AliasManager = ({ aliases, currentDomain, currentPath, onUpdate }) => {
             ) : (
               <button
                 onClick={() => setConfirmRemove(alias)}
-                className="text-slate-600 hover:text-rose-400 transition-colors"
+                className="text-[var(--text-faint)] hover:text-[var(--semantic-danger-fg)] transition-colors duration-150"
                 title={t('memory.alias.remove_tooltip')}
               >
                 <X size={9} />
@@ -174,15 +174,15 @@ const AliasManager = ({ aliases, currentDomain, currentPath, onUpdate }) => {
           <div className="w-full space-y-1.5 mt-1">
             {/* Row 1: cascading path selectors */}
             <div className="flex flex-wrap items-center gap-1.5">
-              <span className="text-xs text-slate-500">{currentDomain}://</span>
+              <span className="text-xs text-[var(--text-muted)]">{currentDomain}://</span>
               {childrenByLevel.map((options, level) => (
                 options.length > 0 && (
                   <React.Fragment key={level}>
-                    {level > 0 && <span className="text-slate-600 text-[11px]">/</span>}
+                    {level > 0 && <span className="text-[var(--text-faint)] text-[11px]">/</span>}
                     <select
                       value={pathSegments[level] || ''}
                       onChange={e => handleSegmentChange(level, e.target.value)}
-                      className="px-1.5 py-0.5 bg-slate-900 border border-indigo-800/40 rounded text-indigo-300 text-[11px] font-mono focus:outline-none focus:border-indigo-500/50"
+                      className="px-1.5 py-0.5 bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-sm)] text-[var(--text-primary)] text-[11px] font-mono focus:outline-none focus:shadow-[var(--focus-ring)]"
                     >
                       <option value="">{level === 0 ? t('memory.alias.root_option') : '—'}</option>
                       {options.map(name => (
@@ -192,8 +192,8 @@ const AliasManager = ({ aliases, currentDomain, currentPath, onUpdate }) => {
                   </React.Fragment>
                 )
               ))}
-              {loadingLevel >= 0 && <Loader2 size={9} className="animate-spin text-slate-500" />}
-              <span className="text-slate-600 text-[11px]">/</span>
+              {loadingLevel >= 0 && <Loader2 size={9} className="animate-spin text-[var(--text-muted)]" />}
+              <span className="text-[var(--text-faint)] text-[11px]">/</span>
               <input
                 ref={leafInputRef}
                 type="text"
@@ -201,7 +201,7 @@ const AliasManager = ({ aliases, currentDomain, currentPath, onUpdate }) => {
                 onChange={e => setLeafName(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={t('memory.alias.name_placeholder')}
-                className="w-24 px-1.5 py-0.5 bg-slate-900 border border-indigo-800/40 rounded text-indigo-300 text-[11px] font-mono focus:outline-none focus:border-indigo-500/50"
+                className="w-24 px-1.5 py-0.5 bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-sm)] text-[var(--text-primary)] text-[11px] font-mono focus:outline-none focus:shadow-[var(--focus-ring)]"
               />
             </div>
             {/* Row 2: disclosure, priority, actions (fixed position) */}
@@ -212,24 +212,24 @@ const AliasManager = ({ aliases, currentDomain, currentPath, onUpdate }) => {
                 onChange={e => setNewDisclosure(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={t('memory.alias.disclosure_placeholder')}
-                className="w-48 px-1.5 py-0.5 bg-slate-900 border border-indigo-800/40 rounded text-indigo-300 text-[11px] focus:outline-none focus:border-indigo-500/50"
+                className="w-48 px-1.5 py-0.5 bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-sm)] text-[var(--text-primary)] text-[11px] focus:outline-none focus:shadow-[var(--focus-ring)]"
               />
               <input
                 type="number" min="0"
                 value={newPriority}
                 onChange={e => setNewPriority(parseInt(e.target.value) || 0)}
                 onKeyDown={handleKeyDown}
-                className="w-14 px-1.5 py-0.5 bg-slate-900 border border-indigo-800/40 rounded text-indigo-300 text-[11px] font-mono focus:outline-none focus:border-indigo-500/50"
+                className="w-14 px-1.5 py-0.5 bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-sm)] text-[var(--text-primary)] text-[11px] font-mono tabular-nums focus:outline-none focus:shadow-[var(--focus-ring)]"
                 title={t('memory.alias.priority')}
               />
               <button
                 onClick={handleAdd}
                 disabled={saving || !leafName.trim() || !newDisclosure.trim()}
-                className="text-indigo-500 hover:text-indigo-300 transition-colors disabled:opacity-50"
+                className="text-[var(--accent)] hover:opacity-80 transition-opacity duration-150 disabled:opacity-50"
               >
                 {saving ? <Loader2 size={11} className="animate-spin" /> : <Save size={11} />}
               </button>
-              <button onClick={cancelAdd} className="text-slate-600 hover:text-slate-400 transition-colors">
+              <button onClick={cancelAdd} className="text-[var(--text-faint)] hover:text-[var(--text-primary)] transition-colors duration-150">
                 <X size={11} />
               </button>
             </div>
@@ -237,13 +237,13 @@ const AliasManager = ({ aliases, currentDomain, currentPath, onUpdate }) => {
         ) : (
           <button
             onClick={() => setAdding(true)}
-            className="inline-flex items-center gap-0.5 px-1.5 py-0.5 border border-dashed border-slate-700 rounded text-slate-600 hover:text-indigo-400 hover:border-indigo-500/40 transition-colors text-[11px]"
+            className="inline-flex items-center gap-0.5 px-1.5 py-0.5 border border-dashed border-[var(--text-faint)] rounded-[var(--radius-sm)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-[var(--text-muted)] transition-colors duration-150 text-[11px]"
           >
             <Plus size={9} /> {t('memory.alias.add')}
           </button>
         )}
       </div>
-      {error && <span className="text-rose-400 w-full text-[11px]">{error}</span>}
+      {error && <span className="text-[var(--semantic-danger-fg)] w-full text-[11px]">{error}</span>}
     </div>
   );
 };

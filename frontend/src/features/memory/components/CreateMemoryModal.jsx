@@ -58,25 +58,25 @@ export default function CreateMemoryModal({ onClose, onCreated, parentPath, curr
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+      className="fixed inset-0 z-50 bg-black/50"
       onClick={handleClose}
     >
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#0C0C14] border border-slate-800 rounded-xl p-6 max-w-4xl w-[calc(100%-2rem)] shadow-2xl max-h-[90vh] overflow-y-auto custom-scrollbar"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-xl)] p-6 max-w-4xl w-[calc(100%-2rem)] shadow-[var(--island-shadow)] max-h-[90vh] overflow-y-auto custom-scrollbar"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-center gap-3 mb-5">
-          <div className="p-2.5 rounded-lg bg-indigo-950/40 text-indigo-400">
+          <div className="p-2.5 rounded-[var(--radius-lg)] bg-[var(--surface-hover)] text-[var(--text-primary)]">
             <Plus size={20} />
           </div>
           <div>
-            <h3 className="text-base font-bold text-slate-100">{t('memory.create.title')}</h3>
-            <p className="text-xs text-slate-500 mt-0.5">{t('memory.create.subtitle')}</p>
+            <h3 className="text-base font-bold text-[var(--text-primary)]">{t('memory.create.title')}</h3>
+            <p className="text-xs text-[var(--text-muted)] mt-0.5">{t('memory.create.subtitle')}</p>
           </div>
         </div>
 
         {error && (
-          <div className="mb-4 p-3 bg-rose-950/20 border border-rose-900/30 rounded-lg text-rose-400 text-sm">
+          <div className="mb-4 p-3 bg-[var(--semantic-danger-bg)] rounded-[var(--radius-md)] text-[var(--semantic-danger-fg)] text-sm">
             {error}
           </div>
         )}
@@ -85,8 +85,8 @@ export default function CreateMemoryModal({ onClose, onCreated, parentPath, curr
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* Parent path (readonly) */}
             <div className="space-y-1.5 md:col-span-2">
-              <label className="text-xs font-medium text-slate-400">{t('memory.create.parent_path')}</label>
-              <div className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-indigo-300/70 font-mono select-all">
+              <label className="text-xs font-medium text-[var(--text-muted)]">{t('memory.create.parent_path')}</label>
+              <div className="w-full bg-[var(--surface-hover)] border border-[var(--border)] rounded-[var(--radius-md)] px-3 py-2 text-sm text-[var(--text-secondary)] font-mono select-all">
                 {currentDomain}://{parentPath || 'root'}
               </div>
             </div>
@@ -94,78 +94,78 @@ export default function CreateMemoryModal({ onClose, onCreated, parentPath, curr
             {/* Title */}
             <div className="space-y-1.5">
               <label className="flex items-baseline justify-between">
-                <span className="text-xs font-medium text-slate-400">
-                  {t('memory.create.title_label')} <span className="text-slate-600 font-normal">{t('memory.create.optional')}</span>
+                <span className="text-xs font-medium text-[var(--text-muted)]">
+                  {t('memory.create.title_label')} <span className="text-[var(--text-faint)] font-normal">{t('memory.create.optional')}</span>
                 </span>
-                <span className="text-[10px] text-slate-600">{t('memory.create.title_hint')}</span>
+                <span className="text-[10px] text-[var(--text-faint)]">{t('memory.create.title_hint')}</span>
               </label>
               <input
                 type="text"
                 value={title}
                 onChange={e => setTitle(e.target.value)}
                 placeholder={t('memory.create.title_placeholder')}
-                className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 font-mono focus:outline-none focus:border-indigo-500/50 transition-colors"
+                className="w-full bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-md)] px-3 py-2 text-sm text-[var(--text-primary)] font-mono focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150"
               />
             </div>
 
             {/* Priority */}
             <div className="space-y-1.5">
               <label className="flex items-baseline justify-between">
-                <span className="text-xs font-medium text-slate-400">{t('memory.create.priority_label')}</span>
-                <span className="text-[10px] text-slate-600">{t('memory.create.priority_hint')}</span>
+                <span className="text-xs font-medium text-[var(--text-muted)]">{t('memory.create.priority_label')}</span>
+                <span className="text-[10px] text-[var(--text-faint)]">{t('memory.create.priority_hint')}</span>
               </label>
               <input
                 type="number"
                 min="0"
                 value={priority}
                 onChange={e => setPriority(parseInt(e.target.value) || 0)}
-                className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 font-mono focus:outline-none focus:border-indigo-500/50 transition-colors"
+                className="w-full bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-md)] px-3 py-2 text-sm text-[var(--text-primary)] font-mono tabular-nums focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150"
               />
             </div>
           </div>
 
           {/* Disclosure */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-slate-400">
-              {t('memory.create.disclosure_label')} <span className="text-rose-400">*</span>
+            <label className="text-xs font-medium text-[var(--text-muted)]">
+              {t('memory.create.disclosure_label')} <span className="text-[var(--semantic-danger-fg)]">*</span>
             </label>
             <input
               type="text"
               value={disclosure}
               onChange={e => setDisclosure(e.target.value)}
               placeholder={t('memory.create.disclosure_placeholder')}
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-indigo-500/50 transition-colors"
+              className="w-full bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-md)] px-3 py-2 text-sm text-[var(--text-primary)] focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150"
             />
           </div>
 
           {/* Content */}
           <div className="space-y-1.5 flex flex-col">
-            <label className="text-xs font-medium text-slate-400">
-              {t('memory.create.content_label')} <span className="text-rose-400">*</span>
+            <label className="text-xs font-medium text-[var(--text-muted)]">
+              {t('memory.create.content_label')} <span className="text-[var(--semantic-danger-fg)]">*</span>
             </label>
             <textarea
               ref={textareaRef}
               value={content}
               onChange={e => setContent(e.target.value)}
               placeholder={t('memory.create.content_placeholder')}
-              className="w-full min-h-[120px] bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 font-mono focus:outline-none focus:border-indigo-500/50 transition-colors resize-none overflow-hidden"
+              className="w-full min-h-[120px] bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-md)] px-3 py-2 text-sm text-[var(--text-primary)] font-mono focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150 resize-none overflow-hidden"
               spellCheck={false}
             />
           </div>
         </div>
 
-        <div className="flex gap-3 justify-end mt-6 pt-4 border-t border-slate-800/50">
+        <div className="flex gap-3 justify-end mt-6 pt-4 border-t border-[var(--border)]">
           <button
             onClick={handleClose}
             disabled={saving}
-            className="px-4 py-2 text-sm text-slate-400 hover:text-slate-200 bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 transition-colors disabled:opacity-50"
+            className="px-4 py-2 text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)] bg-transparent hover:bg-[var(--surface-hover)] rounded-[var(--radius-md)] border border-[var(--border)] transition-colors duration-150 disabled:opacity-50"
           >
             {t('memory.create.cancel')}
           </button>
           <button
             onClick={handleCreate}
             disabled={saving || !content.trim() || !disclosure.trim()}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg transition-colors shadow-lg shadow-indigo-900/20 disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[var(--accent)] hover:opacity-90 rounded-[var(--radius-md)] transition-opacity duration-150 disabled:opacity-50"
           >
             {saving ? (
               <>

@@ -93,20 +93,20 @@ function NamespaceBootPanel({ namespace, uris: initialUris, isDefault, onDelete,
   const label = isDefault ? t('settings.boot_uris.default_label') : namespace;
 
   return (
-    <div className="bg-slate-900/60 border border-slate-800 rounded-lg overflow-hidden">
+    <div className="bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-lg)] overflow-hidden">
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center gap-2.5 px-3 py-2.5 hover:bg-slate-800/40 transition-colors"
+        className="w-full flex items-center gap-2.5 px-3 py-2.5 hover:bg-[var(--surface-hover)] transition-colors duration-150"
       >
-        <Layers size={14} className={clsx(isDefault ? "text-indigo-400" : "text-slate-500")} />
-        <span className={clsx("text-sm font-medium", isDefault ? "text-slate-200" : "text-slate-300")}>{label}</span>
-        {isDefault && <span className="text-[10px] px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">{t('settings.boot_uris.fallback_badge')}</span>}
-        <span className="text-xs text-slate-600 ml-auto mr-2">{t('settings.boot_uris.uri_count', { count: uris.length })}</span>
-        {open ? <ChevronUp size={14} className="text-slate-500" /> : <ChevronDown size={14} className="text-slate-500" />}
+        <Layers size={14} className={clsx(isDefault ? "text-[var(--text-primary)]" : "text-[var(--text-muted)]")} />
+        <span className={clsx("text-sm font-medium", isDefault ? "text-[var(--text-primary)]" : "text-[var(--text-secondary)]")}>{label}</span>
+        {isDefault && <span className="text-[10px] px-1.5 py-0.5 rounded-[var(--radius-sm)] bg-[var(--semantic-info-bg)] text-[var(--semantic-info-fg)] border border-[var(--border)]">{t('settings.boot_uris.fallback_badge')}</span>}
+        <span className="text-xs text-[var(--text-faint)] ml-auto mr-2 tabular-nums">{t('settings.boot_uris.uri_count', { count: uris.length })}</span>
+        {open ? <ChevronUp size={14} className="text-[var(--text-faint)]" /> : <ChevronDown size={14} className="text-[var(--text-faint)]" />}
       </button>
 
       {open && (
-        <div className="px-3 pb-3 pt-1 border-t border-slate-800/50 space-y-2">
+        <div className="px-3 pb-3 pt-1 border-t border-[var(--border)] space-y-2">
           <div className="space-y-1">
             {uris.map((uri, idx) => (
               <div
@@ -116,20 +116,20 @@ function NamespaceBootPanel({ namespace, uris: initialUris, isDefault, onDelete,
                 onDragEnter={() => handleDragEnter(idx)}
                 onDragEnd={handleDragEnd}
                 onDragOver={e => e.preventDefault()}
-                className="flex items-center gap-2 bg-slate-950/60 border border-slate-800 hover:border-slate-700 rounded-md px-2.5 py-1.5 group cursor-grab active:cursor-grabbing transition-all"
+                className="flex items-center gap-2 bg-[var(--surface-hover)] border border-[var(--border)] rounded-[var(--radius-md)] px-2.5 py-1.5 group cursor-grab active:cursor-grabbing transition-colors duration-150"
               >
-                <GripVertical size={12} className="text-slate-600 group-hover:text-slate-400 flex-shrink-0" />
-                <span className="text-xs font-mono text-slate-300 flex-1 truncate">{uri}</span>
+                <GripVertical size={12} className="text-[var(--text-faint)] group-hover:text-[var(--text-muted)] flex-shrink-0" />
+                <span className="text-xs font-mono text-[var(--text-secondary)] flex-1 truncate">{uri}</span>
                 <button
                   onClick={() => handleRemove(idx)}
-                  className="opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-300 transition-opacity"
+                  className="opacity-0 group-hover:opacity-100 text-[var(--semantic-danger-fg)] hover:opacity-80 transition-opacity"
                 >
                   <Trash2 size={12} />
                 </button>
               </div>
             ))}
             {uris.length === 0 && (
-              <p className="text-xs text-slate-600 italic py-1.5">{t('settings.boot_uris.empty')}</p>
+              <p className="text-xs text-[var(--text-faint)] italic py-1.5">{t('settings.boot_uris.empty')}</p>
             )}
           </div>
 
@@ -140,12 +140,12 @@ function NamespaceBootPanel({ namespace, uris: initialUris, isDefault, onDelete,
               onChange={e => setNewUri(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleAdd()}
               placeholder={t('settings.boot_uris.placeholder')}
-              className="flex-1 bg-slate-950 border border-slate-700 text-slate-200 rounded-md px-2.5 py-1.5 text-xs font-mono placeholder:text-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-inner"
+              className="flex-1 bg-[var(--surface-solid)] border border-[var(--border)] text-[var(--text-primary)] placeholder:text-[var(--text-faint)] rounded-[var(--radius-md)] px-2.5 py-1.5 text-xs font-mono focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150"
             />
             <button
               onClick={handleAdd}
               disabled={!newUri.trim()}
-              className="px-2.5 py-1.5 bg-slate-700 hover:bg-slate-600 disabled:opacity-40 text-slate-200 rounded-md text-xs flex items-center gap-1 transition-colors"
+              className="px-2.5 py-1.5 bg-[var(--surface-hover)] hover:bg-[var(--border)] disabled:opacity-40 text-[var(--text-secondary)] hover:text-[var(--text-primary)] rounded-[var(--radius-md)] text-xs flex items-center gap-1 transition-colors duration-150"
             >
               <Plus size={12} /> {t('settings.boot_uris.add')}
             </button>
@@ -156,7 +156,7 @@ function NamespaceBootPanel({ namespace, uris: initialUris, isDefault, onDelete,
               <button
                 onClick={handleDelete}
                 disabled={deleting}
-                className="text-xs text-red-400/70 hover:text-red-400 flex items-center gap-1 transition-colors"
+                className="text-xs text-[var(--semantic-danger-fg)] opacity-70 hover:opacity-100 flex items-center gap-1 transition-opacity duration-150"
               >
                 <Trash2 size={11} />
                 {deleting ? t('settings.boot_uris.removing') : t('settings.boot_uris.remove_override_button')}
@@ -167,7 +167,7 @@ function NamespaceBootPanel({ namespace, uris: initialUris, isDefault, onDelete,
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white rounded-md text-xs font-medium flex items-center gap-1.5 transition-colors"
+                className="px-3 py-1.5 bg-[var(--accent)] hover:opacity-90 disabled:opacity-50 text-white rounded-[var(--radius-md)] text-xs font-medium flex items-center gap-1.5 transition-opacity duration-150"
               >
                 <Save size={12} />
                 {saving ? t('settings.boot_uris.saving') : t('settings.boot_uris.save')}
@@ -223,7 +223,7 @@ export default function BootUrisSection() {
     });
   };
 
-  if (loading) return <div className="pt-4 text-sm text-slate-500">{t('settings.boot_uris.loading')}</div>;
+  if (loading) return <div className="pt-4 text-sm text-[var(--text-muted)]">{t('settings.boot_uris.loading')}</div>;
 
   const defaultUris = allBootUris[''] || [];
   const otherNamespaces = Object.keys(allBootUris).filter(ns => ns !== '').sort();
@@ -231,7 +231,7 @@ export default function BootUrisSection() {
 
   return (
     <div className="space-y-3 pt-4">
-      <p className="text-xs text-slate-500">{t('settings.boot_uris.description')}</p>
+      <p className="text-xs text-[var(--text-muted)]">{t('settings.boot_uris.description')}</p>
 
       <div className="space-y-2">
         <NamespaceBootPanel
@@ -259,7 +259,7 @@ export default function BootUrisSection() {
             <select
               value={newNs}
               onChange={e => setNewNs(e.target.value === '__custom__' ? '' : e.target.value)}
-              className="bg-slate-950 border border-slate-700 text-slate-200 rounded-md px-2.5 py-1.5 text-xs focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+              className="bg-[var(--surface-solid)] border border-[var(--border)] text-[var(--text-primary)] rounded-[var(--radius-md)] px-2.5 py-1.5 text-xs focus:outline-none focus:shadow-[var(--focus-ring)]"
             >
               <option value="">{t('settings.boot_uris.select_or_type')}</option>
               {availableToAdd.map(ns => (
@@ -278,18 +278,18 @@ export default function BootUrisSection() {
               if (e.key === 'Escape') { setAddingNs(false); setNewNs(''); }
             }}
             placeholder={t('settings.boot_uris.namespace_placeholder')}
-            className="flex-1 bg-slate-950 border border-slate-700 text-slate-200 rounded-md px-2.5 py-1.5 text-xs font-mono placeholder:text-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-inner"
+            className="flex-1 bg-[var(--surface-solid)] border border-[var(--border)] text-[var(--text-primary)] placeholder:text-[var(--text-faint)] rounded-[var(--radius-md)] px-2.5 py-1.5 text-xs font-mono focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150"
           />
           <button
             onClick={handleAddNamespace}
             disabled={!newNs.trim() || newNs.trim() in allBootUris}
-            className="px-2.5 py-1.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white rounded-md text-xs flex items-center gap-1 transition-colors"
+            className="px-2.5 py-1.5 bg-[var(--accent)] hover:opacity-90 disabled:opacity-40 text-white rounded-[var(--radius-md)] text-xs flex items-center gap-1 transition-opacity duration-150"
           >
             <Plus size={12} /> {t('settings.boot_uris.add')}
           </button>
           <button
             onClick={() => { setAddingNs(false); setNewNs(''); }}
-            className="px-2 py-1.5 text-slate-400 hover:text-slate-200 text-xs transition-colors"
+            className="px-2 py-1.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] text-xs transition-colors duration-150"
           >
             {t('settings.boot_uris.cancel')}
           </button>
@@ -297,7 +297,7 @@ export default function BootUrisSection() {
       ) : (
         <button
           onClick={() => setAddingNs(true)}
-          className="w-full py-2 border border-dashed border-slate-700 hover:border-slate-500 rounded-lg text-xs text-slate-500 hover:text-slate-300 flex items-center justify-center gap-1.5 transition-colors"
+          className="w-full py-2 border border-dashed border-[var(--border)] hover:border-[var(--text-faint)] rounded-[var(--radius-lg)] text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] flex items-center justify-center gap-1.5 transition-colors duration-150"
         >
           <Plus size={12} /> {t('settings.boot_uris.add_namespace')}
         </button>

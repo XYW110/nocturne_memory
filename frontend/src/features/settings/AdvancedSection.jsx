@@ -40,22 +40,22 @@ export default function AdvancedSection({ settings, lockedFields = [], onSave })
     <div className="space-y-5 pt-4">
       <div className="space-y-3">
         <div className="space-y-2">
-          <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider">{t('settings.advanced.host_label')}</label>
+          <label className="block text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">{t('settings.advanced.host_label')}</label>
           <input
             type="text"
             value={host}
             onChange={e => { setHost(e.target.value); setDirty(true); }}
             disabled={isLocked('host')}
             placeholder={t('settings.advanced.host_placeholder')}
-            className="bg-slate-950 border border-slate-700 text-slate-200 rounded-lg px-3 py-2 text-sm w-full font-mono focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-inner disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-[var(--surface-solid)] border border-[var(--border)] text-[var(--text-primary)] rounded-[var(--radius-md)] px-3 py-2 text-sm w-full font-mono focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
           />
           {isLocked('host') ? (
-            <p className="text-[11px] text-slate-500">{t('settings.advanced.docker_managed')}</p>
+            <p className="text-[11px] text-[var(--text-muted)]">{t('settings.advanced.docker_managed')}</p>
           ) : (
-            <p className="text-[11px] text-slate-500">
+            <p className="text-[11px] text-[var(--text-muted)]">
               {isRemote
                 ? t('settings.advanced.remote_mode_hint')
-                : <Trans i18nKey="settings.advanced.localhost_hint" components={{ c: <code className="text-slate-400" /> }}>
+                : <Trans i18nKey="settings.advanced.localhost_hint" components={{ c: <code className="text-[var(--text-secondary)]" /> }}>
                     Default: only this machine can connect. Change to <c>0.0.0.0</c> to allow LAN / remote access.
                   </Trans>
               }
@@ -65,7 +65,7 @@ export default function AdvancedSection({ settings, lockedFields = [], onSave })
 
         {isRemote && (
           <div className="space-y-2">
-            <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider">{t('settings.advanced.token_label')}</label>
+            <label className="block text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">{t('settings.advanced.token_label')}</label>
             <div className="flex gap-1.5">
               <div className="relative flex-1">
                 <input
@@ -73,13 +73,13 @@ export default function AdvancedSection({ settings, lockedFields = [], onSave })
                   value={token}
                   onChange={e => { setToken(e.target.value); setDirty(true); }}
                   placeholder={settings?.api_token ? t('settings.advanced.token_already_set') : t('settings.advanced.token_not_set')}
-                  className="bg-slate-950 border border-slate-700 text-slate-200 rounded-lg px-3 py-2 pr-9 text-sm w-full font-mono focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-inner"
+                  className="bg-[var(--surface-solid)] border border-[var(--border)] text-[var(--text-primary)] rounded-[var(--radius-md)] px-3 py-2 pr-9 text-sm w-full font-mono focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150"
                 />
                 {token && (
                   <button
                     type="button"
                     onClick={() => setShowToken(!showToken)}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--text-faint)] hover:text-[var(--text-secondary)] transition-colors duration-150"
                   >
                     {showToken ? <EyeOff size={14} /> : <Eye size={14} />}
                   </button>
@@ -94,7 +94,7 @@ export default function AdvancedSection({ settings, lockedFields = [], onSave })
                   setToken(generated);
                   setDirty(true);
                 }}
-                className="px-2.5 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg text-xs flex items-center gap-1.5 transition-colors flex-shrink-0"
+                className="px-2.5 py-2 bg-[var(--surface-hover)] hover:bg-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] rounded-[var(--radius-md)] text-xs flex items-center gap-1.5 transition-colors duration-150 flex-shrink-0"
                 title={t('settings.advanced.generate_token_title')}
               >
                 <RefreshCw size={12} /> {t('settings.advanced.generate')}
@@ -103,20 +103,20 @@ export default function AdvancedSection({ settings, lockedFields = [], onSave })
                 <button
                   type="button"
                   onClick={() => { navigator.clipboard.writeText(token); }}
-                  className="px-2.5 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg text-xs flex items-center gap-1.5 transition-colors flex-shrink-0"
+                  className="px-2.5 py-2 bg-[var(--surface-hover)] hover:bg-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] rounded-[var(--radius-md)] text-xs flex items-center gap-1.5 transition-colors duration-150 flex-shrink-0"
                   title={t('settings.advanced.copy_token_title')}
                 >
                   <Copy size={12} />
                 </button>
               )}
             </div>
-            <p className="text-[11px] text-slate-500">
-              <Trans i18nKey="settings.advanced.token_hint" components={{ code: <code className="text-slate-400" /> }}>
+            <p className="text-[11px] text-[var(--text-muted)]">
+              <Trans i18nKey="settings.advanced.token_hint" components={{ code: <code className="text-[var(--text-secondary)]" /> }}>
                 Clients must send <code>Authorization: Bearer &lt;token&gt;</code> to access the API.
               </Trans>
             </p>
             {!settings?.api_token && !token.trim() && (
-              <p className="text-[11px] text-amber-400 flex items-center gap-1">
+              <p className="text-[11px] text-[var(--semantic-warning-fg)] flex items-center gap-1">
                 <AlertTriangle size={11} /> {t('settings.advanced.token_required')}
               </p>
             )}
@@ -124,7 +124,7 @@ export default function AdvancedSection({ settings, lockedFields = [], onSave })
         )}
       </div>
 
-      <div className="border-t border-slate-800/50 pt-4">
+      <div className="border-t border-[var(--border)] pt-4">
         <div className="flex items-center gap-3">
           <label className="relative inline-flex items-center cursor-pointer">
             <input
@@ -133,24 +133,24 @@ export default function AdvancedSection({ settings, lockedFields = [], onSave })
               onChange={e => { setReadonlyMcp(e.target.checked); setDirty(true); }}
               className="sr-only peer"
             />
-            <div className="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-slate-400 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-red-600 peer-checked:after:bg-white"></div>
+            <div className="w-9 h-5 bg-[var(--text-faint)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-[var(--border)] after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[var(--semantic-danger-fg)] peer-checked:after:bg-white"></div>
           </label>
           <div>
-            <span className="text-sm text-slate-300 block font-medium">{t('settings.advanced.readonly_label')}</span>
-            <span className="text-xs text-slate-500 block">{t('settings.advanced.readonly_desc')}</span>
+            <span className="text-sm text-[var(--text-primary)] block font-medium">{t('settings.advanced.readonly_label')}</span>
+            <span className="text-xs text-[var(--text-muted)] block">{t('settings.advanced.readonly_desc')}</span>
           </div>
         </div>
       </div>
 
       {dirty && (
         <div className="flex items-center justify-between pt-1">
-          <p className="text-xs text-amber-400 flex items-center gap-1">
+          <p className="text-xs text-[var(--semantic-warning-fg)] bg-[var(--semantic-warning-bg)] rounded-[var(--radius-sm)] px-2 py-1 flex items-center gap-1">
             <AlertTriangle size={12} /> {t('settings.advanced.restart_warning')}
           </p>
           <button
             onClick={handleSave}
             disabled={saving || (isRemote && !token.trim() && !settings?.api_token)}
-            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
+            className="px-4 py-2 bg-[var(--accent)] hover:opacity-90 disabled:opacity-50 text-white rounded-[var(--radius-md)] text-sm font-medium flex items-center gap-2 transition-opacity duration-150"
           >
             <Save size={14} />
             {saving ? t('settings.advanced.saving') : t('settings.advanced.save')}

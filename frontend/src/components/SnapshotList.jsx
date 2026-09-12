@@ -3,9 +3,9 @@ import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
 const getActionColor = (action) => {
-  if (action === 'created') return 'emerald';
-  if (action === 'deleted') return 'rose';
-  return 'amber'; // modified
+  if (action === 'created') return 'success';
+  if (action === 'deleted') return 'danger';
+  return 'warning'; // modified
 };
 
 const getActionLabel = (table, action, t) => {
@@ -18,20 +18,20 @@ const getActionLabel = (table, action, t) => {
 };
 
 const COLOR_CLASSES = {
-  emerald: {
-    active: "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]",
-    idle:   "bg-emerald-900",
-    label:  "text-emerald-700",
+  success: {
+    active: "bg-[var(--semantic-success-fg)]",
+    idle:   "bg-[var(--semantic-success-fg)] opacity-30",
+    label:  "text-[var(--semantic-success-fg)]",
   },
-  rose: {
-    active: "bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.6)]",
-    idle:   "bg-rose-900",
-    label:  "text-rose-700",
+  danger: {
+    active: "bg-[var(--semantic-danger-fg)]",
+    idle:   "bg-[var(--semantic-danger-fg)] opacity-30",
+    label:  "text-[var(--semantic-danger-fg)]",
   },
-  amber: {
-    active: "bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]",
-    idle:   "bg-amber-900",
-    label:  "text-amber-700",
+  warning: {
+    active: "bg-[var(--semantic-warning-fg)]",
+    idle:   "bg-[var(--semantic-warning-fg)] opacity-30",
+    label:  "text-[var(--semantic-warning-fg)]",
   },
 };
 
@@ -46,7 +46,7 @@ const SnapshotList = ({ snapshots, selectedId, onSelect }) => {
 
   if (snaps.length === 0) {
     return (
-      <div className="text-center py-10 text-slate-600 text-xs tracking-wide uppercase">
+      <div className="text-center py-10 text-[var(--text-faint)] text-xs tracking-wide uppercase">
         {t('snapshot.empty_sequence')}
       </div>
     );
@@ -65,30 +65,30 @@ const SnapshotList = ({ snapshots, selectedId, onSelect }) => {
             key={item.node_uuid}
             onClick={() => onSelect(item)}
             className={clsx(
-              "group relative text-left py-3 px-5 border-l-2 transition-all duration-200 outline-none w-full hover:bg-white/[0.02]",
+              "group relative text-left py-3 px-5 border-l-2 transition-colors duration-150 outline-none w-full hover:bg-[var(--surface-hover)]",
               isSelected
-                ? "border-indigo-500 bg-white/[0.03]"
-                : "border-transparent text-slate-500 hover:text-slate-300"
+                ? "border-[var(--accent)] bg-[var(--surface-hover)]"
+                : "border-transparent text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
             )}
           >
             {isSelected && (
-              <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-transparent pointer-events-none" />
+              <div className="absolute inset-0 pointer-events-none" />
             )}
 
             <div className="flex items-center gap-3 relative z-10">
               <div className={clsx(
-                "flex-shrink-0 w-1.5 h-1.5 rounded-full transition-colors",
+                "flex-shrink-0 w-1.5 h-1.5 rounded-full transition-colors duration-150",
                 isSelected ? colors.active : colors.idle
               )} />
 
               <div className="min-w-0 flex-1">
                 <div className={clsx(
-                  "font-medium text-xs truncate transition-colors flex items-center gap-2",
-                  isSelected ? "text-slate-200" : "text-slate-400 group-hover:text-slate-300"
+                  "font-medium text-xs truncate transition-colors duration-150 flex items-center gap-2",
+                  isSelected ? "text-[var(--text-primary)]" : "text-[var(--text-secondary)] group-hover:text-[var(--text-primary)]"
                 )}>
                   <span className="truncate">{item.display_uri}</span>
                   {getNamespacesLabel(item.namespaces) && (
-                    <span className="flex-shrink-0 text-[9px] px-1 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 tracking-wider font-mono">
+                    <span className="flex-shrink-0 text-[9px] px-1 py-0.5 rounded-[var(--radius-sm)] bg-[var(--semantic-info-bg)] text-[var(--semantic-info-fg)] border border-[var(--border)] tracking-wider font-mono">
                       {getNamespacesLabel(item.namespaces)}
                     </span>
                   )}
@@ -101,7 +101,7 @@ const SnapshotList = ({ snapshots, selectedId, onSelect }) => {
                     {labelText}
                   </span>
                   {item.row_count > 1 && (
-                    <span className="text-[9px] text-slate-600">
+                    <span className="text-[9px] text-[var(--text-faint)] tabular-nums">
                       {t('snapshot.rows', { count: item.row_count })}
                     </span>
                   )}

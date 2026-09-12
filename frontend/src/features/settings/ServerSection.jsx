@@ -41,16 +41,16 @@ export default function ServerSection({ settings, configPath, lockedFields = [],
   return (
     <div className="space-y-4 pt-4">
       <div className="space-y-2">
-        <label className="block text-xs font-medium text-slate-400 uppercase tracking-wider">{t('settings.server.port_label')}</label>
+        <label className="block text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">{t('settings.server.port_label')}</label>
         <input
           type="number"
           value={port}
           onChange={e => { setPort(e.target.value); setDirty(true); }}
           disabled={isLocked('web_port')}
-          className="bg-slate-950 border border-slate-700 text-slate-200 rounded-lg px-3 py-2 text-sm w-32 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-inner disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-[var(--surface-solid)] border border-[var(--border)] text-[var(--text-primary)] rounded-[var(--radius-md)] px-3 py-2 text-sm w-32 tabular-nums focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
         />
         {isLocked('web_port') && (
-          <p className="text-xs text-slate-500 mt-1">{t('settings.server.docker_managed')}</p>
+          <p className="text-xs text-[var(--text-muted)] mt-1">{t('settings.server.docker_managed')}</p>
         )}
       </div>
 
@@ -62,26 +62,26 @@ export default function ServerSection({ settings, configPath, lockedFields = [],
             onChange={e => { setAutoOpen(e.target.checked); setDirty(true); }}
             className="sr-only peer"
           />
-          <div className="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-slate-400 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600 peer-checked:after:bg-white"></div>
+          <div className="w-9 h-5 bg-[var(--text-faint)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-[var(--border)] after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[var(--accent)] peer-checked:after:bg-white"></div>
         </label>
-        <span className="text-sm text-slate-300">{t('settings.server.auto_open')}</span>
+        <span className="text-sm text-[var(--text-primary)]">{t('settings.server.auto_open')}</span>
       </div>
 
       {configPath && (
-        <div className="text-xs text-slate-500 pt-2 border-t border-slate-800/50">
-          {t('settings.server.config_file')} <code className="text-slate-400">{configPath}</code>
+        <div className="text-xs text-[var(--text-muted)] pt-2 border-t border-[var(--border)]">
+          {t('settings.server.config_file')} <code className="text-[var(--text-secondary)]">{configPath}</code>
         </div>
       )}
 
       {dirty && (
         <div className="flex items-center justify-between pt-1">
-          <p className="text-xs text-amber-400 flex items-center gap-1">
+          <p className="text-xs text-[var(--semantic-warning-fg)] bg-[var(--semantic-warning-bg)] rounded-[var(--radius-sm)] px-2 py-1 flex items-center gap-1">
             <AlertTriangle size={12} /> {t('settings.server.restart_warning')}
           </p>
           <button
             onClick={handleSave}
             disabled={saving}
-            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white rounded-lg text-sm font-medium flex items-center gap-2 transition-colors"
+            className="px-4 py-2 bg-[var(--accent)] hover:opacity-90 disabled:opacity-50 text-white rounded-[var(--radius-md)] text-sm font-medium flex items-center gap-2 transition-opacity duration-150"
           >
             <Save size={14} />
             {saving ? t('settings.server.saving') : t('settings.server.save')}

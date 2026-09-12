@@ -326,57 +326,57 @@ export default function MaintenancePage() {
     const isChecked = selectedIds.has(item.id);
 
     return (
-      <div key={item.id} className="group relative bg-[#0C0C16] border border-slate-700/40 hover:border-slate-600/60 rounded-lg transition-all">
+      <div key={item.id} className="group relative bg-[var(--surface-solid)] border border-[var(--border)] hover:border-[var(--text-faint)] rounded-[var(--radius-lg)] transition-colors duration-150">
         <div
           className="flex items-start gap-3 p-4 cursor-pointer select-none"
           onClick={() => handleExpand(item.id)}
         >
           <button
             onClick={(e) => toggleSelect(item.id, e)}
-            className="mt-0.5 flex-shrink-0 p-0.5 rounded transition-colors hover:bg-slate-700/30"
+            className="mt-0.5 flex-shrink-0 p-0.5 rounded-[var(--radius-sm)] transition-colors duration-150 hover:bg-[var(--surface-hover)]"
           >
             {isChecked ? (
-              <CheckSquare size={18} className="text-indigo-400" />
+              <CheckSquare size={18} className="text-[var(--text-primary)]" />
             ) : (
-              <Square size={18} className="text-slate-600 group-hover:text-slate-500" />
+              <Square size={18} className="text-[var(--text-faint)] group-hover:text-[var(--text-muted)]" />
             )}
           </button>
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap mb-1.5">
               {item.node_uuid && (
-                <span className="text-[11px] font-mono text-slate-300 bg-slate-800/80 px-1.5 py-0.5 rounded" title={`Node UUID: ${item.node_uuid}`}>
-                  <span className="text-slate-500 mr-1">{t('maintenance.badge.node_prefix')}</span>
+                <span className="text-[11px] font-mono text-[var(--text-secondary)] bg-[var(--surface-hover)] px-1.5 py-0.5 rounded-[var(--radius-sm)]" title={`Node UUID: ${item.node_uuid}`}>
+                  <span className="text-[var(--text-faint)] mr-1">{t('maintenance.badge.node_prefix')}</span>
                   {(item.node_uuid.split('-')[0] || '').substring(0, 8)}
                 </span>
               )}
-              <span className="text-[11px] font-mono text-indigo-300 bg-indigo-950/40 px-1.5 py-0.5 rounded border border-indigo-900/30">
+              <span className="text-[11px] font-mono text-[var(--semantic-info-fg)] bg-[var(--semantic-info-bg)] px-1.5 py-0.5 rounded-[var(--radius-sm)] border border-[var(--border)]">
                 {t('maintenance.badge.mem_prefix', { id: item.id })}
               </span>
               {item.category === 'deprecated' ? (
-                <span className="text-[10px] font-mono text-amber-300 bg-amber-900/40 px-1.5 py-0.5 rounded flex items-center gap-1">
+                <span className="text-[10px] font-mono text-[var(--semantic-warning-fg)] bg-[var(--semantic-warning-bg)] px-1.5 py-0.5 rounded-[var(--radius-sm)] flex items-center gap-1">
                   <Archive size={9} /> {t('maintenance.badge.deprecated')}
                 </span>
               ) : (
-                <span className="text-[10px] font-mono text-rose-300 bg-rose-900/40 px-1.5 py-0.5 rounded flex items-center gap-1">
+                <span className="text-[10px] font-mono text-[var(--semantic-danger-fg)] bg-[var(--semantic-danger-bg)] px-1.5 py-0.5 rounded-[var(--radius-sm)] flex items-center gap-1">
                   <Unlink size={9} /> {t('maintenance.badge.orphaned')}
                 </span>
               )}
               {item.migrated_to && (
-                <span className="text-[10px] font-mono text-indigo-300 bg-indigo-900/30 px-1.5 py-0.5 rounded">
+                <span className="text-[10px] font-mono text-[var(--semantic-info-fg)] bg-[var(--semantic-info-bg)] px-1.5 py-0.5 rounded-[var(--radius-sm)]">
                   → #{item.migrated_to}
                 </span>
               )}
-              <span className="text-[11px] text-slate-500">
+              <span className="text-[11px] text-[var(--text-faint)] tabular-nums">
                 {item.created_at ? format(new Date(item.created_at), 'yyyy-MM-dd HH:mm') : t('maintenance.badge.unknown_date')}
               </span>
             </div>
 
             {item.migration_target && item.migration_target.paths.length > 0 && (
               <div className="flex items-center gap-1.5 flex-wrap mb-2">
-                <ArrowRight size={12} className="text-indigo-400/70 flex-shrink-0" />
+                <ArrowRight size={12} className="text-[var(--text-faint)] flex-shrink-0" />
                 {item.migration_target.paths.map((p, i) => (
-                  <span key={i} className="text-[11px] font-mono text-indigo-300/90 bg-indigo-900/25 px-1.5 py-0.5 rounded border border-indigo-800/30">
+                  <span key={i} className="text-[11px] font-mono text-[var(--semantic-info-fg)] bg-[var(--semantic-info-bg)] px-1.5 py-0.5 rounded-[var(--radius-sm)] border border-[var(--border)]">
                     {p}
                   </span>
                 ))}
@@ -384,37 +384,37 @@ export default function MaintenancePage() {
             )}
             {item.migration_target && item.migration_target.paths.length === 0 && (
               <div className="flex items-center gap-1.5 mb-2">
-                <ArrowRight size={12} className="text-slate-500 flex-shrink-0" />
-                <span className="text-[11px] text-slate-500 italic">
+                <ArrowRight size={12} className="text-[var(--text-faint)] flex-shrink-0" />
+                <span className="text-[11px] text-[var(--text-faint)] italic">
                   {t('maintenance.detail.target_no_paths', { id: item.migration_target.id })}
                 </span>
               </div>
             )}
 
-            <div className="bg-slate-900/60 rounded p-2.5 text-[12px] text-slate-400 font-mono leading-relaxed line-clamp-3">
+            <div className="bg-[var(--surface-hover)] rounded-[var(--radius-md)] p-2.5 text-[12px] text-[var(--text-muted)] font-mono leading-relaxed line-clamp-3">
               {item.content_snippet}
             </div>
           </div>
 
-          <div className="mt-1 flex-shrink-0 text-slate-500">
+          <div className="mt-1 flex-shrink-0 text-[var(--text-faint)]">
             {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           </div>
         </div>
 
         {isExpanded && (
-          <div className="border-t border-slate-700/30 p-5 bg-[#09090F]">
+          <div className="border-t border-[var(--border)] p-5 bg-[var(--surface-hover)]">
             {isLoadingDetail ? (
-              <div className="flex items-center gap-3 text-slate-500 py-4">
-                <div className="w-4 h-4 border-2 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin"></div>
+              <div className="flex items-center gap-3 text-[var(--text-muted)] py-4">
+                <div className="w-4 h-4 border-2 border-[var(--border)] border-t-[var(--text-muted)] rounded-full animate-spin"></div>
                 <span className="text-xs">{t('maintenance.detail.loading')}</span>
               </div>
             ) : detail?.error ? (
-              <div className="text-rose-400 text-xs py-2">{t('maintenance.detail.error_prefix', { error: detail.error })}</div>
+              <div className="text-[var(--semantic-danger-fg)] text-xs py-2">{t('maintenance.detail.error_prefix', { error: detail.error })}</div>
             ) : detail ? (
               <div className="space-y-4">
                 <div>
                   <div className="flex justify-between items-center mb-2">
-                    <h4 className="text-[11px] uppercase tracking-widest text-slate-500 font-semibold">
+                    <h4 className="text-[11px] uppercase tracking-widest text-[var(--text-muted)] font-semibold">
                       {detail.migration_target ? t('maintenance.detail.old_version') : t('maintenance.detail.full_content')}
                     </h4>
                     {restoringId !== item.id && item.category === 'orphaned' && (
@@ -423,29 +423,29 @@ export default function MaintenancePage() {
                           e.stopPropagation();
                           setRestoringId(item.id);
                         }}
-                        className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-medium rounded bg-indigo-950/40 text-indigo-300 hover:bg-indigo-900/40 hover:text-indigo-200 border border-indigo-800/40 transition-colors"
+                        className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-medium rounded-[var(--radius-md)] bg-[var(--surface-solid)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)] border border-[var(--border)] transition-colors duration-150"
                       >
                         <Undo2 size={11} />
                         {t('maintenance.detail.restore_btn')}
                       </button>
                     )}
                   </div>
-                  <div className="bg-[#060610] rounded p-4 border border-slate-800/60 text-[12px] text-slate-300 font-mono leading-relaxed whitespace-pre-wrap max-h-64 overflow-y-auto custom-scrollbar">
+                  <div className="bg-[var(--surface-solid)] rounded-[var(--radius-md)] p-4 border border-[var(--border)] text-[12px] text-[var(--text-secondary)] font-mono leading-relaxed whitespace-pre-wrap max-h-64 overflow-y-auto custom-scrollbar">
                     {detail.content}
                   </div>
                 </div>
 
                 {detail.migration_target && (
                   <div>
-                    <h4 className="text-[11px] uppercase tracking-widest text-slate-500 mb-2 font-semibold flex items-center gap-2">
+                    <h4 className="text-[11px] uppercase tracking-widest text-[var(--text-muted)] mb-2 font-semibold flex items-center gap-2">
                       <span>{t('maintenance.detail.diff_header', { fromId: item.id, toId: detail.migration_target.id })}</span>
                       {detail.migration_target.paths.length > 0 && (
-                        <span className="text-indigo-400/70 normal-case tracking-normal font-normal">
+                        <span className="text-[var(--text-faint)] normal-case tracking-normal font-normal">
                           ({detail.migration_target.paths[0]})
                         </span>
                       )}
                     </h4>
-                    <div className="bg-[#060610] rounded border border-slate-800/60 p-4 max-h-96 overflow-y-auto custom-scrollbar">
+                    <div className="bg-[var(--surface-solid)] rounded-[var(--radius-md)] border border-[var(--border)] p-4 max-h-96 overflow-y-auto custom-scrollbar">
                       <DiffViewer
                         oldText={detail.content}
                         newText={detail.migration_target.content}
@@ -483,7 +483,7 @@ export default function MaintenancePage() {
       <div className="flex items-center gap-3 mb-4">
         <button
           onClick={() => toggleSelectAll(items)}
-          className="p-0.5 rounded transition-colors hover:bg-slate-700/30"
+          className="p-0.5 rounded-[var(--radius-sm)] transition-colors duration-150 hover:bg-[var(--surface-hover)]"
           title={allSelected ? t('maintenance.select.deselect_all') : t('maintenance.select.select_all')}
         >
           {allSelected ? (
@@ -491,14 +491,14 @@ export default function MaintenancePage() {
           ) : someSelected ? (
             <Minus size={16} className={color} />
           ) : (
-            <Square size={16} className="text-slate-600" />
+            <Square size={16} className="text-[var(--text-faint)]" />
           )}
         </button>
         {icon}
         <h3 className={`text-xs font-bold uppercase tracking-widest ${color}`}>
           {label}
         </h3>
-        <span className="text-[11px] text-slate-500 bg-slate-800/80 px-2 py-0.5 rounded-full">
+        <span className="text-[11px] text-[var(--text-muted)] bg-[var(--surface-hover)] px-2 py-0.5 rounded-full tabular-nums">
           {items.length}
         </span>
       </div>
@@ -511,29 +511,29 @@ export default function MaintenancePage() {
   const orphanedGroups = useMemo(() => groups.filter(g => g.type === 'orphaned'), [groups]);
 
   return (
-    <div className="flex h-full bg-[#07070D] text-slate-200 font-sans overflow-hidden">
+    <div className="flex h-full bg-[var(--bg-base)] text-[var(--text-primary)] font-sans overflow-hidden">
       {/* ── Sidebar ── */}
-      <div className="w-72 flex-shrink-0 bg-[#0A0A12] border-r border-slate-700/30 flex flex-col">
+      <div className="w-72 flex-shrink-0 bg-[var(--surface)] border-r border-[var(--border)] flex flex-col">
         {/* Header */}
         <div className="p-5 pb-3">
-          <div className="w-10 h-10 bg-amber-950/30 rounded-xl flex items-center justify-center border border-amber-800/30 mb-3 shadow-[0_0_20px_rgba(245,158,11,0.1)]">
-            <Sparkles className="text-amber-400" size={20} />
+          <div className="w-10 h-10 bg-[var(--surface-solid)] rounded-[var(--radius-lg)] flex items-center justify-center border border-[var(--border)] mb-3">
+            <Sparkles className="text-[var(--text-secondary)]" size={20} />
           </div>
-          <h1 className="text-lg font-bold text-slate-100 mb-1">{t('maintenance.header.title')}</h1>
-          <p className="text-[11px] text-slate-500 leading-relaxed">
+          <h1 className="text-lg font-bold text-[var(--text-primary)] mb-1">{t('maintenance.header.title')}</h1>
+          <p className="text-[11px] text-[var(--text-muted)] leading-relaxed">
             {t('maintenance.header.subtitle')}
           </p>
         </div>
 
         {/* Compact stats */}
         <div className="flex gap-2 px-5 pb-3">
-          <div className="flex-1 bg-slate-800/30 rounded-lg px-3 py-2 border border-slate-700/30">
-            <div className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">{t('maintenance.stats.deprecated_label')}</div>
-            <div className="text-xl font-mono text-amber-400">{deprecated.length}</div>
+          <div className="flex-1 bg-[var(--surface-solid)] rounded-[var(--radius-lg)] px-3 py-2 border border-[var(--border)]">
+            <div className="text-[10px] text-[var(--text-muted)] uppercase font-bold tracking-wider">{t('maintenance.stats.deprecated_label')}</div>
+            <div className="text-xl font-mono text-[var(--semantic-warning-fg)] tabular-nums">{deprecated.length}</div>
           </div>
-          <div className="flex-1 bg-slate-800/30 rounded-lg px-3 py-2 border border-slate-700/30">
-            <div className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">{t('maintenance.stats.orphaned_label')}</div>
-            <div className="text-xl font-mono text-rose-400">{orphaned.length}</div>
+          <div className="flex-1 bg-[var(--surface-solid)] rounded-[var(--radius-lg)] px-3 py-2 border border-[var(--border)]">
+            <div className="text-[10px] text-[var(--text-muted)] uppercase font-bold tracking-wider">{t('maintenance.stats.orphaned_label')}</div>
+            <div className="text-xl font-mono text-[var(--semantic-danger-fg)] tabular-nums">{orphaned.length}</div>
           </div>
         </div>
 
@@ -542,18 +542,18 @@ export default function MaintenancePage() {
           {/* All */}
           <button
             onClick={handleShowAll}
-            className={`w-full text-left px-3 py-2.5 rounded-lg transition-all text-xs mb-1 ${
+            className={`w-full text-left px-3 py-2.5 rounded-[var(--radius-lg)] transition-colors duration-150 text-xs mb-1 ${
               activeGroupKeys.length === 0
-                ? 'bg-indigo-900/30 border border-indigo-700/40 text-slate-200'
-                : 'hover:bg-slate-800/30 border border-transparent text-slate-400'
+                ? 'bg-[var(--surface-hover)] border border-[var(--border)] text-[var(--text-primary)]'
+                : 'hover:bg-[var(--surface-hover)] border border-transparent text-[var(--text-secondary)]'
             }`}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Layers size={13} className={activeGroupKeys.length === 0 ? 'text-indigo-400' : 'text-slate-500'} />
+                <Layers size={13} className={activeGroupKeys.length === 0 ? 'text-[var(--text-primary)]' : 'text-[var(--text-muted)]'} />
                 <span className="font-medium">{t('maintenance.group.all')}</span>
               </div>
-              <span className="text-[10px] text-slate-500 bg-slate-800/60 px-1.5 py-0.5 rounded-full">
+              <span className="text-[10px] text-[var(--text-muted)] bg-[var(--surface-hover)] px-1.5 py-0.5 rounded-full tabular-nums">
                 {orphans.length}
               </span>
             </div>
@@ -562,34 +562,34 @@ export default function MaintenancePage() {
           {/* Deprecated groups */}
           {deprecatedGroups.length > 0 && (
             <div className="mt-3">
-              <div className="text-[10px] uppercase text-amber-400/60 font-bold tracking-widest px-3 mb-1.5 flex items-center gap-1.5">
+              <div className="text-[10px] uppercase text-[var(--semantic-warning-fg)] font-bold tracking-widest px-3 mb-1.5 flex items-center gap-1.5">
                 <Archive size={10} />
                 {t('maintenance.group.deprecated_groups')}
-                <span className="text-slate-600">({deprecatedGroups.length})</span>
+                <span className="text-[var(--text-faint)] tabular-nums">({deprecatedGroups.length})</span>
               </div>
               <div className="space-y-0.5">
                 {deprecatedGroups.map(group => (
                   <button
                     key={group.key}
                     onClick={() => handleGroupClick(group.key)}
-                    className={`w-full text-left px-3 py-2 rounded-lg transition-all text-[11px] flex items-center justify-between gap-2 ${
+                    className={`w-full text-left px-3 py-2 rounded-[var(--radius-lg)] transition-colors duration-150 text-[11px] flex items-center justify-between gap-2 ${
                       activeGroupKeys.includes(group.key)
-                        ? 'bg-amber-900/20 border border-amber-700/30 text-amber-200'
-                        : 'hover:bg-slate-800/30 border border-transparent text-slate-400 hover:text-slate-300'
+                        ? 'bg-[var(--semantic-warning-bg)] border border-[var(--border)] text-[var(--semantic-warning-fg)]'
+                        : 'hover:bg-[var(--surface-hover)] border border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                     }`}
                     title={group.name}
                   >
                     <div className="flex items-center gap-2 min-w-0 flex-1">
                       <span className="flex-shrink-0">
                         {activeGroupKeys.includes(group.key) ? (
-                          <CheckSquare size={14} className="text-amber-400" />
+                          <CheckSquare size={14} className="text-[var(--semantic-warning-fg)]" />
                         ) : (
-                          <Square size={14} className="text-slate-600" />
+                          <Square size={14} className="text-[var(--text-faint)]" />
                         )}
                       </span>
                       <span className="truncate font-mono text-[11px] flex-1">{group.name}</span>
                     </div>
-                    <span className="flex-shrink-0 text-[10px] bg-slate-800/60 text-slate-400 px-1.5 py-0.5 rounded-full min-w-[1.5rem] text-center">
+                    <span className="flex-shrink-0 text-[10px] bg-[var(--surface-hover)] text-[var(--text-muted)] px-1.5 py-0.5 rounded-full min-w-[1.5rem] text-center tabular-nums">
                       {group.items.length}
                     </span>
                   </button>
@@ -601,7 +601,7 @@ export default function MaintenancePage() {
           {/* Orphaned group */}
           {orphanedGroups.length > 0 && (
             <div className="mt-3">
-              <div className="text-[10px] uppercase text-rose-400/60 font-bold tracking-widest px-3 mb-1.5 flex items-center gap-1.5">
+              <div className="text-[10px] uppercase text-[var(--semantic-danger-fg)] font-bold tracking-widest px-3 mb-1.5 flex items-center gap-1.5">
                 <Unlink size={10} />
                 {t('maintenance.group.orphaned_section')}
               </div>
@@ -609,23 +609,23 @@ export default function MaintenancePage() {
                 <button
                   key={group.key}
                   onClick={() => handleGroupClick(group.key)}
-                  className={`w-full text-left px-3 py-2 rounded-lg transition-all text-[11px] flex items-center justify-between gap-2 ${
+                  className={`w-full text-left px-3 py-2 rounded-[var(--radius-lg)] transition-colors duration-150 text-[11px] flex items-center justify-between gap-2 ${
                     activeGroupKeys.includes(group.key)
-                      ? 'bg-rose-900/20 border border-rose-700/30 text-rose-200'
-                      : 'hover:bg-slate-800/30 border border-transparent text-slate-400 hover:text-slate-300'
+                      ? 'bg-[var(--semantic-danger-bg)] border border-[var(--border)] text-[var(--semantic-danger-fg)]'
+                      : 'hover:bg-[var(--surface-hover)] border border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                   }`}
                 >
                   <div className="flex items-center gap-2 min-w-0 flex-1">
                     <span className="flex-shrink-0">
                       {activeGroupKeys.includes(group.key) ? (
-                        <CheckSquare size={14} className="text-rose-400" />
+                        <CheckSquare size={14} className="text-[var(--semantic-danger-fg)]" />
                       ) : (
-                        <Square size={14} className="text-slate-600" />
+                        <Square size={14} className="text-[var(--text-faint)]" />
                       )}
                     </span>
                     <span className="truncate flex-1">{group.name}</span>
                   </div>
-                  <span className="flex-shrink-0 text-[10px] bg-slate-800/60 text-slate-400 px-1.5 py-0.5 rounded-full min-w-[1.5rem] text-center">
+                  <span className="flex-shrink-0 text-[10px] bg-[var(--surface-hover)] text-[var(--text-muted)] px-1.5 py-0.5 rounded-full min-w-[1.5rem] text-center tabular-nums">
                     {group.items.length}
                   </span>
                 </button>
@@ -635,20 +635,20 @@ export default function MaintenancePage() {
         </div>
 
         {/* Access log panel (pinned bottom) */}
-        <div className="p-3 border-t border-slate-700/30 flex-shrink-0">
-          <div className="bg-slate-800/30 rounded-lg px-3 py-2.5 border border-slate-700/30">
+        <div className="p-3 border-t border-[var(--border)] flex-shrink-0">
+          <div className="bg-[var(--surface-solid)] rounded-[var(--radius-lg)] px-3 py-2.5 border border-[var(--border)]">
             <div className="flex justify-between items-center mb-0.5">
-              <div className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">{t('maintenance.stats.access_logs_label')}</div>
+              <div className="text-[10px] text-[var(--text-muted)] uppercase font-bold tracking-wider">{t('maintenance.stats.access_logs_label')}</div>
               <button
                 onClick={handleClearLogs}
                 disabled={clearingLogs}
-                className="text-[10px] text-rose-400 hover:text-rose-300 disabled:opacity-50"
+                className="text-[10px] text-[var(--semantic-danger-fg)] hover:opacity-75 disabled:opacity-50 transition-opacity duration-150"
               >
                 {clearingLogs ? t('maintenance.stats.clearing') : t('maintenance.stats.clear_button')}
               </button>
             </div>
-            <div className="text-xl font-mono text-indigo-400">{logStats.count}</div>
-            <div className="text-slate-500 text-[10px] mt-0.5">
+            <div className="text-xl font-mono text-[var(--text-primary)] tabular-nums">{logStats.count}</div>
+            <div className="text-[var(--text-muted)] text-[10px] mt-0.5 tabular-nums">
               {logStats.oldest ? t('maintenance.stats.oldest', { date: format(new Date(logStats.oldest), 'MM-dd HH:mm') }) : t('maintenance.stats.no_records')}
             </div>
           </div>
@@ -656,16 +656,16 @@ export default function MaintenancePage() {
       </div>
 
       {/* ── Main Content ── */}
-      <div className="flex-1 flex flex-col min-w-0 bg-[#07070D] relative overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0 bg-[var(--surface)] relative overflow-hidden">
         {/* Header with batch actions */}
-        <div className="h-14 flex items-center justify-between px-8 border-b border-slate-700/30 bg-[#07070D]/90 backdrop-blur-md sticky top-0 z-10">
-          <h2 className="text-sm font-bold text-slate-300 uppercase tracking-widest flex items-center gap-2">
+        <div className="h-14 flex items-center justify-between px-8 border-b border-[var(--border)] bg-[var(--surface)] sticky top-0 z-10">
+          <h2 className="text-sm font-bold text-[var(--text-secondary)] uppercase tracking-widest flex items-center gap-2">
             <Trash2 size={14} />
             {activeGroupKeys.length > 0 ? (
               <span className="flex items-center gap-2">
-                <span className="text-slate-500">{t('maintenance.list.header')}</span>
-                <span className="text-slate-600">/</span>
-                <span className="font-mono text-xs normal-case tracking-normal text-slate-300 max-w-[400px] truncate" title={activeGroups.map(g => g.name).join(', ')}>
+                <span className="text-[var(--text-muted)]">{t('maintenance.list.header')}</span>
+                <span className="text-[var(--text-faint)]">/</span>
+                <span className="font-mono text-xs normal-case tracking-normal text-[var(--text-secondary)] max-w-[400px] truncate" title={activeGroups.map(g => g.name).join(', ')}>
                   {activeGroups.map(g => g.name).join(', ')}
                 </span>
               </span>
@@ -678,10 +678,10 @@ export default function MaintenancePage() {
               <button
                 onClick={handleBatchDelete}
                 disabled={batchDeleting}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md bg-rose-900/40 text-rose-300 hover:bg-rose-900/60 border border-rose-800/40 transition-colors disabled:opacity-50"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-[var(--radius-md)] bg-[var(--semantic-danger-bg)] text-[var(--semantic-danger-fg)] hover:opacity-90 border border-[var(--border)] transition-opacity duration-150 disabled:opacity-50"
               >
                 {batchDeleting ? (
-                  <div className="w-3 h-3 border-2 border-rose-400/30 border-t-rose-400 rounded-full animate-spin"></div>
+                  <div className="w-3 h-3 border-2 border-[var(--semantic-danger-fg)] border-t-transparent rounded-full animate-spin"></div>
                 ) : (
                   <Trash2 size={13} />
                 )}
@@ -690,7 +690,7 @@ export default function MaintenancePage() {
             )}
             <button
               onClick={loadOrphans}
-              className="p-2 text-slate-400 hover:text-indigo-400 hover:bg-slate-700/40 rounded-full transition-all"
+              className="p-2 text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] rounded-full transition-colors duration-150"
               title={t('maintenance.list.refresh')}
             >
               <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
@@ -701,43 +701,43 @@ export default function MaintenancePage() {
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
           {loading ? (
-            <div className="flex flex-col items-center justify-center h-64 text-slate-500 gap-4">
-              <div className="w-6 h-6 border-2 border-amber-500/30 border-t-amber-500 rounded-full animate-spin"></div>
+            <div className="flex flex-col items-center justify-center h-64 text-[var(--text-muted)] gap-4">
+              <div className="w-6 h-6 border-2 border-[var(--border)] border-t-[var(--text-muted)] rounded-full animate-spin"></div>
               <span className="text-xs tracking-widest uppercase">{t('maintenance.list.scanning')}</span>
             </div>
           ) : error ? (
-            <div className="text-rose-400 bg-rose-950/20 border border-rose-800/40 p-6 rounded-lg flex items-center gap-4">
+            <div className="text-[var(--semantic-danger-fg)] bg-[var(--semantic-danger-bg)] border border-[var(--border)] p-6 rounded-[var(--radius-lg)] flex items-center gap-4">
               <AlertTriangle size={24} />
               <div>
-                <h3 className="font-bold text-rose-300">{t('maintenance.list.error_title')}</h3>
-                <p className="text-sm text-rose-400/80">{error}</p>
+                <h3 className="font-bold text-[var(--semantic-danger-fg)]">{t('maintenance.list.error_title')}</h3>
+                <p className="text-sm text-[var(--semantic-danger-fg)]">{error}</p>
               </div>
             </div>
           ) : orphans.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-slate-600 gap-6 select-none">
+            <div className="flex flex-col items-center justify-center h-full text-[var(--text-faint)] gap-6 select-none">
               <Sparkles size={64} className="opacity-30" />
-              <p className="text-lg font-light text-slate-500">{t('maintenance.list.empty_title')}</p>
-              <p className="text-xs uppercase tracking-widest text-slate-600">{t('maintenance.list.empty_desc')}</p>
+              <p className="text-lg font-light text-[var(--text-muted)]">{t('maintenance.list.empty_title')}</p>
+              <p className="text-xs uppercase tracking-widest text-[var(--text-faint)]">{t('maintenance.list.empty_desc')}</p>
             </div>
           ) : activeGroupKeys.length > 0 ? (
             /* ── Group view: flat list of active groups ── */
             <div className="max-w-5xl mx-auto">
               {activeGroups.length > 0 && (
-                <div className="space-y-3 mb-6 p-4 bg-slate-900/30 rounded-xl border border-slate-800/40">
+                <div className="space-y-3 mb-6 p-4 bg-[var(--surface-solid)] rounded-[var(--radius-xl)] border border-[var(--border)] shadow-[var(--island-shadow-soft)]">
                   {activeGroups.map(group => {
                     return (
                       <div key={group.key} className="flex items-center gap-3">
                         {group.type === 'deprecated' ? (
-                          <Archive size={16} className="text-amber-400/80 flex-shrink-0" />
+                          <Archive size={16} className="text-[var(--semantic-warning-fg)] flex-shrink-0" />
                         ) : (
-                          <Unlink size={16} className="text-rose-400/80 flex-shrink-0" />
+                          <Unlink size={16} className="text-[var(--semantic-danger-fg)] flex-shrink-0" />
                         )}
                         <h3 className={`text-xs font-bold font-mono normal-case tracking-normal flex-1 truncate ${
-                          group.type === 'deprecated' ? 'text-amber-400/80' : 'text-rose-400/80'
+                          group.type === 'deprecated' ? 'text-[var(--semantic-warning-fg)]' : 'text-[var(--semantic-danger-fg)]'
                         }`} title={group.name}>
                           {group.name}
                         </h3>
-                        <span className="text-[11px] text-slate-500 bg-slate-800/80 px-2 py-0.5 rounded-full flex-shrink-0 font-mono">
+                        <span className="text-[11px] text-[var(--text-muted)] bg-[var(--surface-hover)] px-2 py-0.5 rounded-full flex-shrink-0 font-mono tabular-nums">
                           {group.items.length}
                         </span>
                       </div>
@@ -755,9 +755,9 @@ export default function MaintenancePage() {
               {deprecated.length > 0 && (
                 <section>
                   {renderSectionHeader(
-                    <Archive size={16} className="text-amber-400/80" />,
+                    <Archive size={16} className="text-[var(--semantic-warning-fg)]" />,
                     t('maintenance.section.deprecated_versions'),
-                    "text-amber-400/80",
+                    "text-[var(--semantic-warning-fg)]",
                     deprecated
                   )}
                   <div className="space-y-2">
@@ -768,9 +768,9 @@ export default function MaintenancePage() {
               {orphaned.length > 0 && (
                 <section>
                   {renderSectionHeader(
-                    <Unlink size={16} className="text-rose-400/80" />,
+                    <Unlink size={16} className="text-[var(--semantic-danger-fg)]" />,
                     t('maintenance.section.orphaned_memories'),
-                    "text-rose-400/80",
+                    "text-[var(--semantic-danger-fg)]",
                     orphaned
                   )}
                   <div className="space-y-2">
@@ -883,8 +883,8 @@ const RestoreForm = ({ memoryId, onCancel, onSuccess }) => {
   };
 
   return (
-    <div className="bg-[#090910] border border-indigo-500/20 rounded-lg p-4 space-y-3.5 mt-4">
-      <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-indigo-400">
+    <div className="bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-lg)] p-4 space-y-3.5 mt-4 shadow-[var(--island-shadow-soft)]">
+      <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)]">
         <Undo2 size={14} />
         <span>{t('maintenance.detail.restore_title')}</span>
       </div>
@@ -892,29 +892,29 @@ const RestoreForm = ({ memoryId, onCancel, onSuccess }) => {
       <div className="space-y-3">
         {/* Domain & Cascading Path Selectors */}
         <div className="space-y-1.5">
-          <label className="block text-[10px] uppercase font-bold tracking-wider text-slate-500">
+          <label className="block text-[10px] uppercase font-bold tracking-wider text-[var(--text-muted)]">
             {t('maintenance.detail.restore_path_label')}
           </label>
           <div className="flex flex-wrap items-center gap-2">
             <select
               value={domain}
               onChange={e => setDomain(e.target.value)}
-              className="px-2 py-1 bg-[#06060B] border border-slate-700/60 rounded text-slate-300 text-xs font-mono focus:outline-none focus:border-indigo-500/50"
+              className="px-2 py-1 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-md)] text-[var(--text-primary)] text-xs font-mono focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150"
             >
               <option value="core">core</option>
               <option value="writer">writer</option>
               <option value="project">project</option>
             </select>
-            <span className="text-slate-500 font-mono text-xs">://</span>
+            <span className="text-[var(--text-faint)] font-mono text-xs">://</span>
 
             {childrenByLevel.map((options, level) => (
               options.length > 0 && (
                 <React.Fragment key={level}>
-                  {level > 0 && <span className="text-slate-600 text-xs font-mono">/</span>}
+                  {level > 0 && <span className="text-[var(--text-faint)] text-xs font-mono">/</span>}
                   <select
                     value={pathSegments[level] || ''}
                     onChange={e => handleSegmentChange(level, e.target.value)}
-                    className="px-2 py-1 bg-[#06060B] border border-slate-700/60 rounded text-indigo-300 text-xs font-mono focus:outline-none focus:border-indigo-500/50"
+                    className="px-2 py-1 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-md)] text-[var(--text-primary)] text-xs font-mono focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150"
                   >
                     <option value="">{level === 0 ? t('maintenance.detail.restore_parent_placeholder') : '—'}</option>
                     {options.map(name => (
@@ -925,27 +925,27 @@ const RestoreForm = ({ memoryId, onCancel, onSuccess }) => {
               )
             ))}
 
-            {loadingLevel >= 0 && <Loader2 size={12} className="animate-spin text-slate-500" />}
-            <span className="text-slate-600 text-xs font-mono">/</span>
+            {loadingLevel >= 0 && <Loader2 size={12} className="animate-spin text-[var(--text-muted)]" />}
+            <span className="text-[var(--text-faint)] text-xs font-mono">/</span>
             <input
               type="text"
               value={leafName}
               onChange={e => setLeafName(e.target.value)}
               placeholder={t('maintenance.detail.restore_leaf_placeholder')}
-              className="px-2 py-1 bg-[#06060B] border border-indigo-500/30 rounded text-indigo-300 text-xs font-mono focus:outline-none focus:border-indigo-500/50 w-36"
+              className="px-2 py-1 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-md)] text-[var(--text-primary)] placeholder:text-[var(--text-faint)] text-xs font-mono focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150 w-36"
             />
           </div>
         </div>
 
         {/* Namespace Selector */}
         <div className="space-y-1.5">
-          <label className="block text-[10px] uppercase font-bold tracking-wider text-slate-500">
+          <label className="block text-[10px] uppercase font-bold tracking-wider text-[var(--text-muted)]">
             {t('maintenance.detail.restore_namespace_label')}
           </label>
           <select
             value={namespace}
             onChange={e => setNamespace(e.target.value)}
-            className="w-full px-2.5 py-1.5 bg-[#06060B] border border-slate-700/60 rounded text-indigo-300 text-xs font-mono focus:outline-none focus:border-indigo-500/50"
+            className="w-full px-2.5 py-1.5 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-md)] text-[var(--text-primary)] text-xs font-mono focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150"
           >
             <option value="">{t('maintenance.detail.restore_namespace_default')}</option>
             {knownNamespaces.map(ns => (
@@ -960,7 +960,7 @@ const RestoreForm = ({ memoryId, onCancel, onSuccess }) => {
         {/* Priority & Disclosure in parallel */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
           <div className="space-y-1.5 md:col-span-3">
-            <label className="block text-[10px] uppercase font-bold tracking-wider text-slate-500">
+            <label className="block text-[10px] uppercase font-bold tracking-wider text-[var(--text-muted)]">
               {t('memory.alias.disclosure_placeholder')}
             </label>
             <input
@@ -968,11 +968,11 @@ const RestoreForm = ({ memoryId, onCancel, onSuccess }) => {
               value={disclosure}
               onChange={e => setDisclosure(e.target.value)}
               placeholder={t('maintenance.detail.restore_disclosure_placeholder')}
-              className="w-full px-2.5 py-1.5 bg-[#06060B] border border-slate-700/60 rounded text-slate-300 text-xs focus:outline-none focus:border-indigo-500/50"
+              className="w-full px-2.5 py-1.5 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-md)] text-[var(--text-primary)] placeholder:text-[var(--text-faint)] text-xs focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150"
             />
           </div>
           <div className="space-y-1.5">
-            <label className="block text-[10px] uppercase font-bold tracking-wider text-slate-500">
+            <label className="block text-[10px] uppercase font-bold tracking-wider text-[var(--text-muted)]">
               {t('maintenance.detail.restore_priority_label')}
             </label>
             <input
@@ -980,31 +980,31 @@ const RestoreForm = ({ memoryId, onCancel, onSuccess }) => {
               min="0"
               value={priority}
               onChange={e => setPriority(parseInt(e.target.value) || 0)}
-              className="w-full px-2.5 py-1.5 bg-[#06060B] border border-slate-700/60 rounded text-slate-300 text-xs font-mono focus:outline-none focus:border-indigo-500/50"
+              className="w-full px-2.5 py-1.5 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-md)] text-[var(--text-primary)] text-xs font-mono tabular-nums focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150"
             />
           </div>
         </div>
       </div>
 
       {error && (
-        <div className="text-xs text-rose-400 font-medium">
+        <div className="text-xs text-[var(--semantic-danger-fg)] font-medium">
           {error}
         </div>
       )}
 
       {/* Action Buttons */}
-      <div className="flex justify-end gap-2 pt-1 border-t border-slate-800/60">
+      <div className="flex justify-end gap-2 pt-1 border-t border-[var(--border)]">
         <button
           onClick={onCancel}
           disabled={saving}
-          className="px-3 py-1.5 rounded text-xs font-medium bg-slate-850 hover:bg-slate-800 text-slate-300 transition-colors disabled:opacity-50"
+          className="px-3 py-1.5 rounded-[var(--radius-md)] text-xs font-medium bg-[var(--surface-hover)] hover:bg-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-150 disabled:opacity-50"
         >
           {t('maintenance.detail.restore_cancel_btn')}
         </button>
         <button
           onClick={handleRestore}
           disabled={saving || !leafName.trim()}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium bg-indigo-600 hover:bg-indigo-500 text-slate-100 disabled:opacity-50 transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-[var(--radius-md)] text-xs font-medium bg-[var(--accent)] hover:opacity-90 text-white disabled:opacity-50 transition-opacity duration-150"
         >
           {saving ? (
             <Loader2 size={12} className="animate-spin" />

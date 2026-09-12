@@ -36,17 +36,17 @@ const TokenAuth = ({ onAuthenticated }) => {
   }, [token, onAuthenticated]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-slate-950">
+    <div className="flex items-center justify-center min-h-screen bg-[var(--bg-base)]">
       <div className="w-full max-w-sm mx-4">
         {/* 卡片容器 */}
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-8 shadow-2xl shadow-black/50">
+        <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-xl)] p-8 shadow-[var(--island-shadow)]">
           {/* Logo 区域 */}
           <div className="flex flex-col items-center mb-8">
-            <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-4">
-              <LayoutGrid className="w-6 h-6 text-indigo-500" />
+            <div className="w-12 h-12 rounded-[var(--radius-lg)] bg-[var(--surface-solid)] border border-[var(--border)] flex items-center justify-center mb-4">
+              <LayoutGrid className="w-6 h-6 text-[var(--accent)]" />
             </div>
-            <h1 className="text-lg font-bold text-slate-100">{t('auth.title')}</h1>
-            <p className="text-xs text-slate-500 mt-1">{t('auth.subtitle')}</p>
+            <h1 className="text-lg font-bold text-[var(--text-primary)]">{t('auth.title')}</h1>
+            <p className="text-xs text-[var(--text-muted)] mt-1">{t('auth.subtitle')}</p>
           </div>
 
           {/* 表单 */}
@@ -54,13 +54,13 @@ const TokenAuth = ({ onAuthenticated }) => {
             <div>
               <label
                 htmlFor="api-token"
-                className="block text-xs font-medium text-slate-400 mb-2"
+                className="block text-xs font-medium text-[var(--text-secondary)] mb-2"
               >
                 {t('auth.token_label')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <KeyRound className="w-4 h-4 text-slate-600" />
+                  <KeyRound className="w-4 h-4 text-[var(--text-faint)]" />
                 </div>
                 <input
                   id="api-token"
@@ -73,14 +73,14 @@ const TokenAuth = ({ onAuthenticated }) => {
                   }}
                   placeholder={t('auth.token_placeholder')}
                   disabled={loading}
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-950 border border-slate-700 rounded-lg text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/50 transition-colors disabled:opacity-50"
+                  className="w-full pl-10 pr-4 py-2.5 bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-md)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-faint)] focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150 disabled:opacity-50"
                 />
               </div>
             </div>
 
             {/* 错误提示 */}
             {error && (
-              <div data-testid="auth-error-msg" className="flex items-center gap-2 text-xs text-red-400 bg-red-950/30 border border-red-900/50 rounded-lg px-3 py-2">
+              <div data-testid="auth-error-msg" className="flex items-center gap-2 text-xs text-[var(--semantic-danger-fg)] bg-[var(--semantic-danger-bg)] border border-[var(--border)] rounded-[var(--radius-md)] px-3 py-2">
                 <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
                 <span>{error}</span>
               </div>
@@ -90,7 +90,7 @@ const TokenAuth = ({ onAuthenticated }) => {
               type="submit"
               data-testid="auth-submit-btn"
               disabled={loading || !token.trim()}
-              className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-700 disabled:text-slate-500 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+              className="w-full py-2.5 bg-[var(--accent)] hover:opacity-90 disabled:bg-[var(--surface-hover)] disabled:text-[var(--text-faint)] disabled:hover:opacity-100 text-white text-sm font-medium rounded-[var(--radius-md)] transition-opacity duration-150 flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>
@@ -105,7 +105,7 @@ const TokenAuth = ({ onAuthenticated }) => {
         </div>
 
         {/* 底部文字 */}
-        <p className="text-center text-[10px] text-slate-700 mt-4 tracking-wider uppercase">
+        <p className="text-center text-[10px] text-[var(--text-faint)] mt-4 tracking-wider uppercase">
           {t('auth.footer')}
         </p>
       </div>

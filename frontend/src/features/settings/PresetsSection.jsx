@@ -106,31 +106,31 @@ function PresetEditor({ preset, onSaved, onCancel }) {
   return (
     <div className="space-y-4">
       {/* 友好引导 Tips */}
-      <p className="text-xs text-slate-400 bg-slate-950/40 border border-slate-800 rounded-lg p-2.5 leading-relaxed">
+      <p className="text-xs text-[var(--text-muted)] bg-[var(--surface-hover)] border border-[var(--border)] rounded-[var(--radius-lg)] p-2.5 leading-relaxed">
         {t('settings.presets.editor_tip')}
       </p>
 
       <div>
-        <label className="text-xs text-slate-500 mb-1 block">{t('settings.presets.name_label')}</label>
+        <label className="text-xs text-[var(--text-muted)] mb-1 block">{t('settings.presets.name_label')}</label>
         <input
           type="text"
           value={name}
           onChange={e => { setName(e.target.value); setDirty(true); }}
           placeholder={t('settings.presets.name_placeholder')}
-          className="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded-md px-2.5 py-1.5 text-sm placeholder:text-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+          className="w-full bg-[var(--surface-solid)] border border-[var(--border)] text-[var(--text-primary)] placeholder:text-[var(--text-faint)] rounded-[var(--radius-md)] px-2.5 py-1.5 text-sm focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150"
         />
       </div>
 
       {namespaces.map(ns => (
-        <div key={ns} className="bg-slate-900/60 border border-slate-800 rounded-lg p-3 space-y-2">
+        <div key={ns} className="bg-[var(--surface-hover)] border border-[var(--border)] rounded-[var(--radius-lg)] p-3 space-y-2">
           <div className="flex items-center justify-between">
-            <div className="text-xs text-slate-400 font-medium">
+            <div className="text-xs text-[var(--text-secondary)] font-medium">
               {ns === '' ? t('settings.presets.default_namespace') : t('settings.presets.namespace_title', { namespace: ns })}
             </div>
             {ns !== '' && (
               <button
                 onClick={() => handleRemoveNamespace(ns)}
-                className="text-red-400 hover:text-red-300 transition-colors"
+                className="text-[var(--semantic-danger-fg)] hover:opacity-80 transition-opacity duration-150"
                 title={t('settings.presets.remove_namespace')}
               >
                 <Trash2 size={12} />
@@ -146,13 +146,13 @@ function PresetEditor({ preset, onSaved, onCancel }) {
                 onDragEnter={() => handleDragEnter(ns, idx)}
                 onDragEnd={() => handleDragEnd(ns)}
                 onDragOver={e => e.preventDefault()}
-                className="flex items-center gap-2 bg-slate-950/60 border border-slate-800 hover:border-slate-700 rounded-md px-2.5 py-1.5 group cursor-grab active:cursor-grabbing transition-all"
+                className="flex items-center gap-2 bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-md)] px-2.5 py-1.5 group cursor-grab active:cursor-grabbing transition-colors duration-150"
               >
-                <GripVertical size={12} className="text-slate-600 group-hover:text-slate-400 flex-shrink-0" />
-                <span className="text-xs font-mono text-slate-300 flex-1 truncate">{uri}</span>
+                <GripVertical size={12} className="text-[var(--text-faint)] group-hover:text-[var(--text-muted)] flex-shrink-0" />
+                <span className="text-xs font-mono text-[var(--text-secondary)] flex-1 truncate">{uri}</span>
                 <button
                   onClick={() => handleRemoveUri(ns, idx)}
-                  className="opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-300 transition-opacity"
+                  className="opacity-0 group-hover:opacity-100 text-[var(--semantic-danger-fg)] hover:opacity-80 transition-opacity"
                 >
                   <Trash2 size={12} />
                 </button>
@@ -166,19 +166,19 @@ function PresetEditor({ preset, onSaved, onCancel }) {
               onChange={e => setNewUri(prev => ({ ...prev, [ns]: e.target.value }))}
               onKeyDown={e => e.key === 'Enter' && handleAddUri(ns)}
               placeholder={t('settings.presets.uri_placeholder')}
-              className="flex-1 bg-slate-950 border border-slate-700 text-slate-200 rounded-md px-2.5 py-1.5 text-xs font-mono placeholder:text-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-inner"
+              className="flex-1 bg-[var(--surface-solid)] border border-[var(--border)] text-[var(--text-primary)] placeholder:text-[var(--text-faint)] rounded-[var(--radius-md)] px-2.5 py-1.5 text-xs font-mono focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150"
             />
             <button
               onClick={() => handleAddUri(ns)}
               disabled={!(newUri[ns] || '').trim()}
-              className="px-2.5 py-1.5 bg-slate-700 hover:bg-slate-600 disabled:opacity-40 text-slate-200 rounded-md text-xs flex items-center gap-1 transition-colors"
+              className="px-2.5 py-1.5 bg-[var(--surface-hover)] hover:bg-[var(--border)] disabled:opacity-40 text-[var(--text-secondary)] hover:text-[var(--text-primary)] rounded-[var(--radius-md)] text-xs flex items-center gap-1 transition-colors duration-150"
             >
               <Plus size={12} />
             </button>
           </div>
         </div>
       ))}
-      
+
       <div className="flex gap-1.5">
         <input
           type="text"
@@ -186,12 +186,12 @@ function PresetEditor({ preset, onSaved, onCancel }) {
           onChange={e => setNewNamespace(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && handleAddNamespace()}
           placeholder={t('settings.presets.new_namespace_placeholder')}
-          className="flex-1 bg-slate-950 border border-slate-700 text-slate-200 rounded-md px-2.5 py-1.5 text-xs font-mono placeholder:text-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-inner"
+          className="flex-1 bg-[var(--surface-solid)] border border-[var(--border)] text-[var(--text-primary)] placeholder:text-[var(--text-faint)] rounded-[var(--radius-md)] px-2.5 py-1.5 text-xs font-mono focus:outline-none focus:shadow-[var(--focus-ring)] transition-shadow duration-150"
         />
         <button
           onClick={handleAddNamespace}
           disabled={!newNamespace.trim() || namespaces.includes(newNamespace.trim())}
-          className="px-2.5 py-1.5 bg-slate-700 hover:bg-slate-600 disabled:opacity-40 text-slate-200 rounded-md text-xs flex items-center gap-1 transition-colors"
+          className="px-2.5 py-1.5 bg-[var(--surface-hover)] hover:bg-[var(--border)] disabled:opacity-40 text-[var(--text-secondary)] hover:text-[var(--text-primary)] rounded-[var(--radius-md)] text-xs flex items-center gap-1 transition-colors duration-150"
         >
           <Plus size={12} /> {t('settings.presets.add_namespace')}
         </button>
@@ -199,14 +199,14 @@ function PresetEditor({ preset, onSaved, onCancel }) {
 
       <div className="flex justify-between pt-2">
         {onCancel && (
-          <button onClick={onCancel} className="text-xs text-slate-400 hover:text-slate-200 transition-colors">
+          <button onClick={onCancel} className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-150">
             {t('settings.presets.cancel')}
           </button>
         )}
         <button
           onClick={handleSave}
           disabled={saving || !name.trim() || !dirty}
-          className="ml-auto px-4 py-1.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white rounded-md text-xs font-medium flex items-center gap-1.5 transition-colors"
+          className="ml-auto px-4 py-1.5 bg-[var(--accent)] hover:opacity-90 disabled:opacity-50 text-white rounded-[var(--radius-md)] text-xs font-medium flex items-center gap-1.5 transition-opacity duration-150"
         >
           <Save size={12} />
           {saving ? t('settings.presets.saving') : t('settings.presets.save')}
@@ -238,24 +238,24 @@ function PresetCard({ preset, onActivate, onDelete, onDuplicate, onEdit }) {
 
   return (
     <div className={clsx(
-      'bg-slate-900/60 border rounded-lg p-3 transition-all',
+      'bg-[var(--surface-solid)] border rounded-[var(--radius-lg)] p-3 transition-colors duration-150',
       preset.is_active
-        ? 'border-indigo-500/50 ring-1 ring-indigo-500/20'
-        : 'border-slate-800 hover:border-slate-700'
+        ? 'border-[var(--accent)] shadow-[var(--island-shadow-soft)]'
+        : 'border-[var(--border)] hover:border-[var(--text-faint)]'
     )}>
       <div className="flex items-center gap-3">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-slate-200 truncate">
+            <span className="text-sm font-medium text-[var(--text-primary)] truncate">
               {preset.name}
             </span>
             {preset.is_active && (
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 flex items-center gap-1">
+              <span className="text-[10px] px-1.5 py-0.5 rounded-[var(--radius-sm)] bg-[var(--semantic-success-bg)] text-[var(--semantic-success-fg)] border border-[var(--border)] flex items-center gap-1">
                 <Check size={8} /> {t('settings.presets.active')}
               </span>
             )}
           </div>
-          <div className="text-xs text-slate-500 mt-0.5">
+          <div className="text-xs text-[var(--text-muted)] mt-0.5 tabular-nums">
             {uriCount} URI{uriCount !== 1 ? 's' : ''}
           </div>
         </div>
@@ -264,21 +264,21 @@ function PresetCard({ preset, onActivate, onDelete, onDuplicate, onEdit }) {
           {!preset.is_active && (
             <button
               onClick={() => onActivate(preset.id)}
-              className="px-2.5 py-1 bg-indigo-600/80 hover:bg-indigo-500 text-white rounded text-[11px] font-medium transition-colors"
+              className="px-2.5 py-1 bg-[var(--accent)] hover:opacity-90 text-white rounded-[var(--radius-sm)] text-[11px] font-medium transition-opacity duration-150"
             >
               {t('settings.presets.activate')}
             </button>
           )}
           <button
             onClick={() => onEdit(preset)}
-            className="p-1.5 text-slate-500 hover:text-slate-300 transition-colors"
+            className="p-1.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors duration-150"
             title={t('settings.presets.edit')}
           >
             <Edit2 size={13} />
           </button>
           <button
             onClick={() => onDuplicate(preset.id)}
-            className="p-1.5 text-slate-500 hover:text-slate-300 transition-colors"
+            className="p-1.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors duration-150"
             title={t('settings.presets.duplicate')}
           >
             <Copy size={13} />
@@ -286,7 +286,7 @@ function PresetCard({ preset, onActivate, onDelete, onDuplicate, onEdit }) {
           {!preset.is_active && (
             <button
               onClick={handleDelete}
-              className="p-1.5 text-slate-500 hover:text-red-400 transition-colors"
+              className="p-1.5 text-[var(--text-muted)] hover:text-[var(--semantic-danger-fg)] transition-colors duration-150"
               title={t('settings.presets.delete')}
             >
               <Trash2 size={13} />
@@ -364,19 +364,19 @@ export default function PresetsSection() {
   };
 
   if (loading) {
-    return <div className="pt-4 text-sm text-slate-500">{t('settings.presets.loading')}</div>;
+    return <div className="pt-4 text-sm text-[var(--text-muted)]">{t('settings.presets.loading')}</div>;
   }
 
   if (editing) {
     return (
       <div className="space-y-3 pt-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-medium text-slate-300">
+          <h3 className="text-sm font-medium text-[var(--text-secondary)]">
             {editing.id ? t('settings.presets.edit_title') : t('settings.presets.create_title')}
           </h3>
           <button
             onClick={() => setEditing(null)}
-            className="p-1 text-slate-400 hover:text-slate-200 transition-colors"
+            className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors duration-150"
           >
             <X size={16} />
           </button>
@@ -392,7 +392,7 @@ export default function PresetsSection() {
 
   return (
     <div className="space-y-3 pt-4">
-      <p className="text-xs text-slate-500">{t('settings.presets.description')}</p>
+      <p className="text-xs text-[var(--text-muted)]">{t('settings.presets.description')}</p>
 
       <div className="space-y-2">
         {presets.map(preset => (
@@ -409,7 +409,7 @@ export default function PresetsSection() {
 
       <button
         onClick={handleNew}
-        className="w-full py-2 border border-dashed border-slate-700 hover:border-slate-500 rounded-lg text-xs text-slate-500 hover:text-slate-300 flex items-center justify-center gap-1.5 transition-colors"
+        className="w-full py-2 border border-dashed border-[var(--border)] hover:border-[var(--text-faint)] rounded-[var(--radius-lg)] text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] flex items-center justify-center gap-1.5 transition-colors duration-150"
       >
         <Plus size={12} /> {t('settings.presets.add_new')}
       </button>

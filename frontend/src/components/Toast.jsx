@@ -27,15 +27,15 @@ export function toast(message, type = 'info') {
 // ---------------------------------------------------------------------------
 
 const ICON_MAP = {
-  error: { Icon: AlertCircle, className: 'text-red-400' },
-  success: { Icon: CheckCircle, className: 'text-emerald-400' },
-  info: { Icon: Info, className: 'text-slate-400' },
+  error: { Icon: AlertCircle, className: 'text-[var(--semantic-danger-fg)]' },
+  success: { Icon: CheckCircle, className: 'text-[var(--semantic-success-fg)]' },
+  info: { Icon: Info, className: 'text-[var(--text-muted)]' },
 };
 
 const TOAST_STYLE = {
-  error: 'bg-red-950/90 border-red-800 text-red-200',
-  success: 'bg-emerald-950/90 border-emerald-800 text-emerald-200',
-  info: 'bg-slate-900/90 border-slate-700 text-slate-200',
+  error: 'bg-[var(--semantic-danger-bg)] border-[var(--border)] text-[var(--semantic-danger-fg)]',
+  success: 'bg-[var(--semantic-success-bg)] border-[var(--border)] text-[var(--semantic-success-fg)]',
+  info: 'bg-[var(--surface-solid)] border-[var(--border)] text-[var(--text-primary)]',
 };
 
 function ToastItem({ toast: t, onDismiss }) {
@@ -44,14 +44,14 @@ function ToastItem({ toast: t, onDismiss }) {
 
   return (
     <div
-      className={`flex items-start gap-3 px-4 py-3 rounded-lg shadow-lg border animate-in slide-in-from-right duration-300 ${styleClass}`}
+      className={`flex items-start gap-3 px-4 py-3 rounded-[var(--radius-lg)] shadow-[var(--island-shadow)] border transition-colors duration-150 ${styleClass}`}
       role="alert"
     >
       <Icon size={18} className={`${iconClass} flex-shrink-0 mt-0.5`} />
       <span className="text-sm flex-1">{t.message}</span>
       <button
         onClick={() => onDismiss(t.id)}
-        className="text-slate-500 hover:text-slate-300 flex-shrink-0 p-0.5 -mr-1"
+        className="text-[var(--text-faint)] hover:text-[var(--text-secondary)] flex-shrink-0 p-0.5 -mr-1 transition-colors duration-150"
         aria-label="Dismiss"
       >
         <X size={14} />

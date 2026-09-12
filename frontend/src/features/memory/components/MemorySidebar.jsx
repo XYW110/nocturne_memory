@@ -7,7 +7,7 @@ import { useLocale } from '../../../i18n/useLocale';
 const TreeNode = ({ domain, path, name, childrenCount, activeDomain, activePath, onNavigate, level }) => {
   const isAncestor = activeDomain === domain && activePath.startsWith(path + '/');
   const isActive = activeDomain === domain && activePath === path;
-  
+
   const [expanded, setExpanded] = useState(isAncestor || isActive);
   const [children, setChildren] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -58,15 +58,17 @@ const TreeNode = ({ domain, path, name, childrenCount, activeDomain, activePath,
 
   return (
     <div>
-      <div 
+      <div
         className={clsx(
-          "flex items-center gap-1.5 py-1.5 pr-2 rounded-lg text-sm transition-all cursor-pointer group",
-          isActive ? "bg-indigo-500/10 text-indigo-300" : "text-slate-400 hover:bg-white/[0.03] hover:text-slate-200"
+          "flex items-center gap-1.5 py-1.5 pr-2 rounded-[var(--radius-md)] text-sm transition-colors duration-150 cursor-pointer group border-l-[3px]",
+          isActive
+            ? "bg-[var(--surface-hover)] text-[var(--text-primary)] border-l-[var(--accent)]"
+            : "text-[var(--text-muted)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)] border-l-transparent"
         )}
         style={{ paddingLeft: `${level * 12 + 8}px` }}
         onClick={handleClick}
       >
-        <div 
+        <div
           className="w-5 h-5 flex items-center justify-center flex-shrink-0"
           onClick={(e) => {
              if (hasChildren) {
@@ -76,19 +78,19 @@ const TreeNode = ({ domain, path, name, childrenCount, activeDomain, activePath,
           }}
         >
           {loading ? (
-            <div className="w-3 h-3 border-2 border-slate-500 border-t-transparent rounded-full animate-spin" />
+            <div className="w-3 h-3 border-2 border-[var(--text-faint)] border-t-transparent rounded-full animate-spin" />
           ) : hasChildren ? (
-            <ChevronRight size={14} className={clsx("transition-transform text-slate-500 group-hover:text-slate-300", expanded && "rotate-90")} />
+            <ChevronRight size={14} className={clsx("transition-transform text-[var(--text-faint)] group-hover:text-[var(--text-secondary)]", expanded && "rotate-90")} />
           ) : null}
         </div>
-        <FileText size={14} className={clsx("flex-shrink-0", isActive ? "text-indigo-400" : "text-slate-600 group-hover:text-slate-400")} />
+        <FileText size={14} className={clsx("flex-shrink-0", isActive ? "text-[var(--text-primary)]" : "text-[var(--text-faint)] group-hover:text-[var(--text-muted)]")} />
         <span className="truncate flex-1 text-[13px]">{name}</span>
       </div>
-      
+
       {expanded && children.length > 0 && (
         <div>
           {children.map(child => (
-            <TreeNode 
+            <TreeNode
               key={child.path}
               domain={domain}
               path={child.path}
@@ -160,15 +162,17 @@ const DomainNode = ({ domain, rootCount, activeDomain, activePath, onNavigate })
 
   return (
     <div className="mb-2">
-      <div 
+      <div
         className={clsx(
-          "flex items-center gap-1.5 px-2 py-2 rounded-lg text-sm transition-all cursor-pointer group",
-          isActive ? "bg-indigo-500/10 text-indigo-300 shadow-[0_0_10px_rgba(99,102,241,0.1)]" : "text-slate-400 hover:bg-white/[0.03] hover:text-slate-200",
+          "flex items-center gap-1.5 px-2 py-2 rounded-[var(--radius-md)] text-sm transition-colors duration-150 cursor-pointer group border-l-[3px]",
+          isActive
+            ? "bg-[var(--surface-hover)] text-[var(--text-primary)] border-l-[var(--accent)]"
+            : "text-[var(--text-muted)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)] border-l-transparent",
           !isActive && rootCount === 0 && "opacity-40 hover:opacity-100"
         )}
         onClick={handleClick}
       >
-        <div 
+        <div
           className="w-5 h-5 flex items-center justify-center flex-shrink-0"
           onClick={(e) => {
              if (hasChildren) {
@@ -178,24 +182,24 @@ const DomainNode = ({ domain, rootCount, activeDomain, activePath, onNavigate })
           }}
         >
           {loading ? (
-            <div className="w-3.5 h-3.5 border-2 border-slate-500 border-t-transparent rounded-full animate-spin" />
+            <div className="w-3.5 h-3.5 border-2 border-[var(--text-faint)] border-t-transparent rounded-full animate-spin" />
           ) : hasChildren ? (
-            <ChevronRight size={16} className={clsx("transition-transform text-slate-500 group-hover:text-slate-300", expanded && "rotate-90")} />
+            <ChevronRight size={16} className={clsx("transition-transform text-[var(--text-faint)] group-hover:text-[var(--text-secondary)]", expanded && "rotate-90")} />
           ) : null}
         </div>
-        <Database size={16} className={clsx("flex-shrink-0 ml-0.5", isActive ? "text-indigo-400" : "text-slate-500")} />
+        <Database size={16} className={clsx("flex-shrink-0 ml-0.5", isActive ? "text-[var(--text-primary)]" : "text-[var(--text-faint)]")} />
         <span className="font-medium flex-1 truncate ml-1">
           {t('memory.sidebar.domain_label', { domain: domain.charAt(0).toUpperCase() + domain.slice(1) })}
         </span>
         {rootCount !== undefined && rootCount > 0 && (
-          <span className="text-[10px] bg-slate-800/80 px-1.5 py-0.5 rounded text-slate-500">{rootCount}</span>
+          <span className="text-[10px] bg-[var(--surface-hover)] border border-[var(--border)] px-1.5 py-0.5 rounded-[var(--radius-sm)] text-[var(--text-muted)] tabular-nums">{rootCount}</span>
         )}
       </div>
-      
+
       {expanded && children.length > 0 && (
         <div className="mt-1">
           {children.map(child => (
-            <TreeNode 
+            <TreeNode
               key={child.path}
               domain={domain}
               path={child.path}

@@ -91,21 +91,21 @@ export default function SettingsDrawer() {
   return (
     <>
       <div
-        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 animate-in fade-in duration-200"
+        className="fixed inset-0 bg-black/50 z-40 animate-in fade-in duration-200"
         onClick={() => setIsOpen(false)}
       />
-      <div className="fixed inset-y-0 right-0 w-[600px] bg-slate-950 border-l border-slate-800 shadow-2xl z-50 flex flex-col animate-in slide-in-from-right duration-300">
-        <div className="border-b border-slate-800/80 bg-slate-900/40 px-6 pt-6 backdrop-blur-md flex-shrink-0">
+      <div className="fixed inset-y-0 right-0 w-[600px] bg-[var(--surface-solid)] border-l border-[var(--border)] shadow-[var(--island-shadow)] z-50 flex flex-col animate-in slide-in-from-right duration-300">
+        <div className="border-b border-[var(--border)] bg-[var(--surface-solid)] px-6 pt-6 flex-shrink-0">
           <div className="flex items-start justify-between mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-slate-100">{t('app.settings.title')}</h1>
-              <p className="text-sm text-slate-400 mt-1">
+              <h1 className="text-2xl font-bold text-[var(--text-primary)]">{t('app.settings.title')}</h1>
+              <p className="text-sm text-[var(--text-muted)] mt-1">
                 {t('app.settings.subtitle')}
               </p>
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              className="p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-lg transition-colors"
+              className="p-2 text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] rounded-[var(--radius-md)] transition-colors duration-150"
             >
               <X size={20} />
             </button>
@@ -119,10 +119,10 @@ export default function SettingsDrawer() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 pb-3 text-sm font-medium border-b-2 transition-all ${
+                  className={`flex items-center gap-2 pb-3 text-sm font-medium border-b-2 transition-colors duration-150 ${
                     isActive
-                      ? "border-indigo-500 text-indigo-300 drop-shadow-sm"
-                      : "border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-700"
+                      ? "border-[var(--accent)] text-[var(--text-primary)]"
+                      : "border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-[var(--border)]"
                   }`}
                 >
                   <Icon size={16} />
@@ -135,7 +135,7 @@ export default function SettingsDrawer() {
 
         <div className="flex-1 overflow-y-auto px-6 py-8">
           {loading ? (
-            <div className="flex items-center justify-center h-full text-slate-500">
+            <div className="flex items-center justify-center h-full text-[var(--text-muted)]">
               <RefreshCw size={20} className="animate-spin mr-2" /> {t('app.settings.loading')}
             </div>
           ) : (

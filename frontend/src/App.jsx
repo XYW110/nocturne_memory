@@ -92,7 +92,7 @@ function NamespaceSelector() {
 
   return (
     <div className="flex items-center gap-2 text-sm">
-      <Layers size={14} className="text-slate-400 flex-shrink-0" />
+      <Layers size={14} className="text-[var(--text-faint)] flex-shrink-0" />
       {showInput ? (
         <input
           autoFocus
@@ -102,13 +102,13 @@ function NamespaceSelector() {
           onKeyDown={handleInputKeyDown}
           onBlur={() => setShowInput(false)}
           placeholder="namespace (Enter to apply)"
-          className="bg-slate-800 border border-indigo-500 text-slate-200 rounded px-2 py-1 text-xs w-40 focus:outline-none"
+          className="bg-[var(--surface-solid)] border border-[var(--border)] text-[var(--text-primary)] rounded-[var(--radius-sm)] px-2 py-1 text-xs w-40 focus:outline-none focus:shadow-[var(--focus-ring)]"
         />
       ) : (
         <select
           value={selected}
           onChange={handleSelectChange}
-          className="bg-slate-800 border border-slate-700 text-slate-200 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          className="bg-[var(--surface-solid)] border border-[var(--border)] text-[var(--text-primary)] rounded-[var(--radius-sm)] px-2 py-1 text-xs focus:outline-none focus:shadow-[var(--focus-ring)]"
           title={`Current namespace: ${activeLabel}`}
         >
           <option value="">(default)</option>
@@ -132,11 +132,11 @@ function Layout() {
   const isMaintenancePage = location.pathname.startsWith('/maintenance');
 
   return (
-    <div className="flex flex-col h-screen bg-slate-950 text-slate-200">
-      {/* Top Navigation Bar */}
-      <div className="h-12 border-b border-slate-800 bg-slate-900 flex items-center px-4 gap-6 flex-shrink-0 z-10">
-        <div className="font-bold text-slate-100 flex items-center gap-2 mr-4">
-          <LayoutGrid className="w-5 h-5 text-indigo-500" />
+    <div className="flex flex-col h-screen bg-[var(--bg-base)] p-[10px] gap-[10px]">
+      {/* Top Navigation Bar (island card) */}
+      <div className="h-12 rounded-[var(--radius-xl)] bg-[var(--surface)] shadow-[var(--island-shadow)] border border-[var(--border)] flex items-center px-4 gap-6 flex-shrink-0 z-10">
+        <div className="font-bold text-[var(--text-primary)] flex items-center gap-2 mr-4">
+          <LayoutGrid className="w-5 h-5 text-[var(--text-primary)]" />
           <span data-testid="app-brand">{t('app.nav.brand')}</span>
         </div>
 
@@ -144,8 +144,8 @@ function Layout() {
           <NavLink
             to="/review"
             className={({ isActive }) => clsx(
-              "h-full flex items-center gap-2 px-4 text-sm font-medium border-b-2 transition-colors",
-              isActive ? "border-indigo-500 text-indigo-400 bg-slate-800/50" : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
+              "flex items-center gap-2 px-3 py-1.5 rounded-[var(--radius-md)] text-sm font-medium transition-colors",
+              isActive ? "bg-[var(--surface-hover)] text-[var(--text-primary)]" : "text-[var(--text-muted)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-secondary)]"
             )}
           >
             <ShieldCheck size={16} />
@@ -155,8 +155,8 @@ function Layout() {
           <NavLink
             to="/memory"
             className={({ isActive }) => clsx(
-              "h-full flex items-center gap-2 px-4 text-sm font-medium border-b-2 transition-colors",
-              isActive ? "border-emerald-500 text-emerald-400 bg-slate-800/50" : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
+              "flex items-center gap-2 px-3 py-1.5 rounded-[var(--radius-md)] text-sm font-medium transition-colors",
+              isActive ? "bg-[var(--surface-hover)] text-[var(--text-primary)]" : "text-[var(--text-muted)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-secondary)]"
             )}
           >
             <Database size={16} />
@@ -166,8 +166,8 @@ function Layout() {
           <NavLink
             to="/maintenance"
             className={({ isActive }) => clsx(
-              "h-full flex items-center gap-2 px-4 text-sm font-medium border-b-2 transition-colors",
-              isActive ? "border-amber-500 text-amber-400 bg-slate-800/50" : "border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
+              "flex items-center gap-2 px-3 py-1.5 rounded-[var(--radius-md)] text-sm font-medium transition-colors",
+              isActive ? "bg-[var(--surface-hover)] text-[var(--text-primary)]" : "text-[var(--text-muted)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-secondary)]"
             )}
           >
             <Sparkles size={16} />
@@ -179,7 +179,7 @@ function Layout() {
           {!isReviewPage && !isMaintenancePage && <NamespaceSelector />}
           <button
             onClick={() => window.dispatchEvent(new CustomEvent('open-settings'))}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-[var(--radius-md)] text-sm font-medium transition-colors text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]"
           >
             <Settings size={16} />
             {t('app.nav.settings')}
@@ -275,8 +275,8 @@ function App() {
 
   if (isCheckingAuth) {
     return (
-      <div data-testid="app-loading" className="flex flex-col items-center justify-center h-screen bg-slate-950 text-slate-400">
-        <div className="w-8 h-8 rounded-full border-2 border-indigo-500/30 border-t-indigo-500 animate-spin mb-4"></div>
+      <div data-testid="app-loading" className="flex flex-col items-center justify-center h-screen bg-[var(--bg-base)] text-[var(--text-muted)]">
+        <div className="w-8 h-8 rounded-full border-2 border-[var(--border)] border-t-[var(--text-primary)] animate-spin mb-4"></div>
         <div className="text-sm">{t('app.loading.connecting')}</div>
       </div>
     );
@@ -284,26 +284,28 @@ function App() {
 
   if (backendError) {
     return (
-      <div data-testid="error-connection-refused" className="flex flex-col items-center justify-center h-screen bg-slate-950 text-slate-400">
-        <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-4">
-          <AlertCircle className="w-6 h-6 text-red-500" />
+      <div data-testid="error-connection-refused" className="flex flex-col items-center justify-center h-screen bg-[var(--bg-base)] text-[var(--text-muted)]">
+        <div className="w-full max-w-md rounded-[var(--radius-xl)] bg-[var(--surface)] shadow-[var(--island-shadow)] border border-[var(--border)] px-6 py-8 flex flex-col items-center">
+          <div className="w-12 h-12 rounded-xl bg-[var(--semantic-danger-bg)] flex items-center justify-center mb-4">
+            <AlertCircle className="w-6 h-6 text-[var(--semantic-danger-fg)]" />
+          </div>
+          <div className="text-lg font-bold text-[var(--text-primary)] mb-1">{t('app.error.connection_refused')}</div>
+          <div className="text-sm text-[var(--text-muted)] max-w-md text-center mt-2 space-y-2">
+            <p>{t('app.error.troubleshooting')}</p>
+            <ul className="list-disc text-left pl-6 space-y-1">
+              <li>{t('app.error.check_backend')}</li>
+              <li><strong>{t('app.error.check_port_title')}</strong>{t('app.error.check_port_detail')}</li>
+              <li>{t('app.error.check_docker')}</li>
+            </ul>
+          </div>
+          <button
+            data-testid="retry-btn"
+            onClick={() => window.location.reload()}
+            className="mt-6 px-4 py-2 bg-[var(--accent)] text-white rounded-[var(--radius-md)] text-sm transition-opacity hover:opacity-90"
+          >
+            {t('app.error.retry')}
+          </button>
         </div>
-        <div className="text-lg font-bold text-slate-100 mb-1">{t('app.error.connection_refused')}</div>
-        <div className="text-sm text-slate-500 max-w-md text-center mt-2 space-y-2">
-          <p>{t('app.error.troubleshooting')}</p>
-          <ul className="list-disc text-left pl-6 space-y-1">
-            <li>{t('app.error.check_backend')}</li>
-            <li><strong>{t('app.error.check_port_title')}</strong>{t('app.error.check_port_detail')}</li>
-            <li>{t('app.error.check_docker')}</li>
-          </ul>
-        </div>
-        <button
-          data-testid="retry-btn"
-          onClick={() => window.location.reload()}
-          className="mt-6 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm transition-colors"
-        >
-          {t('app.error.retry')}
-        </button>
       </div>
     );
   }
