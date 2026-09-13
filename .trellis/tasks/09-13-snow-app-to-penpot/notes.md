@@ -23,8 +23,28 @@
 - **部分令牌并非全组合存在**:`--surface-2/3` 不在亮色基线(snow/light 未定义),`--surface-active/chrome`、`--selection-bg` 只在预设块;flat-24 里 snow/light 相应缺这些令牌,是忠实映射不是遗漏
 - 响应式令牌(`--content-max`、`--tap-target`)、`--transition-fast`、`--blur-popover` 无 Penpot 对应物,按 PRD P3 记录为 web 实现层令牌,不迁移
 
-## 后续(P2)
+## P2 组件重建结论(2026-09-13)
 
-- 18 个组件片段(components.html + manifest)用 execute_code 重建为 Penpot components,命名对齐令牌组(bg.base/text.primary/radius.sm…)
-- 重建时可直接 `shape.applyToken(token, props)` 绑定令牌,主题切换即可换肤——这是 flat-24 方案的额外好处
-- 验收基准:preview/ 页 + components.html;preview 中 brand-assets 等手工页以 components.html 为准
+- **18/18 组件全部重建并注册为 Penpot components**,命名 `区段/id`(foundations/island、navigation/top-bar、actions/buttons、status/pills、status/chips、lists/list-row、lists/timeline、layouts/detail-panel、layouts/drawer-sheet、content/diff-lines、forms/toggle、select-input、text-input、settings-row),与 manifest 一一对应
+- **令牌绑定是活的**:fills/radius 绑定 token(`applyToken`),实测切到 github/dark 后 detail-panel 变 #0A0E14、Primary 变 #58A6FF、文字自动变亮——组件即换肤。shadow 用字面量(见下)
+- 全部 18 个经 PNG 导出目视验收(snow/light),关键组件另验 github/dark
+
+### P2 踩坑(补充 P1 清单)
+
+7. **组件注册命名**:board 名给叶子,`createComponent` 后 `c.name = '区段/id'`(Penpot 把 `/` 当组路径,主实例名会自动带前缀,别双写)
+8. **createComponent 会重置异步进行中的样式**(applyToken 未落盘时注册 → 样式被冲掉)。流程固定:字面量建板 → 注册 → 再绑定
+9. **绑定 shadow 令牌会触发 Penpot 服务端导出渲染 bug**(导出全黑、bbox 膨胀;编辑器内数据正确)。解法:shadow 用字面量,色彩/圆角保留绑定。已 A/B 验证(detail-panel 解绑后导出正常)
+10. **前景色令牌误绑到板 fill** 会得到"色块吞文字"(板与文字同色)。扫绑修复:board 绑背景/表面令牌,text 绑前景令牌;终扫 0 残留
+11. 默认新建 board 自带不透明白 fill,纯布局容器要显式 `fills = []`,否则盖住半透明岛面
+12. 插件标签页后台 ~30s 被浏览器冻结(heartbeat 超时),长任务需先发探针唤醒紧跟操作调用
+
+### P2 遗留(可接受/记录)
+
+- `tabular-nums` 无 Penpot 对应,时间戳/计数未体现等宽数字
+- 阴影令牌(light/dark 两套 island.shadow)以字面量(snow/light 值)内置,主题切换时阴影不变;如需联动可手动重新绑定 shadow(编辑器内正常,仅导出管线有 bug)
+- 组件内 mono 字体未专门设置(diff 行用默认字体,字号/颜色/底色正确)
+
+## 后续(P3,可选)
+
+- ui_kits/app 的应用级组件(Sidebar/ChatArea)作为页面级 layout 样例
+- 响应式令牌(--content-max 等)保持"web 实现层令牌,不迁移"结论

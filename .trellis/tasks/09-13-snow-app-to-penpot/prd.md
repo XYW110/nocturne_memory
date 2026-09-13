@@ -63,8 +63,8 @@ Penpot 是首个原生支持 W3C Design Tokens 的平台,且支持 **multidimens
 
 - [x] 转换脚本输出 DTCG 格式 token sets + `$themes`,24 组合(preset×mode)的 resolved 值与 tokens.css 级联结果一致(脚本内置抽查断言,17/24 组合抽查全过)
 - [x] 令牌成功导入 Penpot,多主题切换正确(P1 实测 4 组合:snow/dark、dracula/light、github/dark、midnight-blue/light,14/14 项一致;D1 实测判定采用 flat-24 备选方案,结论见 notes.md)
-- [ ] ≥18 个组件片段在 Penpot 中成为可复用组件,视觉与 preview/ 页一致
-- [ ] 迁移结论与坑记录进 notes.md(尤其多主题解析顺序的实测结果)
+- [x] ≥18 个组件片段在 Penpot 中成为可复用组件,视觉与 preview/ 页一致(18/18 注册为 components,逐个 PNG 导出目视验收;令牌绑定使组件随主题换肤,github/dark 实测通过)
+- [x] 迁移结论与坑记录进 notes.md(尤其多主题解析顺序的实测结果:D1 判定 flat-24;P1/P2 共 12 条坑)
 - [ ] 不改动 frontend/ 代码;userToken 不出现在任何新文件中
 
 ## 风险与已知坑
