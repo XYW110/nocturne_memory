@@ -1,0 +1,33 @@
+# ── Backend ──
+backend/__pycache__
+backend/**/*.pyc
+backend/**/*.pyo
+backend/.env
+backend/*.db
+backend/*.sqlite
+backend/.venv
+backend/venv
+backend/.pytest_cache
+backend/.mypy_cache
+backend/tests/
+
+# ── Frontend ──
+frontend/node_modules
+frontend/dist
+frontend/.env*
+frontend/.vscode
+frontend/.idea
+
+# ── Root ──
+.git
+.gitignore
+*.md
+docs/
+.trellis/
+.trae/
+.github/
+demo.db
+nocturne_data.db
+*.db
+*.sqlite
+.env

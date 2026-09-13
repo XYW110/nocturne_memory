@@ -25,11 +25,14 @@ from typing import Any, Optional
 from locales import t
 
 _BACKEND_DIR = Path(__file__).resolve().parent
-# 兼容 Docker 部署：Dockerfile 把 backend/* 复制到 WORKDIR，所以容器内
-# _BACKEND_DIR 本身就是根目录；本地开发则是 backend/，根目录在上一级。
 _IN_DOCKER = Path("/.dockerenv").exists()
 ROOT_DIR = _BACKEND_DIR if _IN_DOCKER else _BACKEND_DIR.parent
-CONFIG_PATH = ROOT_DIR / "config.json"
+
+_env_config_path = os.environ.get("CONFIG_PATH")
+if _env_config_path:
+    CONFIG_PATH = Path(_env_config_path)
+else:
+    CONFIG_PATH = ROOT_DIR / "config.json"
 
 _DEMO_DB = "demo.db"
 _USER_DB = "nocturne_data.db"
@@ -183,7 +186,6 @@ def _build_cfg_from_kvs(kvs: dict) -> dict:
     cfg = dict(DEFAULTS)
     for cfg_key, env_key in _ENV_MAP.items():
         val = kvs.get(env_key)
-        # 统一标准：只认 WEB_PORT。PORT 仅作为历史遗留的 fallback。
         if cfg_key == "web_port" and not val:
             val = kvs.get("PORT")
         if val:
@@ -239,38 +241,44 @@ def _load() -> dict:
     if CONFIG_PATH.exists():
         if CONFIG_PATH.is_dir():
             if _IN_DOCKER:
-                raise RuntimeError(_docker_setup_hint())
-            raise RuntimeError(
-                f"{CONFIG_PATH} is a directory, but Nocturne expects a JSON file."
-            )
-
-        try:
-            with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-                _cache = json.load(f)
-        except json.JSONDecodeError as e:
-            if _IN_DOCKER:
+                shutil.rmtree(str(CONFIG_PATH), ignore_errors=True)
+            else:
                 raise RuntimeError(
-                    f"Failed to parse config.json: {e}\n\n{_docker_setup_hint()}"
-                ) from e
-            raise
-            
-        if _migrate_away_from_demo(_cache):
+                    f"{CONFIG_PATH} is a directory, but Nocturne expects a JSON file."
+                )
+        else:
             try:
-                _save_file(_cache)
-            except ConfigWriteError as e:
-                raise RuntimeError(
-                    t("config.db_migrated_not_writable").format(demo_db=_DEMO_DB)
-                ) from e
+                with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+                    _cache = json.load(f)
+            except json.JSONDecodeError as e:
+                if _IN_DOCKER:
+                    raise RuntimeError(
+                        f"Failed to parse config.json: {e}\n\n{_docker_setup_hint()}"
+                    ) from e
+                raise
 
-        return _cache
+            if _migrate_away_from_demo(_cache):
+                try:
+                    _save_file(_cache)
+                except ConfigWriteError as e:
+                    raise RuntimeError(
+                        t("config.db_migrated_not_writable").format(demo_db=_DEMO_DB)
+                    ) from e
+
+            return _cache
 
     cfg = _migrate_from_dotenv()
     if cfg is None:
         cfg = _migrate_from_env_vars()
     if cfg is None:
         if _IN_DOCKER:
-            raise RuntimeError(_docker_setup_hint())
-        cfg = dict(DEFAULTS)
+            # No config.json and no env vars: use Docker-appropriate defaults
+            cfg = dict(DEFAULTS)
+            cfg["host"] = "0.0.0.0"
+            cfg["auto_open_browser"] = False
+            cfg["database_url"] = "sqlite+aiosqlite:////app/data/nocturne.db"
+        else:
+            cfg = dict(DEFAULTS)
 
     migrated = _migrate_away_from_demo(cfg)
     try:

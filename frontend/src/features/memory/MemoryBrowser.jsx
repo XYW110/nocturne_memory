@@ -15,9 +15,11 @@ import {
   FileText,
   Loader2,
   Plus,
+  Lock,
+  Unlock,
 } from 'lucide-react';
 import clsx from 'clsx';
-import { api, getSettingsBootUris, toggleSettingsBootUri, deleteNode, searchMemories, createMemory, renameNode, addDomain, removeDomain, getDomains } from '../../lib/api';
+import { api, getSettingsBootUris, toggleSettingsBootUri, deleteNode, searchMemories, createMemory, renameNode, addDomain, removeDomain, getDomains, toggleNodeLocked } from '../../lib/api';
 import { toast } from '../../components/Toast';
 import { useLocale } from '../../i18n/useLocale';
 import CreateMemoryModal from './components/CreateMemoryModal';
@@ -215,6 +217,17 @@ export default function MemoryBrowser() {
       setBootUris(result.uris);
     } catch (err) {
       console.error('Failed to toggle boot URI:', err);
+    }
+  };
+
+  const handleToggleLocked = async () => {
+    try {
+      const next = !node?.locked;
+      await toggleNodeLocked(path, domain, next);
+      await refreshData();
+      toast(next ? t('memory.locked.locked_toast') : t('memory.locked.unlocked_toast'), 'success');
+    } catch (err) {
+      toast(t('memory.toast.save_failed', { error: err.response?.data?.detail || err.message }), 'error');
     }
   };
 
@@ -576,6 +589,20 @@ export default function MemoryBrowser() {
                                 </div>
                                 
                                 <div className="flex gap-2 flex-shrink-0">
+                                    {!editing && !node.is_virtual && (
+                                        <button
+                                            onClick={handleToggleLocked}
+                                            title={node.locked ? t('memory.locked.unlock_hint') : t('memory.locked.lock_hint')}
+                                            className={clsx(
+                                                "flex items-center gap-2 px-4 py-2 min-h-[var(--tap-target)] rounded-[var(--radius-md)] text-sm font-medium transition-colors duration-150 border",
+                                                node.locked
+                                                    ? "bg-[var(--semantic-warning-bg)] border-[var(--semantic-warning-fg)] text-[var(--semantic-warning-fg)]"
+                                                    : "bg-transparent border-[var(--border)] text-[var(--text-muted)] hover:bg-[var(--surface-hover)] hover:text-[var(--semantic-warning-fg)]"
+                                            )}
+                                        >
+                                            {node.locked ? <Lock size={15} /> : <Unlock size={15} />}
+                                        </button>
+                                    )}
                                     {!editing && (
                                         <button
                                             onClick={() => handleBootToggle(currentUri)}

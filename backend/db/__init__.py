@@ -14,6 +14,7 @@ from .namespace import get_namespace, set_namespace
 from .models import (
     Base, ROOT_NODE_UUID, Node, Memory, Edge, Path,
     GlossaryKeyword, SearchDocument, ChangeCollector, Preset,
+    EmotionLedger, RelationshipRequest,
 )
 
 if TYPE_CHECKING:
@@ -27,6 +28,10 @@ _graph_service: Optional["GraphService"] = None
 _search_indexer: Optional["SearchIndexer"] = None
 _glossary_service: Optional["GlossaryService"] = None
 _preset_service: Optional["PresetService"] = None
+_emotion_service = None
+_relationship_service = None
+_template_loader = None
+_template_service = None
 
 
 def _resolve_database_url() -> str:
@@ -96,9 +101,46 @@ def get_preset_service() -> "PresetService":
     return _preset_service  # type: ignore[return-value]
 
 
+def get_emotion_service():
+    _ensure_initialized()
+    global _emotion_service
+    if _emotion_service is None:
+        from emotion_service import EmotionService
+        _emotion_service = EmotionService(_db_manager)
+    return _emotion_service
+
+
+def get_relationship_service():
+    _ensure_initialized()
+    global _relationship_service
+    if _relationship_service is None:
+        from relationship_service import RelationshipService
+        _relationship_service = RelationshipService(_db_manager)
+    return _relationship_service
+
+
+def get_template_loader():
+    _ensure_initialized()
+    global _template_loader
+    if _template_loader is None:
+        from template_loader import TemplateLoader
+        _template_loader = TemplateLoader(_db_manager, _graph_service)
+    return _template_loader
+
+
+def get_template_service():
+    _ensure_initialized()
+    global _template_service
+    if _template_service is None:
+        from templates_service import SoulTemplateService
+        _template_service = SoulTemplateService(_db_manager)
+    return _template_service
+
+
 async def close_db():
     """Tear down all services and close the database connection."""
     global _db_manager, _graph_service, _search_indexer, _glossary_service, _preset_service
+    global _emotion_service, _relationship_service, _template_loader, _template_service
     if _db_manager:
         await _db_manager.close()
     _db_manager = None
@@ -106,6 +148,10 @@ async def close_db():
     _search_indexer = None
     _glossary_service = None
     _preset_service = None
+    _emotion_service = None
+    _relationship_service = None
+    _template_loader = None
+    _template_service = None
 
 
 __all__ = [
@@ -113,9 +159,12 @@ __all__ = [
     "get_db_manager", "get_graph_service",
     "get_search_indexer", "get_glossary_service",
     "get_preset_service",
+    "get_emotion_service", "get_relationship_service", "get_template_loader",
+    "get_template_service",
     "close_db",
     "ChangesetStore", "get_changeset_store",
     "get_namespace", "set_namespace",
     "Base", "ROOT_NODE_UUID", "Node", "Memory", "Edge", "Path",
     "GlossaryKeyword", "SearchDocument", "ChangeCollector", "Preset",
+    "EmotionLedger", "RelationshipRequest", "SoulTemplate",
 ]

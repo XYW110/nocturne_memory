@@ -28,3 +28,19 @@ backups/
 # Runtime databases (SQLite + WAL + backups)
 database/
 temp/
+
+# CodeGraph runtime (from origin/main merge)
+.codegraph/*.db
+.codegraph/*.db-shm
+.codegraph/*.db-wal
+.codegraph/daemon.log
+.codegraph/daemon.pid
+
+# OpenCode / Qoder / OpenMCP
+.opencode/.cache/
+.opencode/.log/
+.qoder/.cache/
+.qoder/.log/
+.openmcp/
+
+demo.db

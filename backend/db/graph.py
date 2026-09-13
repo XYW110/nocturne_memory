@@ -150,6 +150,7 @@ class GraphService:
                 "content": memory.content,
                 "priority": edge.priority,
                 "disclosure": edge.disclosure,
+                "locked": edge.locked,
                 "deprecated": memory.deprecated,
                 "created_at": memory.created_at.isoformat()
                 if memory.created_at
@@ -158,6 +159,25 @@ class GraphService:
                 "path": path_obj.path,
                 "alias_count": alias_count,
             }
+
+    async def is_node_locked(self, node_uuid: str) -> bool:
+        """True if any edge pointing to this node is locked.
+
+        Locking is enforced at the node level (not the path level) so that the
+        AI cannot bypass protection by aliasing a locked node to a fresh,
+        unlocked path and editing through it — all aliases share one node and
+        one content version chain.
+        """
+        if not node_uuid or node_uuid == ROOT_NODE_UUID:
+            return False
+        async with self.session() as session:
+            result = await session.execute(
+                select(Edge.id).where(
+                    Edge.child_uuid == node_uuid,
+                    Edge.locked == True,  # noqa: E712
+                ).limit(1)
+            )
+            return result.first() is not None
 
     async def get_paths_for_node(
         self,
@@ -168,7 +188,7 @@ class GraphService:
     ) -> List[Dict[str, Any]]:
         """
         Get all paths pointing to a specific node.
-        
+
         Args:
             node_uuid: The node UUID to query.
             namespace: If provided, filters to paths in this namespace. 
@@ -353,6 +373,7 @@ class GraphService:
                         else memory.content,
                         "priority": edge.priority,
                         "disclosure": edge.disclosure,
+                        "locked": edge.locked,
                         "approx_children_count": approx_children_count,
                     }
                 )
@@ -441,8 +462,6 @@ class GraphService:
         Returns stale nodes and crowded parent nodes.
         """
         from datetime import datetime, timedelta
-        if priority_thresholds is None:
-            priority_thresholds = {0: 3, 1: 7, 2: 14}
             
         async with self.session() as session:
             # First find when we actually started tracking last_accessed_at
@@ -482,7 +501,18 @@ class GraphService:
 
                 # Determine the threshold based on priority
                 prio = edge.priority if edge.priority is not None else 999
-                threshold_days = priority_thresholds.get(prio, days_stale)
+                if priority_thresholds and prio in priority_thresholds:
+                    threshold_days = priority_thresholds[prio]
+                elif prio != 999:
+                    # Automatically calculate: priority 0 -> 3, priority 1 -> 7, priority 2 -> 14, priority 3 -> 28, etc.
+                    # Cap priority between 0 and 20 to prevent OverflowError and negative zero-threshold bugs
+                    safe_prio = max(0, min(prio, 20))
+                    threshold_days = 3 if safe_prio == 0 else int(3.5 * (2 ** safe_prio))
+                    # Cap at 36500 days (~100 years) to keep UI and logic sane
+                    threshold_days = min(threshold_days, 36500)
+                else:
+                    threshold_days = days_stale
+                    
                 cutoff_date = datetime.now() - timedelta(days=threshold_days)
 
                 if effective_date < cutoff_date:

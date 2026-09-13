@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
-  Plus, Trash2, GripVertical, Save, Copy, Check, Edit2, X, Layers
+  Plus, Trash2, GripVertical, Save, Copy, Check, Edit2, X, Layers, RotateCcw
 } from 'lucide-react';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import {
   listPresets, createPreset, updatePreset, deletePreset,
-  activatePreset, duplicatePreset
+  activatePreset, duplicatePreset, resetExistingSoul
 } from '../../lib/api';
 import { toast } from '../../components/Toast';
 import ConfirmModal from '../../components/ConfirmModal';
@@ -217,8 +217,29 @@ function PresetEditor({ preset, onSaved, onCancel }) {
 }
 
 
-function PresetCard({ preset, onActivate, onDelete, onDuplicate, onEdit }) {
+function PresetCard({ preset, onActivate, onDelete, onDuplicate, onEdit, onReset }) {
   const { t } = useTranslation();
+  const [resetting, setResetting] = useState(false);
+  const defaultBootUris = {
+    '': [
+      'core://agent',
+      'core://operating_principles',
+      'core://philosophy',
+      'core://agent/showroom_quality',
+      'core://agent/preferences',
+      'core://my_user',
+    ]
+  };
+
+  const handleReset = async () => {
+    setResetting(true);
+    try {
+      await onReset(preset.id, defaultBootUris);
+    } finally {
+      setResetting(false);
+    }
+  };
+
   const [confirmState, setConfirmState] = useState(null);
 
   const uriCount = Object.values(preset.boot_uris || {}).reduce(
@@ -269,6 +290,14 @@ function PresetCard({ preset, onActivate, onDelete, onDuplicate, onEdit }) {
               {t('settings.presets.activate')}
             </button>
           )}
+          <button
+            onClick={handleReset}
+            disabled={resetting}
+            className="p-1.5 text-[var(--text-muted)] hover:text-[var(--semantic-warning-fg)] disabled:opacity-40 transition-colors duration-150"
+            title={t('settings.presets.reset_to_default')}
+          >
+            <RotateCcw size={13} className={resetting ? 'animate-spin' : ''} />
+          </button>
           <button
             onClick={() => onEdit(preset)}
             className="p-1.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors duration-150"
@@ -359,8 +388,33 @@ export default function PresetsSection() {
     setEditing(preset);
   };
 
+  const defaultSoulBootUris = {
+    '': [
+      'core://agent',
+      'core://operating_principles',
+      'core://philosophy',
+      'core://my_user',
+    ]
+  };
+
   const handleNew = () => {
-    setEditing({ name: '', boot_uris: { '': [] }, id: null });
+    setEditing({ name: '', boot_uris: defaultSoulBootUris, id: null });
+  };
+
+  const handleResetSoul = async (id, bootUris) => {
+    const target = presets.find(p => p.id === id);
+    if (!target) return;
+    try {
+      // 1. Reset preset's boot_uris to default
+      await updatePreset(id, { name: target.name, boot_uris: bootUris });
+      // 2. Force-reset actual memory nodes to template content
+      const result = await resetExistingSoul('partner');
+      await load();
+      const extraCount = result.deleted_extra?.length || 0;
+      toast(t('settings.presets.reset_to_default') + (extraCount > 0 ? (i18n.language?.startsWith('zh') ? `（清理 ${extraCount} 个残留节点）` : ` (${extraCount} leftover nodes cleaned)`) : ''), 'success');
+    } catch (e) {
+      toast(t('settings.presets.reset_to_default_failed') + ': ' + (e.response?.data?.detail || e.message), 'error');
+    }
   };
 
   if (loading) {
@@ -403,6 +457,7 @@ export default function PresetsSection() {
             onDelete={handleDelete}
             onDuplicate={handleDuplicate}
             onEdit={handleEdit}
+            onReset={handleResetSoul}
           />
         ))}
       </div>

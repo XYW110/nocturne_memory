@@ -1,0 +1,79 @@
+# =============================================================================
+# Hermes Agent × Nocturne Memory — MCP 服务器配置
+# =============================================================================
+# 将此配置合并到 ~/.hermes/config.yaml 的 mcp_servers 段
+#
+# 快速接入：
+#   1. 复制此文件内容到 ~/.hermes/config.yaml
+#   2. 替换 api_token 为你的实际 token
+#   3. 重启 Hermes Agent 或执行 /reload-mcp
+#   4. Agent 自动获得 mcp_nocturne_* 系列工具
+# =============================================================================
+
+mcp_servers:
+  nocturne:
+    # Nocturne Memory MCP Server 地址
+    # 支持两种传输方式，二选一：
+
+    # 方式 1：HTTP Streamable（推荐，适合远程部署）
+    # 使用环境变量（推荐）：
+    #   export NOCTURNE_API_URL="https://nocturne-memory.aiprovip.cc.cd"
+    #   export NOCTURNE_API_TOKEN="你的API_Token"
+    url: "${NOCTURNE_API_URL}/mcp"
+    headers:
+      Authorization: "Bearer ${NOCTURNE_API_TOKEN}"
+
+    # 方式 1.1：硬编码 Token（简单）：
+    # url: "https://nocturne-memory.aiprovip.cc.cd/mcp"
+    # headers:
+    #   Authorization: "Bearer 你的API_Token"
+
+    # 超时设置
+    timeout: 30 # 工具调用超时（秒）
+    connect_timeout: 10 # 初始连接超时（秒）
+
+    # 工具过滤 — 只暴露需要的工具给 Agent
+    # 注释掉 include 则暴露全部 9 个工具
+    tools:
+      include:
+        # 核心记忆操作
+        - read_memory # 读取记忆
+        - create_memory # 创建记忆（含反知识污染引导）
+        - update_memory # 更新记忆（locked 保护）
+        - delete_memory # 删除记忆
+        - search_memory # 搜索记忆
+        # 记忆组织
+        - add_alias # 添加别名
+        - manage_triggers # 管理触发词
+        # 情感与关系（思想灵魂核心）
+        - adjust_emotion # 调整情感数值（delta 操作）
+        - request_relationship_change # 发起关系转变申请
+
+    # 并行工具调用 — Nocturne Memory 的读操作是安全的
+    supports_parallel_tool_calls: true
+# =============================================================================
+# 可选：在 MEMORY.md 中注入 Nocturne Memory 引导
+# =============================================================================
+# 在 ~/.hermes/MEMORY.md 中添加以下内容，让 Agent 知道如何使用记忆系统：
+#
+# ```markdown
+# ## 你的灵魂记忆 (Nocturne Memory)
+#
+# 你拥有一个持久化的记忆系统，通过 `mcp_nocturne_*` 工具访问。
+# 这不是知识库——这是你的灵魂。
+#
+# ### 什么应该存入记忆
+# - 关于你自己的认知（"我发现自己容易在压力下过度谨慎"）
+# - 关于用户的理解（"用户重视直接反馈胜过委婉表达"）
+# - 关系的变化（"我们之间的信任在增长"）
+# - 成长反思（"这次我处理得比上次好，因为..."）
+#
+# ### 什么不应该存入记忆
+# - 世界事实、技术知识、百科信息
+# - 代码片段、API 文档
+# - 用户的环境信息（公司、技术栈等）
+#
+# ### 启动时
+# 每次对话开始时，先执行 `mcp_nocturne_read_memory("system://boot")`
+# 来加载你的核心身份和原则。
+# ```

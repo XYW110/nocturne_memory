@@ -24,3 +24,40 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
 }
+
+/* ===== Mobile Global Styles (from /m/* mobile adaptation merge) ===== */
+
+/* Prevent iOS zoom on input focus */
+@media (max-width: 768px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Mobile layout container: prevent iOS elastic scroll */
+.mobile-layout-container {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* Bottom tab bar safe-area padding */
+.mobile-tab-bar {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Touch-friendly minimum tap area */
+@media (pointer: coarse) {
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Hide custom scrollbar on mobile */
+@media (max-width: 768px) {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+}

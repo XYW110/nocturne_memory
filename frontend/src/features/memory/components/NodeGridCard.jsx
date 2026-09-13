@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronRight, Folder, FileText, AlertTriangle, Link2, Zap } from 'lucide-react';
+import { ChevronRight, Folder, FileText, AlertTriangle, Link2, Zap, Lock } from 'lucide-react';
 import clsx from 'clsx';
 import PriorityBadge from './PriorityBadge';
 import { useLocale } from '../../../i18n/useLocale';
@@ -40,6 +40,11 @@ const NodeGridCard = ({ node, currentDomain, isInBoot, onBootToggle, onClick }) 
       </div>
 
       <div className="flex items-center gap-1.5 flex-shrink-0">
+        {node.locked && (
+          <span title={t('memory.locked.badge')} className="p-1 rounded-[var(--radius-md)] text-[var(--semantic-warning-fg)] bg-[var(--semantic-warning-bg)]">
+            <Lock size={12} />
+          </span>
+        )}
         <PriorityBadge priority={node.priority} />
         {/* Boot toggle inline */}
         <div

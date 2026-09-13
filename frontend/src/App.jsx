@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserRouter, Routes, Route, NavLink, Navigate, useLocation } from 'react-router-dom';
-import { ShieldCheck, Database, LayoutGrid, Sparkles, AlertCircle, Layers, Settings } from 'lucide-react';
+import { ShieldCheck, Database, LayoutGrid, Sparkles, AlertCircle, Layers, Settings, Heart } from 'lucide-react';
 import clsx from 'clsx';
 
 import ReviewPage from './features/review/ReviewPage';
 import MemoryBrowser from './features/memory/MemoryBrowser';
 import MaintenancePage from './features/maintenance/MaintenancePage';
+import SoulPage from './features/soul/SoulPage';
+import MobileLayout from './features/mobile/MobileLayout';
 import SettingsDrawer from './features/settings/SettingsDrawer';
 import TokenAuth from './components/TokenAuth';
 import { ToastContainer } from './components/Toast';
@@ -126,10 +128,80 @@ function NamespaceSelector() {
   );
 }
 
+// ===== Device detection (from /m/* mobile adaptation) =====
+
+const isMobileDevice = () => {
+  const ua = navigator.userAgent;
+  return /Mobile|Android|iPhone|iPad|WebOS/i.test(ua);
+};
+
+const getMobilePreference = () =>
+  localStorage.getItem('mobile_preference') || 'auto';
+
+/**
+ * Redirects between / and /m/ routes based on device type and user preference.
+ * Must be called inside BrowserRouter (uses useLocation).
+ */
+function useDeviceRedirect() {
+  const location = useLocation();
+
+  useEffect(() => {
+    const pref = getMobilePreference();
+    const isMobile = isMobileDevice();
+    const isMobilePath = location.pathname.startsWith('/m/');
+
+    let shouldRedirect = false;
+    let targetPath = '';
+
+    if (pref === 'mobile') {
+      if (!isMobilePath) {
+        shouldRedirect = true;
+        const mapping = {
+          '/review': '/m/review',
+          '/memory': '/m/memory',
+          '/soul': '/m/soul',
+          '/maintenance': '/m/maintenance',
+        };
+        const match = Object.entries(mapping).find(([k]) =>
+          location.pathname.startsWith(k)
+        );
+        targetPath = match ? match[1] : '/m/review';
+      }
+    } else if (pref === 'desktop') {
+      if (isMobilePath) {
+        shouldRedirect = true;
+        targetPath = '/review';
+      }
+    } else {
+      // auto mode
+      if (isMobile && !isMobilePath) {
+        shouldRedirect = true;
+        targetPath = '/m/review';
+      } else if (!isMobile && isMobilePath) {
+        shouldRedirect = true;
+        targetPath = '/review';
+      }
+    }
+
+    if (shouldRedirect) {
+      window.location.replace(targetPath);
+    }
+  }, [location.pathname]);
+}
+
 function Layout() {
   const { t } = useTranslation();
   useTheme(); // apply persisted light/dark theme on mount
   const location = useLocation();
+
+  // Redirect between desktop and mobile based on device + preference
+  useDeviceRedirect();
+
+  // Mobile route? Delegate to MobileLayout
+  if (location.pathname.startsWith('/m/')) {
+    return <MobileLayout />;
+  }
+
   const isReviewPage = location.pathname.startsWith('/review');
   const isMaintenancePage = location.pathname.startsWith('/maintenance');
 
@@ -165,6 +237,14 @@ function Layout() {
           </NavLink>
 
           <NavLink
+            to="/soul"
+            className={navLinkClass}
+          >
+            <Heart size={16} className="max-[640px]:hidden" />
+            {t('app.nav.soul')}
+          </NavLink>
+
+          <NavLink
             to="/maintenance"
             className={navLinkClass}
           >
@@ -193,6 +273,8 @@ function Layout() {
           <Route path="/review" element={<ReviewPage />} />
 
           <Route path="/memory" element={<MemoryBrowser />} />
+
+          <Route path="/soul" element={<SoulPage />} />
 
           <Route path="/maintenance" element={<MaintenancePage />} />
         </Routes>

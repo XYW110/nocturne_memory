@@ -26,7 +26,7 @@ import config as _cfg
 from auth import BearerTokenAuthMiddleware, get_cors_config
 from namespace_middleware import NamespaceMiddleware
 from locales.middleware import LocaleMiddleware
-from api import review_router, browse_router, maintenance_router, settings_router, presets_router
+from api import review_router, browse_router, maintenance_router, settings_router, presets_router, templates_router, emotion_router, relationship_router
 from health import router as health_router, health_check
 from config import ConfigWriteError
 from db import get_db_manager, close_db
@@ -128,6 +128,9 @@ def build_web_app(*, extra_routes=None, extra_prefixes=None, lifespan=None):
     api.include_router(maintenance_router)
     api.include_router(settings_router)
     api.include_router(presets_router)
+    api.include_router(templates_router)
+    api.include_router(emotion_router)
+    api.include_router(relationship_router)
 
     routes = list(extra_routes or [])
     routes.append(Mount("/api", app=api))

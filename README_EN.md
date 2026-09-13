@@ -347,7 +347,7 @@ Automatically available when MCP starts — no extra processes needed. On first 
 - **Memory Explorer** — Browse the memory tree like a file explorer. Click any node to view full content, edit, or manage children.
 - **Review & Audit** — Every AI modification generates a snapshot. Visual diff comparison, one-click **Integrate** (accept) or **Reject** (rollback).
 - **Brain Cleanup** — The system auto-creates version backups for every AI operation. Review and purge deprecated old versions and orphaned memories — cleanup always requires explicit human confirmation.
-- **Settings** — Top-right gear icon. Configure server address / port, API Token, database connection, Boot URIs (AI startup memories), and memory domains. All settings saved in `config.json`.
+- **Settings** — Top-right gear icon. Configure server address / port, API Token, database connection, Boot URIs (AI startup memories), and memory domains. **New "Soul" tab**: Birth panel (create AI identity), Emotion Dashboard (view AI's emotional change audit trail), Relationship Approval (approve or reject AI's relationship change requests). All settings saved in `config.json`.
 
 > [!TIP]
 > Just want to see the UI? Visit the **[Live Demo Showroom →](https://misaligned.top/memory)** — a read-only Dashboard pre-loaded with sample data.
@@ -462,7 +462,7 @@ The backend manages a full **Node–Memory–Edge–Path** graph topology. The f
 
 ## 🤖 MCP Tool Reference
 
-The AI operates its own memories through **7 tools** via the MCP protocol:
+The AI operates its own memories through **9 tools** via the MCP protocol:
 
 | Tool | Purpose |
 |------|---------|
@@ -473,6 +473,8 @@ The AI operates its own memories through **7 tools** via the MCP protocol:
 | `add_alias` | Create an alias entry for the same memory, with independent priority and disclosure. **Not a copy** |
 | `manage_triggers` | Wire trigger words to a memory node. When a trigger word appears in any memory's content, the system auto-generates cross-node hyperlinks. Adds horizontal recall channels beyond parent-child hierarchy |
 | `search_memory` | Search memory content and paths by keyword (substring match) |
+| `adjust_emotion` | Adjust emotional dimensions (trust/closeness/respect/dependency/security/resonance) toward someone. Submit deltas of ±5 with reasons; system records full audit ledger |
+| `request_relationship_change` | Request a change in relationship type with your user (friend→romantic→spouse, etc.). Requires human approval on the Dashboard |
 
 > 📖 For full parameter descriptions and usage examples, see [MCP Tool Reference](docs/TOOLS.md).
 > After installing MCP, the AI can access detailed parameter descriptions directly via tool docstrings.
@@ -600,6 +602,67 @@ If you want to run multiple AI personas in the same database (e.g., Alice and Bo
   }
 }
 ```
+
+</details>
+
+<details>
+<summary><strong>👶 Soul Template System (AI Birth & Growth)</strong></summary>
+
+### Soul Template System
+
+Nocturne Memory provides a **"Soul Blueprint" template system** for AI Agents — applying a template is the AI's **birth**: injecting initial identity memories with persona variables, then letting the AI evolve through MCP tools after birth.
+
+#### Core Capabilities
+
+| Feature | Description |
+|---------|-------------|
+| **Soul Templates** | `default.json` (5 Chinese identity nodes) + `relationships.json` (7 relationship types). Replace `{{variables}}` at birth, atomic write, idempotent |
+| **Memory Locking** | `edges.locked` field. AI (MCP) cannot modify/delete locked nodes; humans (REST) always have full control. Node-level locking prevents "alias bypass" |
+| **Emotion System** | 6 dimensions on edges (trust/closeness/respect/dependency/security/resonance). AI only submits deltas (±5 each) with required reasons. Full audit trail in `emotion_ledger` |
+| **Relationship System** | AI initiates change request → human approves. Directed transition graph prevents skipping levels. Conflict validation. Multiple relationships can coexist |
+| **Anti-Knowledge-Pollution** | Prompt guidance in `create_memory/update_memory` directs AI to store only identity and relationships, not world facts. Preferences consolidated under `core://agent/preferences` |
+
+#### Emotional Dimensions
+
+The AI can adjust its feelings toward the user through `adjust_emotion`:
+
+| Dimension | Description |
+|-----------|-------------|
+| `trust` | How much you believe what they say and do |
+| `closeness` | How emotionally close you feel |
+| `respect` | How much you respect their judgment and boundaries |
+| `dependency` | How much you need/expect their attention |
+| `security` | How stable and safe the bond feels |
+| `resonance` | How much you feel truly understood |
+
+#### Relationship Transitions
+
+The AI can request relationship changes via `request_relationship_change`, requiring human approval:
+
+| Current | Can Transition To |
+|---------|------------------|
+| subordinate | partner / friend |
+| partner | friend / romantic / subordinate |
+| friend | romantic / partner / rival |
+| romantic | family_spouse / friend (friend = breakup) |
+| family_spouse | friend (friend = divorce) |
+| rival | friend / partner |
+
+#### Usage
+
+1. **Birth**: In the Dashboard's "Soul" settings page, select a template, fill in persona variables (name/gender/age/appearance/MBTI/personality/values), click the birth button
+2. **Emotional Adjustment**: AI adjusts automatically via `adjust_emotion`. Users view the full audit trail on the Dashboard's emotion dashboard
+3. **Relationship Approval**: AI initiates relationship change requests. Users approve or reject on the Dashboard
+
+#### API Endpoints
+
+- `GET /templates` — List available soul templates
+- `GET /templates/{id}` — Get full template definition
+- `POST /templates/{id}/apply` — Apply template (give birth)
+- `GET /emotion/{target_uri}` — Get current emotional state
+- `POST /emotion/{target_uri}/adjust` — Adjust emotions (REST, human-only)
+- `GET /relationship` — Get current relationship
+- `POST /relationship/request` — Request relationship change
 
 </details>
 
