@@ -128,7 +128,7 @@ export default function RelationshipPanel({ refreshTrigger = 0 }) {
   const history = requests.filter(r => r.status !== 'pending');
 
   return (
-    <div className="space-y-4 pt-4">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
       {/* Current relationship */}
       <div className="bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-lg)] p-3">
         <div className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)] mb-2">
@@ -148,6 +148,8 @@ export default function RelationshipPanel({ refreshTrigger = 0 }) {
         )}
       </div>
 
+      {/* Requests & history */}
+      <div className="lg:col-span-2 space-y-4">
       {/* Pending requests */}
       <div>
         <div className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)] mb-2">
@@ -179,6 +181,7 @@ export default function RelationshipPanel({ refreshTrigger = 0 }) {
           </div>
         </div>
       )}
+      </div>
 
       {rejecting && (
         <PromptModal

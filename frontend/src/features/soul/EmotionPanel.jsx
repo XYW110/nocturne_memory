@@ -73,7 +73,7 @@ export default function EmotionPanel({ refreshTrigger = 0 }) {
         </button>
       </div>
 
-      <div className="space-y-2.5 bg-[var(--surface)] border border-[var(--border)] rounded-lg p-3 max-h-[360px] overflow-y-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2.5 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-md)] p-3 max-h-[360px] overflow-y-auto">
         {DIMENSIONS.map(dim => (
           <DimensionBar key={dim} value={values[dim]} label={t(`settings.emotion.dim.${dim}`)} />
         ))}

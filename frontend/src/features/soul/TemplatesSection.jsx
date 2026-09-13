@@ -319,7 +319,7 @@ export default function TemplatesSection({ onBorn }) {
           <select
             value={initRelationship}
             onChange={e => setInitRelationship(e.target.value)}
-            className="flex-1 bg-[var(--surface-solid)] border border-[var(--border)] text-[var(--text-primary)] rounded-md px-2.5 py-1.5 text-xs focus:outline-none focus:border-[var(--semantic-warning-fg)]"
+            className="w-64 bg-[var(--surface-solid)] border border-[var(--border)] text-[var(--text-primary)] rounded-md px-2.5 py-1.5 text-xs focus:outline-none focus:border-[var(--semantic-warning-fg)]"
           >
             {RELATIONSHIP_TYPES.map(rel => (
               <option key={rel} value={rel}>{t(`settings.relationship.type.${rel}`)}</option>
@@ -346,7 +346,7 @@ export default function TemplatesSection({ onBorn }) {
         </button>
       </div>
 
-      <div className="space-y-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {templates.map(tpl => {
           const desc = i18n.language?.startsWith('zh') ? tpl.description : (tpl.description_en || tpl.description);
           return (

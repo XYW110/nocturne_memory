@@ -45,16 +45,16 @@ export default function EmotionLedger({ refreshTrigger = 0 }) {
   const { t } = useTranslation();
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
-    setError(false);
     try {
       const led = await getEmotionLedger();
       setEntries(led.entries || []);
     } catch (e) {
-      setError(true);
+      // Backend answers 404 while the AI has no emotion history yet —
+      // fall through to the empty state instead of a blank card.
+      setEntries([]);
     } finally {
       setLoading(false);
     }
@@ -66,16 +66,8 @@ export default function EmotionLedger({ refreshTrigger = 0 }) {
     return <div className="pt-2 text-sm text-[var(--text-muted)] flex items-center gap-2"><RefreshCw size={14} className="animate-spin" /></div>;
   }
 
-  if (error) {
-    return null;
-  }
-
   return (
     <div className="space-y-3 pt-2">
-      <div className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)]">
-        <Heart size={12} className="text-[var(--text-muted)]" />
-        {t('settings.emotion.ledger_title')}
-      </div>
       <div className="space-y-1.5">
         {entries.length === 0 ? (
           <p className="text-[11px] text-[var(--text-muted)] italic">{t('settings.emotion.ledger_empty')}</p>

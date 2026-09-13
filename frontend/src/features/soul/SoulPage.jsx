@@ -60,14 +60,14 @@ export default function SoulPage() {
       {/* Content island */}
       <div className="flex-1 min-h-0 overflow-y-auto rounded-[var(--radius-xl)] bg-[var(--surface)] border border-[var(--border)] shadow-[var(--island-shadow)] px-6 py-5">
         {activeTab === "birth" && (
-          <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-200">
+          <div className="animate-in fade-in slide-in-from-bottom-2 duration-200">
             <TemplatesSection onBorn={() => setSoulVersion((v) => v + 1)} />
           </div>
         )}
 
         {activeTab === "emotion" && (
-          <div className="max-w-3xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-200">
-            <section className="bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-lg)] p-4 shadow-[var(--island-shadow-soft)]">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 animate-in fade-in slide-in-from-bottom-2 duration-200">
+            <section className="lg:col-span-2 bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-lg)] p-4 shadow-[var(--island-shadow-soft)]">
               <h2 className="text-sm font-semibold text-[var(--text-primary)] flex items-center gap-2 mb-1">
                 <Heart size={14} className="text-[var(--text-secondary)]" />
                 {t("app.soul.tab_emotion")}
@@ -75,13 +75,17 @@ export default function SoulPage() {
               <EmotionPanel refreshTrigger={soulVersion} />
             </section>
             <section className="bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-lg)] p-4 shadow-[var(--island-shadow-soft)]">
+              <h2 className="text-sm font-semibold text-[var(--text-primary)] flex items-center gap-2 mb-1">
+                <Heart size={14} className="text-[var(--text-muted)]" />
+                {t("settings.emotion.ledger_title")}
+              </h2>
               <EmotionLedger refreshTrigger={soulVersion} />
             </section>
           </div>
         )}
 
         {activeTab === "relationship" && (
-          <div className="max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-200">
+          <div className="animate-in fade-in slide-in-from-bottom-2 duration-200">
             <RelationshipPanel refreshTrigger={soulVersion} />
           </div>
         )}
