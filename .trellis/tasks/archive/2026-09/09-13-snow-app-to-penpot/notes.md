@@ -44,7 +44,14 @@
 - 阴影令牌(light/dark 两套 island.shadow)以字面量(snow/light 值)内置,主题切换时阴影不变;如需联动可手动重新绑定 shadow(编辑器内正常,仅导出管线有 bug)
 - 组件内 mono 字体未专门设置(diff 行用默认字体,字号/颜色/底色正确)
 
+## P3 布局样例(2026-09-13 补做,任务归档后追加)
+
+- **Layouts 页新建 `app-shell-desktop`(1280×800)应用壳样例**:bg.base 底板 + 顶部三岛(brand/nav/actions)+ 侧栏岛(Workspace 导航,active 行 accent 左条)+ 队列岛(内嵌 **lists/list-row 组件实例**,演示复用)+ 聊天主岛(general 频道头、3 条消息气泡、composer 输入条)。全部令牌绑定,随主题换肤
+- ui_kits/app 的 JSX 是通用脚手架(回退色不是 snow 调色板),布局权威以 DESIGN.md 浮动岛规范为准;样例按其三栏结构(侧栏 ~260 / 列表 ~340 / 主区 ~620,gap 10px)落地
+- **响应式令牌最终结论**:`--content-max`、`--tap-target`、断点值均为 web 实现层令牌,Penpot 无对应物,不迁移(记入 report.md)
+- 布局页踩坑补充:跨页移动 shape 无 API(Page 对象无 appendChild;remove/修改需目标页 active),页重建比搬移省事;`createPage` 忽略名称参数(自动命名),建后需手动 `page.name =`;组件库 `components[].name` 是叶子名,全路径在主实例名上
+
 ## 后续(P3,可选)
 
-- ui_kits/app 的应用级组件(Sidebar/ChatArea)作为页面级 layout 样例
+- ~~ui_kits/app 的应用级组件(Sidebar/ChatArea)作为页面级 layout 样例~~(已完成,见上)
 - 响应式令牌(--content-max 等)保持"web 实现层令牌,不迁移"结论
