@@ -25,7 +25,8 @@
       "section_domains": "Memory Domains",
       "appearance": "Appearance",
       "themeLight": "Light",
-      "themeDark": "Dark"
+      "themeDark": "Dark",
+      "themePreset": "Theme preset"
     },
     "error": {
       "connection_refused": "Cannot connect to backend service (Connection Refused)",

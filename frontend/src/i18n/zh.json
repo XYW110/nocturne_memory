@@ -23,7 +23,8 @@
       "section_domains": "记忆域名",
       "appearance": "外观",
       "themeLight": "亮色",
-      "themeDark": "暗色"
+      "themeDark": "暗色",
+      "themePreset": "主题预设"
     },
     "error": {
       "connection_refused": "无法连接到后端服务 (Connection Refused)",

@@ -15,9 +15,26 @@ import ServerSection from './ServerSection';
 import AdvancedSection from './AdvancedSection';
 import LocaleSection from './LocaleSection';
 
+// Swatch previews mirror the light palettes in styles/tokens.css
+// (bg-base / surface / accent); literal colors are preview-only.
+const PRESET_OPTIONS = [
+  { id: 'snow', name: 'Snow', preview: ['#eef2f7', '#ffffff', '#111827'] },
+  { id: 'midnight-blue', name: 'Midnight Blue', preview: ['#e0e7ef', '#f0f4f8', '#111827'] },
+  { id: 'forest-green', name: 'Forest Green', preview: ['#e8f0e8', '#f7faf7', '#111827'] },
+  { id: 'rose-pink', name: 'Rose Pink', preview: ['#fbe7ef', '#fdf2f8', '#111827'] },
+  { id: 'solarized', name: 'Solarized', preview: ['#f5edd6', '#fdf6e3', '#111827'] },
+  { id: 'nord', name: 'Nord', preview: ['#e2e7ee', '#eceff4', '#111827'] },
+  { id: 'dracula', name: 'Dracula', preview: ['#ebe3f5', '#f8f5ff', '#111827'] },
+  { id: 'tokyo-night', name: 'Tokyo Night', preview: ['#dbe3f0', '#eef2f8', '#111827'] },
+  { id: 'github', name: 'GitHub', preview: ['#f0f3f6', '#ffffff', '#111827'] },
+  { id: 'google', name: 'Google', preview: ['#f1f3f4', '#ffffff', '#0b57d0'] },
+  { id: 'gruvbox', name: 'Gruvbox', preview: ['#f4e8c1', '#fbf1c7', '#111827'] },
+  { id: 'cream', name: 'Cream', preview: ['#e8e6dc', '#faf9f5', '#d97757'] },
+];
+
 export default function SettingsDrawer() {
   const { t } = useTranslation();
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, preset, setPreset } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [settings, setSettings] = useState(null);
   const [dbStatus, setDbStatus] = useState(null);
@@ -137,7 +154,7 @@ export default function SettingsDrawer() {
 
         <div className="flex-1 overflow-y-auto px-6 py-8">
           {/* Appearance: light/dark theme toggle (persisted via lib/theme) */}
-          <div className="mb-8 flex items-center justify-between gap-4">
+          <div className="mb-4 flex items-center justify-between gap-4">
             <span className="text-sm font-medium text-[var(--text-primary)]">
               {t('app.settings.appearance')}
             </span>
@@ -158,6 +175,39 @@ export default function SettingsDrawer() {
                   {option.label}
                 </button>
               ))}
+            </div>
+          </div>
+          {/* Theme preset: palette picker (persisted via lib/theme) */}
+          <div className="mb-8">
+            <span className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+              {t('app.settings.themePreset')}
+            </span>
+            <div className="flex flex-wrap gap-2">
+              {PRESET_OPTIONS.map(option => {
+                const selected = preset === option.id;
+                return (
+                  <button
+                    key={option.id}
+                    onClick={() => setPreset(option.id)}
+                    className={`flex items-center gap-2 px-2.5 py-1.5 rounded-[var(--radius-md)] border text-xs font-medium transition-colors duration-150 ${
+                      selected
+                        ? "border-[var(--accent)] text-[var(--text-primary)]"
+                        : "border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-[var(--border-strong)]"
+                    }`}
+                  >
+                    <span className="flex -space-x-1">
+                      {option.preview.map((color, i) => (
+                        <span
+                          key={i}
+                          className="w-3.5 h-3.5 rounded-full border border-[var(--border)]"
+                          style={{ backgroundColor: color }}
+                        />
+                      ))}
+                    </span>
+                    {option.name}
+                  </button>
+                );
+              })}
             </div>
           </div>
           {loading ? (
