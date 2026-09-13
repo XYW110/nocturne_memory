@@ -85,3 +85,9 @@
 - import-local 是摄取管道(原文降级为 source 证据),非刷新手段;试验产生的 user:snow-app-design-system 条目已随文件夹删除而注销
 - 官方权威文档:design-systems/README.md(包契约);docs/design-systems.md 为完整指南;本安装版无 craft 参考库
 - UI 现状:重启 OpenDesign 或刷新页面即可见新色板与完整正文
+
+## 2026-09-13 追加: hub 登录后的作用域与同步核查
+
+- 用户登录 OpenDesign Cloud(hub workspace nlbl9h7t02...)后,catalog API 按工作区作用域过滤——未认证请求返回空是预期;user:snow-app 已注册为个人工作区资源(personal/active),UI 以个人项目形态呈现
+- 全量核验:工作区副本(data/projects/ds-snow-app)与规范源(data/design-systems/snow-app)的 8 个核心文件逐字节一致;preview 14 页中用户在 UI 新建的 9 页(brand-assets、colors-theme 等)按 OD 14:02 同步方向从源补齐到工作区
+- 结论:最新内容已全部更新到位;MCP 全局配置无需重设(OD_DATA_DIR 指向同一数据目录)
