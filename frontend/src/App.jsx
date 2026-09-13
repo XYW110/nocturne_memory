@@ -11,6 +11,7 @@ import SettingsDrawer from './features/settings/SettingsDrawer';
 import TokenAuth from './components/TokenAuth';
 import { ToastContainer } from './components/Toast';
 import { AUTH_ERROR_EVENT, getNamespaces } from './lib/api';
+import { useTheme } from './lib/theme';
 import { detectLocale } from './i18n/index';
 
 const NAMESPACE_SWITCH_ROOT_REDIRECT_KEY = 'nocturne:namespace-switch-root-redirect';
@@ -91,7 +92,7 @@ function NamespaceSelector() {
   const activeLabel = selected || '(default)';
 
   return (
-    <div className="flex items-center gap-2 text-sm">
+    <div className="flex items-center gap-2 text-sm max-[640px]:hidden">
       <Layers size={14} className="text-[var(--text-faint)] flex-shrink-0" />
       {showInput ? (
         <input
@@ -127,15 +128,21 @@ function NamespaceSelector() {
 
 function Layout() {
   const { t } = useTranslation();
+  useTheme(); // apply persisted light/dark theme on mount
   const location = useLocation();
   const isReviewPage = location.pathname.startsWith('/review');
   const isMaintenancePage = location.pathname.startsWith('/maintenance');
 
+  const navLinkClass = ({ isActive }) => clsx(
+    "flex items-center gap-2 px-3 py-1.5 min-h-[var(--tap-target)] rounded-[var(--radius-md)] text-sm font-medium transition-colors max-[640px]:px-2.5 max-[640px]:text-xs",
+    isActive ? "bg-[var(--surface-hover)] text-[var(--text-primary)]" : "text-[var(--text-muted)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-secondary)]"
+  );
+
   return (
-    <div className="flex flex-col h-screen bg-[var(--bg-base)] p-[10px] gap-[10px]">
+    <div className="flex flex-col h-screen bg-[var(--bg-base)] p-[var(--gap-island)] gap-[var(--gap-island)]">
       {/* Top Navigation Bar (island card) */}
-      <div className="h-12 rounded-[var(--radius-xl)] bg-[var(--surface)] shadow-[var(--island-shadow)] border border-[var(--border)] flex items-center px-4 gap-6 flex-shrink-0 z-10">
-        <div className="font-bold text-[var(--text-primary)] flex items-center gap-2 mr-4">
+      <div className="h-12 rounded-[var(--radius-xl)] bg-[var(--surface)] shadow-[var(--island-shadow)] border border-[var(--border)] flex items-center px-4 gap-6 flex-shrink-0 z-10 max-[720px]:px-2.5 max-[720px]:gap-3">
+        <div className="font-bold text-[var(--text-primary)] flex items-center gap-2 mr-4 max-[640px]:mr-2">
           <LayoutGrid className="w-5 h-5 text-[var(--text-primary)]" />
           <span data-testid="app-brand">{t('app.nav.brand')}</span>
         </div>
@@ -143,10 +150,7 @@ function Layout() {
         <nav className="flex items-center gap-1 h-full">
           <NavLink
             to="/review"
-            className={({ isActive }) => clsx(
-              "flex items-center gap-2 px-3 py-1.5 rounded-[var(--radius-md)] text-sm font-medium transition-colors",
-              isActive ? "bg-[var(--surface-hover)] text-[var(--text-primary)]" : "text-[var(--text-muted)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-secondary)]"
-            )}
+            className={navLinkClass}
           >
             <ShieldCheck size={16} />
             {t('app.nav.review')}
@@ -154,10 +158,7 @@ function Layout() {
 
           <NavLink
             to="/memory"
-            className={({ isActive }) => clsx(
-              "flex items-center gap-2 px-3 py-1.5 rounded-[var(--radius-md)] text-sm font-medium transition-colors",
-              isActive ? "bg-[var(--surface-hover)] text-[var(--text-primary)]" : "text-[var(--text-muted)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-secondary)]"
-            )}
+            className={navLinkClass}
           >
             <Database size={16} />
             {t('app.nav.memory')}
@@ -165,21 +166,18 @@ function Layout() {
 
           <NavLink
             to="/maintenance"
-            className={({ isActive }) => clsx(
-              "flex items-center gap-2 px-3 py-1.5 rounded-[var(--radius-md)] text-sm font-medium transition-colors",
-              isActive ? "bg-[var(--surface-hover)] text-[var(--text-primary)]" : "text-[var(--text-muted)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-secondary)]"
-            )}
+            className={navLinkClass}
           >
             <Sparkles size={16} />
             {t('app.nav.maintenance')}
           </NavLink>
         </nav>
 
-        <div className="ml-auto flex items-center gap-4">
+        <div className="ml-auto flex items-center gap-4 max-[640px]:gap-2">
           {!isReviewPage && !isMaintenancePage && <NamespaceSelector />}
           <button
             onClick={() => window.dispatchEvent(new CustomEvent('open-settings'))}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-[var(--radius-md)] text-sm font-medium transition-colors text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]"
+            className="flex items-center gap-2 px-3 py-1.5 min-h-[var(--tap-target)] rounded-[var(--radius-md)] text-sm font-medium transition-colors text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]"
           >
             <Settings size={16} />
             {t('app.nav.settings')}

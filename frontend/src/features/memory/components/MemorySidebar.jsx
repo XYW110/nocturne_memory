@@ -60,7 +60,7 @@ const TreeNode = ({ domain, path, name, childrenCount, activeDomain, activePath,
     <div>
       <div
         className={clsx(
-          "flex items-center gap-1.5 py-1.5 pr-2 rounded-[var(--radius-md)] text-sm transition-colors duration-150 cursor-pointer group border-l-[3px]",
+          "flex items-center gap-1.5 py-1.5 min-h-[var(--tap-target)] pr-2 rounded-[var(--radius-md)] text-sm transition-colors duration-150 cursor-pointer group border-l-[3px]",
           isActive
             ? "bg-[var(--surface-hover)] text-[var(--text-primary)] border-l-[var(--accent)]"
             : "text-[var(--text-muted)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)] border-l-transparent"
@@ -164,7 +164,7 @@ const DomainNode = ({ domain, rootCount, activeDomain, activePath, onNavigate })
     <div className="mb-2">
       <div
         className={clsx(
-          "flex items-center gap-1.5 px-2 py-2 rounded-[var(--radius-md)] text-sm transition-colors duration-150 cursor-pointer group border-l-[3px]",
+          "flex items-center gap-1.5 px-2 py-2 min-h-[var(--tap-target)] rounded-[var(--radius-md)] text-sm transition-colors duration-150 cursor-pointer group border-l-[3px]",
           isActive
             ? "bg-[var(--surface-hover)] text-[var(--text-primary)] border-l-[var(--accent)]"
             : "text-[var(--text-muted)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)] border-l-transparent",

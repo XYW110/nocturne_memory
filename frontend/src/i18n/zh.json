@@ -20,7 +20,10 @@
       "section_database": "数据库连接",
       "section_boot_uris": "启动 URI",
       "section_presets": "启动预设",
-      "section_domains": "记忆域名"
+      "section_domains": "记忆域名",
+      "appearance": "外观",
+      "themeLight": "亮色",
+      "themeDark": "暗色"
     },
     "error": {
       "connection_refused": "无法连接到后端服务 (Connection Refused)",

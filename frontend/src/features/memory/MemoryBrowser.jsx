@@ -341,7 +341,7 @@ export default function MemoryBrowser() {
     <div className="flex h-full bg-[var(--bg-base)] text-[var(--text-secondary)] font-sans gap-[var(--gap-island)] p-[var(--gap-island)] overflow-hidden">
 
       {/* Sidebar */}
-      <div className="w-64 flex-shrink-0 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-xl)] shadow-[var(--island-shadow)] flex flex-col overflow-hidden">
+      <div className="w-64 max-[1024px]:w-52 max-[720px]:hidden flex-shrink-0 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-xl)] shadow-[var(--island-shadow)] flex flex-col overflow-hidden">
         <div className="p-5 border-b border-[var(--border)]">
           <div className="flex items-center gap-2 text-[var(--text-primary)] mb-1">
             <Cpu size={18} />
@@ -424,7 +424,7 @@ export default function MemoryBrowser() {
                          setShowAddDomainInput(true);
                          setTimeout(() => addDomainInputRef.current?.focus(), 50);
                        }}
-                       className="w-full flex items-center gap-1.5 px-2 py-2 rounded-[var(--radius-md)] text-[var(--text-muted)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)] text-sm transition-colors duration-150 text-left group"
+                       className="w-full flex items-center gap-1.5 px-2 py-2 min-h-[var(--tap-target)] rounded-[var(--radius-md)] text-[var(--text-muted)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)] text-sm transition-colors duration-150 text-left group"
                      >
                        <div className="w-5 h-5 flex items-center justify-center flex-shrink-0">
                          <Plus size={14} className="text-[var(--text-faint)] group-hover:text-[var(--text-muted)] transition-colors duration-150" />
@@ -474,7 +474,7 @@ export default function MemoryBrowser() {
          {/* Search Results Overlay */}
          {searchResults !== null && (
            <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
-             <div className="max-w-7xl mx-auto space-y-4">
+             <div className="max-w-[var(--content-max)] mx-auto space-y-4">
                <div className="flex items-center justify-between">
                   <h2 className="text-sm font-bold text-[var(--text-muted)] uppercase tracking-widest">
                     {searchResults.length > 0
@@ -527,7 +527,7 @@ export default function MemoryBrowser() {
                     <button onClick={() => navigateTo('')} className="text-xs bg-[var(--surface-hover)] text-[var(--text-muted)] px-4 py-2 rounded-[var(--radius-md)] hover:text-[var(--text-primary)] transition-colors duration-150">{t('memory.status.return_root')}</button>
                 </div>
             ) : (
-                <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className="max-w-[var(--content-max)] mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                     
                     {node && (
                         <div className="space-y-4">
@@ -581,7 +581,7 @@ export default function MemoryBrowser() {
                                             onClick={() => handleBootToggle(currentUri)}
                                             title={bootUris.includes(currentUri) ? t('memory.boot.remove') : t('memory.boot.add')}
                                             className={clsx(
-                                                "flex items-center gap-2 px-4 py-2 rounded-[var(--radius-md)] text-sm font-medium transition-colors duration-150 border",
+                                                "flex items-center gap-2 px-4 py-2 min-h-[var(--tap-target)] rounded-[var(--radius-md)] text-sm font-medium transition-colors duration-150 border",
                                                 bootUris.includes(currentUri)
                                                     ? "bg-[var(--semantic-warning-bg)] border-[var(--semantic-warning-fg)] text-[var(--semantic-warning-fg)]"
                                                     : "bg-transparent border-[var(--border)] text-[var(--text-muted)] hover:bg-[var(--surface-hover)] hover:text-[var(--semantic-warning-fg)]"
@@ -594,7 +594,7 @@ export default function MemoryBrowser() {
                                     {!editing && (
                                         <button
                                             onClick={() => setShowCreateModal(true)}
-                                            className="flex items-center gap-2 px-4 py-2 bg-[var(--surface-solid)] hover:bg-[var(--surface-hover)] text-[var(--text-primary)] rounded-[var(--radius-md)] text-sm font-medium transition-colors duration-150 border border-[var(--border)]"
+                                            className="flex items-center gap-2 px-4 py-2 min-h-[var(--tap-target)] bg-[var(--surface-solid)] hover:bg-[var(--surface-hover)] text-[var(--text-primary)] rounded-[var(--radius-md)] text-sm font-medium transition-colors duration-150 border border-[var(--border)]"
                                         >
                                             <Plus size={16} />
                                             {t('memory.create.button')}
@@ -609,12 +609,12 @@ export default function MemoryBrowser() {
                                         </>
                                     ) : !node.is_virtual && (
                                         <>
-                                            <button onClick={startEditing} className="flex items-center gap-2 px-4 py-2 bg-[var(--surface-solid)] hover:bg-[var(--surface-hover)] text-[var(--text-primary)] rounded-[var(--radius-md)] text-sm font-medium transition-colors duration-150 border border-[var(--border)]">
+                                            <button onClick={startEditing} className="flex items-center gap-2 px-4 py-2 min-h-[var(--tap-target)] bg-[var(--surface-solid)] hover:bg-[var(--surface-hover)] text-[var(--text-primary)] rounded-[var(--radius-md)] text-sm font-medium transition-colors duration-150 border border-[var(--border)]">
                                                 <Edit3 size={16} /> {t('memory.edit.edit')}
                                             </button>
                                             <button
                                               onClick={() => setDeleteTarget({ domain, path })}
-                                              className="flex items-center gap-2 px-3 py-2 bg-transparent hover:bg-[var(--semantic-danger-bg)] text-[var(--text-muted)] hover:text-[var(--semantic-danger-fg)] rounded-[var(--radius-md)] text-sm font-medium transition-colors duration-150 border border-[var(--border)]"
+                                              className="flex items-center gap-2 px-3 py-2 min-h-[var(--tap-target)] bg-transparent hover:bg-[var(--semantic-danger-bg)] text-[var(--text-muted)] hover:text-[var(--semantic-danger-fg)] rounded-[var(--radius-md)] text-sm font-medium transition-colors duration-150 border border-[var(--border)]"
                                               title={t('memory.delete.tooltip')}
                                             >
                                               <Trash2 size={16} />

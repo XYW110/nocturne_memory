@@ -215,7 +215,7 @@ function ReviewPage() {
     <div className="flex h-full bg-[var(--bg-base)] text-[var(--text-secondary)] overflow-hidden font-sans gap-[var(--gap-island)] p-[var(--gap-island)]">
 
       {/* Sidebar */}
-      <div className="w-72 flex-shrink-0 flex flex-col bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-xl)] shadow-[var(--island-shadow)] overflow-hidden">
+      <div className="w-72 max-[1024px]:hidden flex-shrink-0 flex flex-col bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-xl)] shadow-[var(--island-shadow)] overflow-hidden">
         <div className="p-5 border-b border-[var(--border)]">
           <div className="flex items-center gap-3 text-[var(--text-primary)]">
             <div className="w-8 h-8 rounded-[var(--radius-md)] bg-[var(--accent)] flex items-center justify-center">
@@ -246,7 +246,7 @@ function ReviewPage() {
           <div className="p-4 border-t border-[var(--border)]">
             <button
               onClick={handleClearAll}
-              className="w-full group flex items-center justify-center gap-2 bg-transparent hover:bg-[var(--semantic-success-bg)] text-[var(--text-muted)] hover:text-[var(--semantic-success-fg)] border border-[var(--border)] rounded-[var(--radius-md)] py-2.5 text-xs font-medium transition-colors duration-150"
+              className="w-full group flex items-center justify-center gap-2 bg-transparent hover:bg-[var(--semantic-success-bg)] text-[var(--text-muted)] hover:text-[var(--semantic-success-fg)] border border-[var(--border)] rounded-[var(--radius-md)] py-2.5 min-h-[var(--tap-target)] text-xs font-medium transition-colors duration-150"
             >
               <Check size={14} className="group-hover:scale-110 transition-transform" />
               <span>{t('review.action.integrate_all')}</span>
@@ -260,7 +260,7 @@ function ReviewPage() {
         {selectedChange ? (
           <>
             {/* Header */}
-            <div className="h-20 border-b border-[var(--border)] flex items-center justify-between px-8 relative z-10 flex-shrink-0">
+            <div className="h-20 border-b border-[var(--border)] flex items-center justify-between px-8 relative z-10 flex-shrink-0 max-[720px]:px-4">
               <div className="flex items-center gap-4 min-w-0">
                 <div className={clsx(
                   "w-10 h-10 rounded-full flex items-center justify-center border flex-shrink-0",
@@ -291,13 +291,13 @@ function ReviewPage() {
               <div className="flex items-center gap-3">
                 <button
                   onClick={handleRollback}
-                  className="flex items-center gap-2 px-5 py-2 bg-transparent hover:bg-[var(--semantic-danger-bg)] border border-[var(--border)] text-[var(--semantic-danger-fg)] rounded-[var(--radius-md)] transition-colors duration-150 text-xs font-medium uppercase tracking-wider"
+                  className="flex items-center gap-2 px-5 py-2 min-h-[var(--tap-target)] bg-transparent hover:bg-[var(--semantic-danger-bg)] border border-[var(--border)] text-[var(--semantic-danger-fg)] rounded-[var(--radius-md)] transition-colors duration-150 text-xs font-medium uppercase tracking-wider"
                 >
                   <RotateCcw size={14} /> {t('review.action.reject_group')}
                 </button>
                 <button
                   onClick={handleApprove}
-                  className="flex items-center gap-2 px-6 py-2 bg-[var(--accent)] hover:opacity-90 text-white rounded-[var(--radius-md)] transition-opacity duration-150 text-xs font-bold uppercase tracking-wider"
+                  className="flex items-center gap-2 px-6 py-2 min-h-[var(--tap-target)] bg-[var(--accent)] hover:opacity-90 text-white rounded-[var(--radius-md)] transition-opacity duration-150 text-xs font-bold uppercase tracking-wider"
                 >
                   <Check size={14} /> {t('review.action.integrate_group')}
                 </button>
@@ -305,8 +305,8 @@ function ReviewPage() {
             </div>
 
             {/* Diff Area */}
-            <div className="flex-1 overflow-y-auto px-8 py-8 custom-scrollbar">
-              <div className="max-w-4xl mx-auto">
+            <div className="flex-1 overflow-y-auto px-8 py-8 custom-scrollbar max-[720px]:px-4">
+              <div className="max-w-[var(--content-max)] mx-auto">
                 {diffError ? (
                   <div className="mt-20 flex flex-col items-center justify-center text-[var(--semantic-danger-fg)] gap-6 animate-in fade-in zoom-in duration-300">
                     <div className="w-20 h-20 bg-[var(--semantic-danger-bg)] rounded-full flex items-center justify-center">

@@ -5,6 +5,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import i18n, { detectLocale } from '../../i18n';
 import { getSettings, updateSettings, getDatabaseStatus } from '../../lib/api';
+import { useTheme } from '../../lib/theme';
 
 import Section from './Section';
 import DatabaseSection from './DatabaseSection';
@@ -16,6 +17,7 @@ import LocaleSection from './LocaleSection';
 
 export default function SettingsDrawer() {
   const { t } = useTranslation();
+  const { theme, setTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [settings, setSettings] = useState(null);
   const [dbStatus, setDbStatus] = useState(null);
@@ -134,6 +136,30 @@ export default function SettingsDrawer() {
         </div>
 
         <div className="flex-1 overflow-y-auto px-6 py-8">
+          {/* Appearance: light/dark theme toggle (persisted via lib/theme) */}
+          <div className="mb-8 flex items-center justify-between gap-4">
+            <span className="text-sm font-medium text-[var(--text-primary)]">
+              {t('app.settings.appearance')}
+            </span>
+            <div className="flex items-center rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-hover)] p-0.5">
+              {[
+                { value: 'light', label: t('app.settings.themeLight') },
+                { value: 'dark', label: t('app.settings.themeDark') },
+              ].map(option => (
+                <button
+                  key={option.value}
+                  onClick={() => setTheme(option.value)}
+                  className={`px-3 py-1 min-h-[var(--tap-target)] rounded-[var(--radius-sm)] text-xs font-medium transition-colors duration-150 ${
+                    theme === option.value
+                      ? "bg-[var(--surface-solid)] text-[var(--text-primary)] shadow-[var(--island-shadow-soft)]"
+                      : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
           {loading ? (
             <div className="flex items-center justify-center h-full text-[var(--text-muted)]">
               <RefreshCw size={20} className="animate-spin mr-2" /> {t('app.settings.loading')}
