@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Heart, Sparkles, Users } from "lucide-react";
+import { Heart, Sparkles, Users, Settings } from "lucide-react";
 import clsx from "clsx";
 import TemplatesSection from "../soul/TemplatesSection";
 import EmotionPanel from "../soul/EmotionPanel";
@@ -73,7 +73,8 @@ export default function MobileSoul() {
           to="/m/settings"
           className="flex items-center justify-center gap-1 text-sm text-[var(--text-muted)] hover:text-[var(--text-secondary)] py-2"
         >
-          ⚙ {t("soul.settingsEntry")}
+          <Settings size={14} />
+          {t("soul.settingsEntry")}
         </NavLink>
       </div>
     </div>

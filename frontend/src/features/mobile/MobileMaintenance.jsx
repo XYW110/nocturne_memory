@@ -191,7 +191,7 @@ export default function MobileMaintenance() {
   const handleRestore = async (id) => {
     try {
       await api.post(`/maintenance/orphans/${id}/restore`);
-      toast("Memory restored ✓");
+      toast("Memory restored");
       loadOrphans();
     } catch (err) {
       toast("Restore failed");

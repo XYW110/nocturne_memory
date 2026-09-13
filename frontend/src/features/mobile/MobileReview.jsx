@@ -107,7 +107,7 @@ export default function MobileReview() {
       onConfirm: async () => {
         try {
           await rollbackGroup(selectedChange.node_uuid);
-          toast(t("review.action.reject") + " ✓");
+          toast(t("review.action.reject") + "");
           setConfirmState(null);
           handleBackToList();
           loadChanges();
@@ -123,7 +123,7 @@ export default function MobileReview() {
     if (!selectedChange) return;
     try {
       await approveGroup(selectedChange.node_uuid);
-      toast(t("review.action.approve") + " ✓");
+      toast(t("review.action.approve") + "");
       handleBackToList();
       loadChanges();
     } catch (err) {
@@ -138,7 +138,7 @@ export default function MobileReview() {
       onConfirm: async () => {
         try {
           await clearAll();
-          toast(t("review.action.integrateAll") + " ✓");
+          toast(t("review.action.integrateAll") + "");
           setConfirmState(null);
           loadChanges();
         } catch (err) {
