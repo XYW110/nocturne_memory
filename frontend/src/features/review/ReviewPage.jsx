@@ -170,9 +170,9 @@ function ReviewPage() {
             const isChanged = JSON.stringify(oldVal) !== JSON.stringify(newVal);
 
             return (
-              <div key={key} className="grid grid-cols-[100px_1fr_20px_1fr] gap-4 text-sm items-start">
-                <span className="text-[var(--text-muted)] font-medium capitalize text-xs pt-0.5">{key}</span>
-                <div className={clsx("text-xs font-mono text-right break-words tabular-nums", isChanged && !isCreation ? "text-[var(--semantic-danger-fg)] line-through" : "text-[var(--text-faint)]")}>
+              <div key={key} className="grid grid-cols-[100px_1fr_20px_1fr] gap-4 text-sm items-start max-[640px]:grid-cols-1 max-[640px]:gap-1.5">
+                <span className="text-[var(--text-muted)] font-medium capitalize text-xs pt-0.5 max-[640px]:mb-1">{key}</span>
+                <div className={clsx("text-xs font-mono text-right break-words tabular-nums max-[640px]:text-left", isChanged && !isCreation ? "text-[var(--semantic-danger-fg)] line-through" : "text-[var(--text-faint)]")}>
                   {oldVal != null ? String(oldVal) : '∅'}
                 </div>
                 <div className="text-center text-[var(--text-faint)] pt-0.5">
@@ -260,7 +260,7 @@ function ReviewPage() {
         {selectedChange ? (
           <>
             {/* Header */}
-            <div className="h-20 border-b border-[var(--border)] flex items-center justify-between px-8 relative z-10 flex-shrink-0 max-[720px]:px-4">
+            <div className="h-20 border-b border-[var(--border)] flex items-center justify-between px-8 relative z-10 flex-shrink-0 max-[720px]:px-4 max-[640px]:h-auto max-[640px]:flex-col max-[640px]:items-stretch max-[640px]:gap-3 max-[640px]:py-3">
               <div className="flex items-center gap-4 min-w-0">
                 <div className={clsx(
                   "w-10 h-10 rounded-full flex items-center justify-center border flex-shrink-0",
@@ -269,7 +269,7 @@ function ReviewPage() {
                   {changeTypeIcon(selectedChange.top_level_table)}
                 </div>
                 <div className="min-w-0 flex flex-col">
-                  <h2 className="text-lg font-medium text-[var(--text-primary)] truncate tracking-tight flex items-center gap-3">
+                  <h2 className="text-lg font-medium text-[var(--text-primary)] truncate tracking-tight flex flex-wrap items-center gap-3 max-[640px]:whitespace-normal max-[640px]:break-all">
                     <span>{selectedChange.display_uri}</span>
                     {selectedChange.namespaces && selectedChange.namespaces.length > 0 && selectedChange.namespaces.some(ns => ns !== "" || selectedChange.namespaces.length > 1) && (
                       <span className="text-[10px] px-2 py-0.5 rounded-[var(--radius-sm)] bg-[var(--semantic-info-bg)] text-[var(--semantic-info-fg)] tracking-widest font-mono uppercase">
@@ -277,27 +277,27 @@ function ReviewPage() {
                       </span>
                     )}
                   </h2>
-                  <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
-                    <span className="bg-[var(--surface-hover)] px-1.5 py-0.5 rounded-[var(--radius-sm)] text-[var(--text-muted)] capitalize">
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-[var(--text-muted)]">
+                    <span className="whitespace-nowrap bg-[var(--surface-hover)] px-1.5 py-0.5 rounded-[var(--radius-sm)] text-[var(--text-muted)] capitalize">
                       {selectedChange.top_level_table} {selectedChange.action || t('review.badge.modified')}
                     </span>
-                    <span className="text-[var(--text-faint)] tabular-nums">
+                    <span className="whitespace-nowrap text-[var(--text-faint)] tabular-nums">
                       ({t('review.badge.rows_affected', { count: selectedChange.row_count })})
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 max-[640px]:justify-end">
                 <button
                   onClick={handleRollback}
-                  className="flex items-center gap-2 px-5 py-2 min-h-[var(--tap-target)] bg-transparent hover:bg-[var(--semantic-danger-bg)] border border-[var(--border)] text-[var(--semantic-danger-fg)] rounded-[var(--radius-md)] transition-colors duration-150 text-xs font-medium uppercase tracking-wider"
+                  className="whitespace-nowrap flex items-center gap-2 px-5 py-2 min-h-[var(--tap-target)] bg-transparent hover:bg-[var(--semantic-danger-bg)] border border-[var(--border)] text-[var(--semantic-danger-fg)] rounded-[var(--radius-md)] transition-colors duration-150 text-xs font-medium uppercase tracking-wider"
                 >
                   <RotateCcw size={14} /> {t('review.action.reject_group')}
                 </button>
                 <button
                   onClick={handleApprove}
-                  className="flex items-center gap-2 px-6 py-2 min-h-[var(--tap-target)] bg-[var(--accent)] hover:opacity-90 text-white rounded-[var(--radius-md)] transition-opacity duration-150 text-xs font-bold uppercase tracking-wider"
+                  className="whitespace-nowrap flex items-center gap-2 px-6 py-2 min-h-[var(--tap-target)] bg-[var(--accent)] hover:opacity-90 text-white rounded-[var(--radius-md)] transition-opacity duration-150 text-xs font-bold uppercase tracking-wider"
                 >
                   <Check size={14} /> {t('review.action.integrate_group')}
                 </button>
@@ -350,17 +350,17 @@ function ReviewPage() {
                         </h3>
                         <div className="space-y-2">
                           {diffData.path_changes.map((pc, i) => (
-                            <div key={i} className="flex items-center gap-3 text-sm">
+                            <div key={i} className="min-w-0 flex items-center gap-3 text-sm">
                               {pc.action === 'deleted' ? (
-                                <span className="text-[var(--semantic-danger-fg)] bg-[var(--semantic-danger-bg)] px-2 py-0.5 rounded-[var(--radius-sm)] text-[10px] uppercase font-bold tracking-wider">{t('review.path.removed')}</span>
+                                <span className="flex-shrink-0 whitespace-nowrap text-[var(--semantic-danger-fg)] bg-[var(--semantic-danger-bg)] px-2 py-0.5 rounded-[var(--radius-sm)] text-[10px] uppercase font-bold tracking-wider">{t('review.path.removed')}</span>
                               ) : (
-                                <span className="text-[var(--semantic-success-fg)] bg-[var(--semantic-success-bg)] px-2 py-0.5 rounded-[var(--radius-sm)] text-[10px] uppercase font-bold tracking-wider">{t('review.path.added')}</span>
+                                <span className="flex-shrink-0 whitespace-nowrap text-[var(--semantic-success-fg)] bg-[var(--semantic-success-bg)] px-2 py-0.5 rounded-[var(--radius-sm)] text-[10px] uppercase font-bold tracking-wider">{t('review.path.added')}</span>
                               )}
-                              <span className={clsx("font-mono text-xs break-all", pc.action === 'deleted' ? "text-[var(--semantic-danger-fg)] line-through" : "text-[var(--semantic-success-fg)]")}>
+                              <span className={clsx("min-w-0 flex-1 font-mono text-xs break-all", pc.action === 'deleted' ? "text-[var(--semantic-danger-fg)] line-through" : "text-[var(--semantic-success-fg)]")}>
                                 {pc.uri}
                               </span>
                               {pc.namespace !== undefined && pc.namespace !== null && (pc.namespace !== "" || (selectedChange.namespaces && selectedChange.namespaces.some(n => n !== "" || selectedChange.namespaces.length > 1))) && (
-                                    <span className="ml-auto text-[10px] px-2 py-0.5 rounded-[var(--radius-sm)] bg-[var(--semantic-info-bg)] text-[var(--semantic-info-fg)] tracking-wider font-mono">
+                                    <span className="ml-auto flex-shrink-0 whitespace-nowrap text-[10px] px-2 py-0.5 rounded-[var(--radius-sm)] bg-[var(--semantic-info-bg)] text-[var(--semantic-info-fg)] tracking-wider font-mono">
                                       {pc.namespace === "" ? t('review.namespace.default') : pc.namespace}
                                 </span>
                               )}

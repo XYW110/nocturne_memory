@@ -511,9 +511,9 @@ export default function MaintenancePage() {
   const orphanedGroups = useMemo(() => groups.filter(g => g.type === 'orphaned'), [groups]);
 
   return (
-    <div className="flex h-full bg-[var(--bg-base)] text-[var(--text-primary)] font-sans overflow-hidden">
+    <div className="flex h-full bg-[var(--bg-base)] text-[var(--text-primary)] font-sans overflow-hidden max-[640px]:flex-col">
       {/* ── Sidebar ── */}
-      <div className="w-72 flex-shrink-0 bg-[var(--surface)] border-r border-[var(--border)] flex flex-col">
+      <div className="w-72 flex-shrink-0 bg-[var(--surface)] border-r border-[var(--border)] flex flex-col max-[640px]:w-full max-[640px]:flex-shrink max-[640px]:max-h-[46%] max-[640px]:border-r-0 max-[640px]:border-b">
         {/* Header */}
         <div className="p-5 pb-3">
           <div className="w-10 h-10 bg-[var(--surface-solid)] rounded-[var(--radius-lg)] flex items-center justify-center border border-[var(--border)] mb-3">
@@ -658,8 +658,8 @@ export default function MaintenancePage() {
       {/* ── Main Content ── */}
       <div className="flex-1 flex flex-col min-w-0 bg-[var(--surface)] relative overflow-hidden">
         {/* Header with batch actions */}
-        <div className="h-14 flex items-center justify-between px-8 border-b border-[var(--border)] bg-[var(--surface)] sticky top-0 z-10">
-          <h2 className="text-sm font-bold text-[var(--text-secondary)] uppercase tracking-widest flex items-center gap-2">
+        <div className="h-14 flex items-center justify-between px-8 border-b border-[var(--border)] bg-[var(--surface)] sticky top-0 z-10 max-[640px]:px-4 max-[640px]:gap-3">
+          <h2 className="min-w-0 text-sm font-bold text-[var(--text-secondary)] uppercase tracking-widest flex items-center gap-2">
             <Trash2 size={14} />
             {activeGroupKeys.length > 0 ? (
               <span className="flex items-center gap-2">
@@ -699,7 +699,7 @@ export default function MaintenancePage() {
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto p-8 custom-scrollbar max-[640px]:p-4">
           {loading ? (
             <div className="flex flex-col items-center justify-center h-64 text-[var(--text-muted)] gap-4">
               <div className="w-6 h-6 border-2 border-[var(--border)] border-t-[var(--text-muted)] rounded-full animate-spin"></div>
