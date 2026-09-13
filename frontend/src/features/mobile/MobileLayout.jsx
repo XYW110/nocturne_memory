@@ -17,10 +17,10 @@ import MobileMaintenance from "./MobileMaintenance";
 import MobileSettings from "./MobileSettings";
 
 const TABS = [
-  { id: "review", path: "/m/review", icon: ShieldCheck, color: "indigo" },
-  { id: "memory", path: "/m/memory", icon: Database, color: "indigo" },
-  { id: "soul", path: "/m/soul", icon: Heart, color: "rose" },
-  { id: "maintenance", path: "/m/maintenance", icon: Sparkles, color: "amber" },
+  { id: "review", path: "/m/review", icon: ShieldCheck },
+  { id: "memory", path: "/m/memory", icon: Database },
+  { id: "soul", path: "/m/soul", icon: Heart },
+  { id: "maintenance", path: "/m/maintenance", icon: Sparkles },
 ];
 
 // Pages that don't need the namespace selector in the top bar
@@ -35,16 +35,16 @@ export default function MobileLayout() {
   const activeTab = TABS.find((tab) => location.pathname.startsWith(tab.path));
 
   return (
-    <div className="mobile-layout-container flex flex-col bg-nocturne-bg-primary text-nocturne-text-primary">
+    <div className="mobile-layout-container flex flex-col bg-[var(--bg-base)] text-[var(--text-primary)]">
       {/* Top Bar */}
       <div
-        className="h-12 flex-shrink-0 border-b border-[var(--color-border)] bg-nocturne-bg-secondary flex items-center px-4 gap-3"
+        className="h-12 flex-shrink-0 border-b border-[var(--border)] bg-[var(--surface)] flex items-center px-4 gap-3"
         style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
       >
         {isSettings ? (
           <NavLink
             to="/m/soul"
-            className="text-nocturne-text-secondary hover:text-nocturne-text-primary p-1"
+            className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] p-1"
           >
             ← <span className="text-sm">{t("settings.back")}</span>
           </NavLink>
@@ -69,7 +69,7 @@ export default function MobileLayout() {
       </div>
 
       {/* Bottom Tab Bar */}
-      <nav className="mobile-tab-bar h-14 flex-shrink-0 border-t border-[var(--color-border)] bg-nocturne-bg-secondary flex">
+      <nav className="mobile-tab-bar h-14 flex-shrink-0 border-t border-[var(--border)] bg-[var(--surface)] flex">
         {TABS.map((tab) => {
           const Icon = tab.icon;
           return (
@@ -81,8 +81,8 @@ export default function MobileLayout() {
                   "flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors",
                   "border-t-2",
                   isActive
-                    ? `border-${tab.color}-500 text-${tab.color}-400`
-                    : "border-transparent text-nocturne-text-muted"
+                    ? "border-[var(--accent)] text-[var(--text-primary)]"
+                    : "border-transparent text-[var(--text-muted)]"
                 )
               }
             >
@@ -99,7 +99,7 @@ export default function MobileLayout() {
             localStorage.setItem("mobile_preference", "desktop");
             window.location.replace("/review");
           }}
-          className="flex items-center justify-center px-1 text-nocturne-text-muted hover:text-nocturne-text-secondary"
+          className="flex items-center justify-center px-1 text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
           title={t("nav.switchDesktop")}
         >
           <span className="text-[10px]">🖥</span>

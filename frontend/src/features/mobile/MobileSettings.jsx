@@ -90,7 +90,7 @@ export default function MobileSettings() {
       <div className="flex items-center justify-center h-full">
         <RefreshCw
           size={20}
-          className="animate-spin text-nocturne-text-muted"
+          className="animate-spin text-[var(--text-muted)]"
         />
       </div>
     );
@@ -99,15 +99,15 @@ export default function MobileSettings() {
   return (
     <div className="flex flex-col h-full">
       {/* Tab bar */}
-      <div className="flex-shrink-0 border-b border-[var(--color-border)] bg-nocturne-bg-secondary flex overflow-x-auto">
+      <div className="flex-shrink-0 border-b border-[var(--border)] bg-[var(--surface)] flex overflow-x-auto">
         {TABS.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`flex-shrink-0 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
               activeTab === tab.id
-                ? "border-indigo-500 text-indigo-400"
-                : "border-transparent text-nocturne-text-secondary"
+                ? "border-[var(--accent)] text-[var(--text-muted)]"
+                : "border-transparent text-[var(--text-secondary)]"
             }`}
           >
             {t(tab.labelKey)}
@@ -153,7 +153,7 @@ export default function MobileSettings() {
         {activeTab === "soul" && settings && (
           <div>
             {/* Soul settings are managed through the Soul page */}
-            <p className="text-sm text-nocturne-text-muted text-center py-8">
+            <p className="text-sm text-[var(--text-muted)] text-center py-8">
               Soul settings are managed on the Soul page.
             </p>
           </div>

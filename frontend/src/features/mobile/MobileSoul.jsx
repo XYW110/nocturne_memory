@@ -29,7 +29,7 @@ export default function MobileSoul() {
   return (
     <div className="flex flex-col h-full">
       {/* Tab bar */}
-      <div className="flex-shrink-0 border-b border-[var(--color-border)] bg-nocturne-bg-secondary flex">
+      <div className="flex-shrink-0 border-b border-[var(--border)] bg-[var(--surface)] flex">
         {TABS.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -40,8 +40,8 @@ export default function MobileSoul() {
               className={clsx(
                 "flex-1 flex items-center justify-center gap-1.5 py-3 text-sm font-medium border-b-2 transition-colors",
                 isActive
-                  ? "border-rose-500 text-rose-400 bg-nocturne-bg-tertiary/30"
-                  : "border-transparent text-nocturne-text-secondary hover:text-nocturne-text-primary"
+                  ? "border-[var(--accent)] text-[var(--text-primary)] bg-[var(--surface)]"
+                  : "border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
               )}
             >
               <Icon size={16} />
@@ -68,10 +68,10 @@ export default function MobileSoul() {
       </div>
 
       {/* Settings link */}
-      <div className="flex-shrink-0 border-t border-[var(--color-border)] bg-nocturne-bg-secondary px-4 py-2">
+      <div className="flex-shrink-0 border-t border-[var(--border)] bg-[var(--surface)] px-4 py-2">
         <NavLink
           to="/m/settings"
-          className="flex items-center justify-center gap-1 text-sm text-nocturne-text-muted hover:text-nocturne-text-secondary py-2"
+          className="flex items-center justify-center gap-1 text-sm text-[var(--text-muted)] hover:text-[var(--text-secondary)] py-2"
         >
           ⚙ {t("soul.settingsEntry")}
         </NavLink>

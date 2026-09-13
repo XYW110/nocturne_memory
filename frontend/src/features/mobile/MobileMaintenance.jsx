@@ -205,8 +205,8 @@ export default function MobileMaintenance() {
   return (
     <div className="flex flex-col h-full">
       {/* Header: log stats + clear */}
-      <div className="flex-shrink-0 border-b border-[var(--color-border)] bg-nocturne-bg-secondary px-4 py-3 flex items-center justify-between">
-        <div className="text-xs text-nocturne-text-muted">
+      <div className="flex-shrink-0 border-b border-[var(--border)] bg-[var(--surface)] px-4 py-3 flex items-center justify-between">
+        <div className="text-xs text-[var(--text-muted)]">
           {logStats ? (
             <span>
               Logs: {logStats.count} entries
@@ -219,7 +219,7 @@ export default function MobileMaintenance() {
         <div className="flex gap-2">
           <button
             onClick={handleClearLogs}
-            className="px-2 py-1 text-xs rounded bg-amber-600/20 text-amber-400 hover:bg-amber-600/30"
+            className="px-2 py-1 text-xs rounded bg-[var(--semantic-warning-bg)] text-[var(--semantic-warning-fg)] hover:opacity-80"
           >
             {t("maintenance.action.clearLogs")}
           </button>
@@ -228,7 +228,7 @@ export default function MobileMaintenance() {
               loadOrphans();
               loadLogStats();
             }}
-            className="p-1 text-nocturne-text-muted hover:text-nocturne-text-secondary"
+            className="p-1 text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
           >
             <RefreshCw size={16} />
           </button>
@@ -238,26 +238,26 @@ export default function MobileMaintenance() {
       {/* Content */}
       <div className="flex-1 min-h-0 overflow-y-auto">
         {loading ? (
-          <div className="text-center text-nocturne-text-muted text-sm mt-8">
+          <div className="text-center text-[var(--text-muted)] text-sm mt-8">
             Scanning…
           </div>
         ) : error ? (
-          <div className="text-center text-red-400 text-sm mt-8">{error}</div>
+          <div className="text-center text-[var(--semantic-danger-fg)] text-sm mt-8">{error}</div>
         ) : orphans.length === 0 ? (
           <div className="text-center mt-8">
-            <div className="text-lg font-medium text-nocturne-text-primary">
+            <div className="text-lg font-medium text-[var(--text-primary)]">
               {t("maintenance.empty.title")}
             </div>
-            <div className="text-sm text-nocturne-text-muted mt-1">
+            <div className="text-sm text-[var(--text-muted)] mt-1">
               {t("maintenance.empty.desc")}
             </div>
           </div>
         ) : (
-          <div className="divide-y divide-[var(--color-border)]">
+          <div className="divide-y divide-[var(--border)]">
             {/* Deprecated section */}
             {deprecated.length > 0 && (
               <div>
-                <div className="px-4 py-2 text-xs font-semibold text-amber-400 bg-nocturne-bg-tertiary/50">
+                <div className="px-4 py-2 text-xs font-semibold text-[var(--semantic-warning-fg)] bg-[var(--surface)]">
                   {t("maintenance.section.deprecated")} ({deprecated.length})
                 </div>
                 {deprecated.map((item) => (
@@ -283,7 +283,7 @@ export default function MobileMaintenance() {
             {/* Orphaned section */}
             {orphaned.length > 0 && (
               <div>
-                <div className="px-4 py-2 text-xs font-semibold text-rose-400 bg-nocturne-bg-tertiary/50">
+                <div className="px-4 py-2 text-xs font-semibold text-[var(--semantic-danger-fg)] bg-[var(--surface)]">
                   {t("maintenance.section.orphaned")} ({orphaned.length})
                 </div>
                 {orphaned.map((item) => (
@@ -311,17 +311,17 @@ export default function MobileMaintenance() {
 
       {/* Floating batch delete button */}
       {selectedIds.size > 0 && (
-        <div className="flex-shrink-0 border-t border-[var(--color-border)] bg-nocturne-bg-secondary px-4 py-3 flex items-center gap-3">
+        <div className="flex-shrink-0 border-t border-[var(--border)] bg-[var(--surface)] px-4 py-3 flex items-center gap-3">
           <button
             onClick={() => setSelectedIds(new Set())}
-            className="text-xs text-nocturne-text-muted hover:text-nocturne-text-secondary"
+            className="text-xs text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
           >
             {t("maintenance.select.none")}
           </button>
           <button
             onClick={handleBatchDelete}
             disabled={batchDeleting}
-            className="flex-1 h-10 rounded-lg bg-red-600/80 text-white text-sm font-medium hover:bg-red-600 flex items-center justify-center gap-2"
+            className="flex-1 h-10 rounded-lg bg-[var(--semantic-danger-fg)] text-white text-sm font-medium hover:opacity-90 flex items-center justify-center gap-2"
           >
             {batchDeleting ? (
               <Loader2 size={16} className="animate-spin" />
@@ -358,7 +358,7 @@ function MemoryItem({
 }) {
   return (
     <div
-      className="px-4 py-3 hover:bg-nocturne-bg-tertiary/30 cursor-pointer"
+      className="px-4 py-3 hover:bg-[var(--surface-solid)]/30 cursor-pointer"
       onTouchStart={selectMode ? undefined : onTouchStart}
       onTouchEnd={onTouchEnd}
       onMouseDown={selectMode ? undefined : onTouchStart}
@@ -375,22 +375,22 @@ function MemoryItem({
         {selectMode && (
           <span className="flex-shrink-0">
             {selected ? (
-              <CheckSquare size={16} className="text-indigo-400" />
+              <CheckSquare size={16} className="text-[var(--text-muted)]" />
             ) : (
-              <Square size={16} className="text-nocturne-text-muted" />
+              <Square size={16} className="text-[var(--text-muted)]" />
             )}
           </span>
         )}
         <div className="flex-1 min-w-0">
-          <div className="text-sm text-nocturne-text-primary truncate">
+          <div className="text-sm text-[var(--text-primary)] truncate">
             {item.display_uri || item.uri || `Memory #${item.id}`}
           </div>
-          <div className="text-xs text-nocturne-text-muted mt-0.5">
+          <div className="text-xs text-[var(--text-muted)] mt-0.5">
             {item.is_deprecated ? "Deprecated" : "Orphaned"}
             {item.timestamp && ` · ${item.timestamp}`}
           </div>
         </div>
-        <span className="flex-shrink-0 text-nocturne-text-muted">
+        <span className="flex-shrink-0 text-[var(--text-muted)]">
           {expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </span>
       </div>
@@ -399,7 +399,7 @@ function MemoryItem({
       {expanded && (
         <div className="mt-3 space-y-3">
           {detailLoading ? (
-            <div className="text-center text-nocturne-text-muted text-xs">
+            <div className="text-center text-[var(--text-muted)] text-xs">
               Loading…
             </div>
           ) : detail ? (
@@ -413,14 +413,14 @@ function MemoryItem({
                   e.stopPropagation();
                   onRestore();
                 }}
-                className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300"
+                className="flex items-center gap-1 text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]"
               >
                 <Undo2 size={14} />
                 {t("maintenance.detail.restore")}
               </button>
             </>
           ) : (
-            <div className="text-xs text-nocturne-text-muted">
+            <div className="text-xs text-[var(--text-muted)]">
               Failed to load details
             </div>
           )}

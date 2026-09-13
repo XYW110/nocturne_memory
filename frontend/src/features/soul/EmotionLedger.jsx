@@ -10,20 +10,20 @@ function LedgerEntry({ entry, t }) {
   const when = entry.created_at ? entry.created_at.slice(0, 16).replace('T', ' ') : '';
 
   return (
-    <div className="border border-[var(--color-border)] rounded-md bg-nocturne-bg-primary/40">
+    <div className="border border-[var(--border)] rounded-md bg-[var(--surface)]">
       <button
         onClick={() => setOpen(o => !o)}
-        className="w-full flex items-center gap-2 px-2.5 py-1.5 text-left hover:bg-nocturne-bg-tertiary/40"
+        className="w-full flex items-center gap-2 px-2.5 py-1.5 text-left hover:bg-[var(--surface)]"
       >
-        {open ? <ChevronDown size={12} className="text-nocturne-text-muted" /> : <ChevronRight size={12} className="text-nocturne-text-muted" />}
-        <span className="text-[11px] text-nocturne-text-muted font-mono">{when}</span>
+        {open ? <ChevronDown size={12} className="text-[var(--text-muted)]" /> : <ChevronRight size={12} className="text-[var(--text-muted)]" />}
+        <span className="text-[11px] text-[var(--text-muted)] font-mono">{when}</span>
         <span className="flex-1 flex flex-wrap gap-1 justify-end">
           {changed.map(([d, delta]) => (
             <span
               key={d}
               className={clsx(
                 'text-[10px] px-1.5 py-0.5 rounded font-mono',
-                delta > 0 ? 'bg-emerald-500/10 text-emerald-400' : 'bg-red-500/10 text-red-400'
+                delta > 0 ? 'bg-[var(--semantic-success-bg)] text-[var(--semantic-success-fg)]' : 'bg-[var(--semantic-danger-bg)] text-[var(--semantic-danger-fg)]'
               )}
             >
               {t(`settings.emotion.dim.${d}`)}{delta > 0 ? '+' : ''}{delta}
@@ -32,9 +32,9 @@ function LedgerEntry({ entry, t }) {
         </span>
       </button>
       {open && (
-        <div className="px-3 pb-2 pt-1 text-xs text-nocturne-text-secondary border-t border-[var(--color-border-strong)] space-y-1">
+        <div className="px-3 pb-2 pt-1 text-xs text-[var(--text-secondary)] border-t border-[var(--border-strong)] space-y-1">
           <p className="whitespace-pre-wrap leading-relaxed">{entry.reason}</p>
-          {entry.context && <p className="text-nocturne-text-muted italic">{entry.context}</p>}
+          {entry.context && <p className="text-[var(--text-muted)] italic">{entry.context}</p>}
         </div>
       )}
     </div>
@@ -63,7 +63,7 @@ export default function EmotionLedger({ refreshTrigger = 0 }) {
   useEffect(() => { load(); }, [load, refreshTrigger]);
 
   if (loading) {
-    return <div className="pt-2 text-sm text-nocturne-text-muted flex items-center gap-2"><RefreshCw size={14} className="animate-spin" /></div>;
+    return <div className="pt-2 text-sm text-[var(--text-muted)] flex items-center gap-2"><RefreshCw size={14} className="animate-spin" /></div>;
   }
 
   if (error) {
@@ -72,13 +72,13 @@ export default function EmotionLedger({ refreshTrigger = 0 }) {
 
   return (
     <div className="space-y-3 pt-2">
-      <div className="flex items-center gap-1.5 text-xs text-nocturne-text-secondary">
-        <Heart size={12} className="text-rose-400" />
+      <div className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)]">
+        <Heart size={12} className="text-[var(--text-muted)]" />
         {t('settings.emotion.ledger_title')}
       </div>
       <div className="space-y-1.5">
         {entries.length === 0 ? (
-          <p className="text-[11px] text-nocturne-text-muted italic">{t('settings.emotion.ledger_empty')}</p>
+          <p className="text-[11px] text-[var(--text-muted)] italic">{t('settings.emotion.ledger_empty')}</p>
         ) : (
           entries.map(entry => <LedgerEntry key={entry.id} entry={entry} t={t} />)
         )}

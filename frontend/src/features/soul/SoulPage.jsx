@@ -24,9 +24,9 @@ export default function SoulPage() {
   return (
     <div className="flex flex-col h-full">
       {/* Header with secondary tabs */}
-      <div className="border-b border-[var(--color-border)] bg-nocturne-bg-tertiary/40 px-6 pt-4 flex-shrink-0">
-        <h1 className="text-xl font-bold text-nocturne-text-primary flex items-center gap-2 mb-3">
-          <Heart className="text-rose-400" size={20} />
+      <div className="border-b border-[var(--border)] bg-[var(--surface)] px-6 pt-4 flex-shrink-0">
+        <h1 className="text-xl font-bold text-[var(--text-primary)] flex items-center gap-2 mb-3">
+          <Heart className="text-[var(--text-secondary)]" size={20} />
           {t("app.nav.soul")}
         </h1>
         <div className="flex gap-6">
@@ -40,8 +40,8 @@ export default function SoulPage() {
                 className={clsx(
                   "flex items-center gap-2 pb-3 text-sm font-medium border-b-2 transition-all",
                   isActive
-                    ? "border-rose-500 text-rose-300"
-                    : "border-transparent text-nocturne-text-secondary hover:text-nocturne-text-primary hover:border-[var(--color-border-light)]"
+                    ? "border-[var(--accent)] text-[var(--text-primary)]"
+                    : "border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-[var(--border-strong)]"
                 )}
               >
                 <Icon size={16} />
@@ -62,14 +62,14 @@ export default function SoulPage() {
 
         {activeTab === "emotion" && (
           <div className="max-w-3xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-200">
-            <section className="bg-nocturne-bg-tertiary/40 border border-[var(--color-border)] rounded-lg p-4">
-              <h2 className="text-sm font-semibold text-nocturne-text-primary flex items-center gap-2 mb-1">
-                <Heart size={14} className="text-rose-400" />
+            <section className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-lg)] p-4 shadow-[var(--island-shadow-soft)]">
+              <h2 className="text-sm font-semibold text-[var(--text-primary)] flex items-center gap-2 mb-1">
+                <Heart size={14} className="text-[var(--text-secondary)]" />
                 {t("app.soul.tab_emotion")}
               </h2>
               <EmotionPanel refreshTrigger={soulVersion} />
             </section>
-            <section className="bg-nocturne-bg-tertiary/40 border border-[var(--color-border)] rounded-lg p-4">
+            <section className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-lg)] p-4 shadow-[var(--island-shadow-soft)]">
               <EmotionLedger refreshTrigger={soulVersion} />
             </section>
           </div>

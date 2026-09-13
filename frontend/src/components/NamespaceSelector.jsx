@@ -66,7 +66,7 @@ export default function NamespaceSelector() {
 
   return (
     <div className="flex items-center gap-2 text-sm">
-      <Layers size={14} className="text-nocturne-text-muted flex-shrink-0" />
+      <Layers size={14} className="text-[var(--text-muted)] flex-shrink-0" />
       {showInput ? (
         <input
           autoFocus
@@ -76,13 +76,13 @@ export default function NamespaceSelector() {
           onKeyDown={handleInputKeyDown}
           onBlur={() => setShowInput(false)}
           placeholder="namespace (Enter to apply)"
-          className="bg-nocturne-bg-tertiary border border-indigo-500 text-nocturne-text-primary rounded px-2 py-1 text-xs w-40 focus:outline-none"
+          className="bg-[var(--surface-solid)] border border-[var(--accent)] text-[var(--text-primary)] rounded px-2 py-1 text-xs w-40 focus:outline-none"
         />
       ) : (
         <select
           value={selected}
           onChange={handleSelectChange}
-          className="bg-nocturne-bg-tertiary border border-[var(--color-border-light)] text-nocturne-text-primary rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          className="bg-[var(--surface-solid)] border border-[var(--border)] text-[var(--text-primary)] rounded px-2 py-1 text-xs focus:outline-none focus:shadow-[var(--focus-ring)]"
           title={`Current namespace: ${activeLabel}`}
         >
           <option value="">(default)</option>

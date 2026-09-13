@@ -104,12 +104,12 @@ export default function MobileMemory() {
   return (
     <div className="flex flex-col h-full">
       {/* Top bar: domain dropdown + search */}
-      <div className="flex-shrink-0 border-b border-[var(--color-border)] bg-nocturne-bg-secondary p-3 space-y-2">
+      <div className="flex-shrink-0 border-b border-[var(--border)] bg-[var(--surface)] p-3 space-y-2">
         <div className="flex gap-2">
           <select
             value={selectedDomain}
             onChange={handleDomainChange}
-            className="flex-1 bg-nocturne-bg-tertiary border border-[var(--color-border-light)] text-nocturne-text-primary rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            className="flex-1 bg-[var(--surface-solid)] border border-[var(--border)] text-[var(--text-primary)] rounded px-3 py-2 text-sm focus:outline-none focus:shadow-[var(--focus-ring)]"
           >
             <option value="">{t("memory.domain.all")}</option>
             {domains.map((d) => (
@@ -125,11 +125,11 @@ export default function MobileMemory() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder={t("memory.search.placeholder")}
-            className="flex-1 bg-nocturne-bg-tertiary border border-[var(--color-border-light)] text-nocturne-text-primary rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            className="flex-1 bg-[var(--surface-solid)] border border-[var(--border)] text-[var(--text-primary)] rounded px-3 py-2 text-sm focus:outline-none focus:shadow-[var(--focus-ring)]"
           />
           <button
             type="submit"
-            className="px-3 py-2 bg-indigo-600 text-white rounded text-sm hover:bg-indigo-500"
+            className="px-3 py-2 bg-[var(--accent)] text-white rounded text-sm hover:opacity-90"
           >
             <Search size={16} />
           </button>
@@ -143,17 +143,17 @@ export default function MobileMemory() {
           <div>
             <button
               onClick={handleClearSearch}
-              className="flex items-center gap-1 text-sm text-nocturne-text-muted hover:text-nocturne-text-secondary mb-3"
+              className="flex items-center gap-1 text-sm text-[var(--text-muted)] hover:text-[var(--text-secondary)] mb-3"
             >
               <ArrowLeft size={14} />
               {t("memory.search.back")}
             </button>
             {searching ? (
-              <div className="text-center text-nocturne-text-muted text-sm">
+              <div className="text-center text-[var(--text-muted)] text-sm">
                 Searching…
               </div>
             ) : searchResults.length === 0 ? (
-              <div className="text-center text-nocturne-text-muted text-sm mt-8">
+              <div className="text-center text-[var(--text-muted)] text-sm mt-8">
                 {t("memory.search.noResults", { query: searchQuery })}
               </div>
             ) : (
@@ -170,12 +170,12 @@ export default function MobileMemory() {
         {searchResults === null && (
           <>
             {loading && (
-              <div className="text-center text-nocturne-text-muted text-sm mt-8">
+              <div className="text-center text-[var(--text-muted)] text-sm mt-8">
                 Loading…
               </div>
             )}
             {error && (
-              <div className="text-center text-red-400 text-sm mt-8">
+              <div className="text-center text-[var(--semantic-danger-fg)] text-sm mt-8">
                 {error}
               </div>
             )}
@@ -201,7 +201,7 @@ export default function MobileMemory() {
               </div>
             )}
             {!loading && !error && !data && !selectedDomain && (
-              <div className="text-center text-nocturne-text-muted text-sm mt-8">
+              <div className="text-center text-[var(--text-muted)] text-sm mt-8">
                 {t("memory.empty.noDomain")}
               </div>
             )}

@@ -154,14 +154,14 @@ export default function MobileReview() {
     return (
       <div className="flex flex-col h-full">
         {/* Header with back button */}
-        <div className="h-12 flex-shrink-0 border-b border-[var(--color-border)] bg-nocturne-bg-secondary flex items-center px-4 gap-3">
+        <div className="h-12 flex-shrink-0 border-b border-[var(--border)] bg-[var(--surface)] flex items-center px-4 gap-3">
           <button
             onClick={handleBackToList}
-            className="text-nocturne-text-secondary hover:text-nocturne-text-primary text-sm"
+            className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-sm"
           >
             ← {t("review.detail.back")}
           </button>
-          <span className="text-sm font-semibold truncate text-indigo-400">
+          <span className="text-sm font-semibold truncate text-[var(--text-muted)]">
             {selectedChange.display_uri}
           </span>
         </div>
@@ -169,12 +169,12 @@ export default function MobileReview() {
         {/* Diff content */}
         <div className="flex-1 min-h-0 overflow-y-auto p-4">
           {diffError ? (
-            <div className="text-red-400 text-sm">{diffError}</div>
+            <div className="text-[var(--semantic-danger-fg)] text-sm">{diffError}</div>
           ) : diffData ? (
             <div className="space-y-4">
               {/* Action badge */}
               <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded text-xs font-medium bg-indigo-500/20 text-indigo-400">
+                <span className="px-2 py-0.5 rounded text-xs font-medium bg-[var(--semantic-info-bg)] text-[var(--semantic-info-fg)]">
                   {diffData.action === "created"
                     ? t("review.detail.created")
                     : diffData.action === "deleted"
@@ -182,7 +182,7 @@ export default function MobileReview() {
                     : t("review.detail.modified")}
                 </span>
                 {diffData.row_count != null && (
-                  <span className="text-xs text-nocturne-text-muted">
+                  <span className="text-xs text-[var(--text-muted)]">
                     {t("review.detail.rowsAffected", {
                       count: diffData.row_count,
                     })}
@@ -195,23 +195,23 @@ export default function MobileReview() {
               />
             </div>
           ) : (
-            <div className="text-center text-nocturne-text-muted text-sm mt-8">
+            <div className="text-center text-[var(--text-muted)] text-sm mt-8">
               Loading…
             </div>
           )}
         </div>
 
         {/* Bottom fixed action bar */}
-        <div className="h-14 flex-shrink-0 border-t border-[var(--color-border)] bg-nocturne-bg-secondary flex gap-3 px-4 items-center">
+        <div className="h-14 flex-shrink-0 border-t border-[var(--border)] bg-[var(--surface)] flex gap-3 px-4 items-center">
           <button
             onClick={handleReject}
-            className="flex-1 h-10 rounded-lg border border-red-500/30 text-red-400 text-sm font-medium hover:bg-red-500/10"
+            className="flex-1 h-10 rounded-lg border border-[var(--semantic-danger-fg)] text-[var(--semantic-danger-fg)] text-sm font-medium hover:bg-[var(--semantic-danger-bg)]"
           >
             {t("review.action.reject")}
           </button>
           <button
             onClick={handleApprove}
-            className="flex-1 h-10 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-500"
+            className="flex-1 h-10 rounded-lg bg-[var(--accent)] text-white text-sm font-medium hover:opacity-90"
           >
             {t("review.action.approve")}
           </button>
@@ -227,10 +227,10 @@ export default function MobileReview() {
     <div className="flex flex-col h-full">
       {/* Integrate All button */}
       {changes.length > 0 && (
-        <div className="flex-shrink-0 px-4 py-3 border-b border-[var(--color-border)]">
+        <div className="flex-shrink-0 px-4 py-3 border-b border-[var(--border)]">
           <button
             onClick={handleIntegrateAll}
-            className="w-full h-10 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-500 flex items-center justify-center gap-2"
+            className="w-full h-10 rounded-lg bg-[var(--accent)] text-white text-sm font-medium hover:opacity-90 flex items-center justify-center gap-2"
           >
             <Check size={16} />
             {t("review.action.integrateAll")}
@@ -241,11 +241,11 @@ export default function MobileReview() {
       {/* Change list */}
       <div className="flex-1 min-h-0 overflow-y-auto">
         {loading ? (
-          <div className="text-center text-nocturne-text-muted text-sm mt-8">
+          <div className="text-center text-[var(--text-muted)] text-sm mt-8">
             Loading…
           </div>
         ) : changes.length === 0 ? (
-          <div className="text-center text-nocturne-text-muted text-sm mt-8">
+          <div className="text-center text-[var(--text-muted)] text-sm mt-8">
             {t("review.empty")}
           </div>
         ) : (
