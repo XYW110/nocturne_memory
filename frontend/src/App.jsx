@@ -103,13 +103,13 @@ function NamespaceSelector() {
           onKeyDown={handleInputKeyDown}
           onBlur={() => setShowInput(false)}
           placeholder="namespace (Enter to apply)"
-          className="bg-[var(--surface-solid)] border border-[var(--border)] text-[var(--text-primary)] rounded-[var(--radius-sm)] px-2 py-1 text-xs w-40 focus:outline-none focus:shadow-[var(--focus-ring)]"
+          className="bg-[var(--surface-solid)] border border-[var(--border)] text-[var(--text-primary)] rounded-[var(--radius-sm)] px-2 py-1 text-xs w-40 max-[860px]:min-[641px]:w-32 focus:outline-none focus:shadow-[var(--focus-ring)]"
         />
       ) : (
         <select
           value={selected}
           onChange={handleSelectChange}
-          className="bg-[var(--surface-solid)] border border-[var(--border)] text-[var(--text-primary)] rounded-[var(--radius-sm)] px-2 py-1 text-xs focus:outline-none focus:shadow-[var(--focus-ring)]"
+          className="bg-[var(--surface-solid)] border border-[var(--border)] text-[var(--text-primary)] rounded-[var(--radius-sm)] px-2 py-1 text-xs max-[860px]:min-[641px]:w-32 focus:outline-none focus:shadow-[var(--focus-ring)]"
           title={`Current namespace: ${activeLabel}`}
         >
           <option value="">(default)</option>
@@ -141,13 +141,13 @@ function Layout() {
   return (
     <div className="flex flex-col h-screen bg-[var(--bg-base)] p-[var(--gap-island)] gap-[var(--gap-island)]">
       {/* Top Navigation Bar (island card) */}
-      <div className="h-12 rounded-[var(--radius-xl)] bg-[var(--surface)] shadow-[var(--island-shadow)] border border-[var(--border)] flex items-center px-4 gap-6 flex-shrink-0 z-10 max-[720px]:px-2.5 max-[720px]:gap-3 overflow-hidden">
+      <div className="h-12 rounded-[var(--radius-xl)] bg-[var(--surface)] shadow-[var(--island-shadow)] border border-[var(--border)] flex items-center px-4 gap-6 flex-shrink-0 z-10 max-[720px]:px-2.5 max-[720px]:gap-3 max-[860px]:min-[641px]:h-auto max-[860px]:min-[641px]:flex-wrap max-[860px]:min-[641px]:py-2 max-[860px]:min-[641px]:gap-x-4 max-[860px]:min-[641px]:gap-y-2 overflow-hidden">
         <div className="font-bold text-[var(--text-primary)] flex items-center gap-2 mr-4 whitespace-nowrap max-[640px]:mr-0 max-[640px]:hidden">
           <LayoutGrid className="w-5 h-5 text-[var(--text-primary)] flex-shrink-0" />
           <span data-testid="app-brand">{t('app.nav.brand')}</span>
         </div>
 
-        <nav className="flex items-center gap-1 h-full">
+        <nav className="flex items-center gap-1 h-full max-[860px]:min-[641px]:order-last max-[860px]:min-[641px]:w-full max-[860px]:min-[641px]:justify-center">
           <NavLink
             to="/review"
             className={navLinkClass}

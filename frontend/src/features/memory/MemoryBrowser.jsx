@@ -451,9 +451,9 @@ export default function MemoryBrowser() {
 
       {/* Main Area */}
       <div className="flex-1 flex flex-col min-w-0 bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius-xl)] shadow-[var(--island-shadow)] relative overflow-hidden">
-         <div className="h-14 flex-shrink-0 border-b border-[var(--border)] flex items-center px-6 sticky top-0 z-20 gap-4">
+         <div className="h-14 flex-shrink-0 border-b border-[var(--border)] flex items-center px-6 sticky top-0 z-20 gap-4 max-[640px]:h-auto max-[640px]:flex-col max-[640px]:items-stretch max-[640px]:gap-2 max-[640px]:py-2 max-[640px]:px-4">
              <Breadcrumb items={data.breadcrumbs} onNavigate={navigateTo} />
-             <div className="ml-auto relative flex-shrink-0 w-72">
+             <div className="ml-auto relative flex-shrink-0 w-72 max-[640px]:w-full">
                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-faint)] pointer-events-none" />
                <input
                  type="text"
