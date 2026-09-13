@@ -36,3 +36,28 @@
 ### Status
 
 [OK] **Completed**
+
+## Session 2: snow-app 设计体系迁移到 Penpot(P1 令牌 + P2 组件 + P3 布局样例)
+<!-- trellis-session: v=2 fp=penpot-migration -->
+
+**Date**: 2026-09-13
+**Task**: 09-13-snow-app-to-penpot(已归档)
+**Branch**: `main`
+
+### Summary
+
+OpenDesign 沉淀的 user:snow-app 设计体系完整迁移至 Penpot(SaaS):P1 转换脚本(tokens.css 级联 → 24 组合 resolved → DTCG sets,内置断言全过)+ MCP 导入(24 sets / 24 themes / 778 tokens);D1 实测判定——Penpot 多主题是集合并集+静态顺序,基线+覆盖建模必污染一侧,采用 flat-24 备选,4 组合 14/14 验证;P2 重建 18 个组件为 token 绑定的可复用 components(applyToken,切主题即换肤,github/dark 实测),逐个导出目视验收并修复两类系统性误绑;P3 补做 Layouts 页 1280×800 应用壳样例(三岛顶栏+侧栏+队列+聊天区,内嵌 list-row 组件实例)。12+ 条 Penpot MCP 实测坑沉淀为 `.trellis/spec/penpot/index.md`
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `6e4afc8` | feat(task): snow-app to Penpot P1 — DTCG token conversion + flat-24 theme import verified |
+| `15b569e` | feat(task): snow-app to Penpot P2 — 18 components rebuilt as token-bound Penpot components |
+| `96e4625` | docs(spec): penpot MCP automation code-spec |
+| `4b068bd` | chore(task): archive 09-13-snow-app-to-penpot |
+| `f98fc42` | feat(task): snow-app to Penpot P3 — app-shell layout sample on Layouts page |
+
+### Status
+
+[OK] **Completed**(PRD 验收 5/5;P3 可选项已做)
