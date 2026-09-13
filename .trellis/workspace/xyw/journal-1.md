@@ -202,3 +202,28 @@ OpenDesign 沉淀的 user:snow-app 设计体系完整迁移至 Penpot(SaaS):P1 �
 ### Next Steps
 
 - None - task complete
+
+
+## Session 6: merge XYW110 fork; soul/mobile snow-app restyle
+<!-- trellis-session: v=2 fp=dd038ab13e26f2f4 -->
+
+**Date**: 2026-09-13
+**Task**: merge XYW110 fork; soul/mobile snow-app restyle
+**Branch**: `main`
+
+### Summary
+
+Fixed wrong origin (Dataojitori -> XYW110), merged the diverged June line (49 commits: /m/* mobile, soul templates, Docker/CI) with the September line, resolved 66 conflicts (snow-app tokens win for style, June features ported), then ported soul page + mobile views onto the token layer and rebuilt all three soul tabs as full-width island dashboards.
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `fdbcf21` | Merge remote-tracking branch 'origin/main' |
+| `057f331` | style(frontend): port soul page & mobile views to snow-app token layer |
+| `e2fb324` | style(frontend): soul page adopts the island layout skeleton |
+| `acad90c` | style(frontend): soul tabs fill the wide viewport |
+
+### Status
+
+[OK] **Completed**

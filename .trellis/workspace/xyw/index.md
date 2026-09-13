@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 1
+- **Total Sessions**: 6
 - **Last Active**: 2026-09-13
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~38 | Active |
+| `journal-1.md` | ~229 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 6 | 2026-09-13 | merge XYW110 fork; soul/mobile snow-app restyle | `fdbcf21`, `057f331`, `e2fb324`, `acad90c` | `main` |
 | 1 | 2026-09-13 | snow-app 风格落地 nocturne_memory 前端 + OpenDesign 个人设计体系 | `0484477`, `3e3f2d5`, `c29e558`, `a6f0be0`, `508b7a8`, `a68d769`, `30f201b`, `f6153a1`, `b07d9db`, `8ff7a4f` | `main` |
 <!-- @@@/auto:session-history -->
 
