@@ -1,0 +1,29 @@
+{
+  "tokenSetOrder": [
+    "light",
+    "dark",
+    "preset-light/midnight-blue",
+    "preset-dark/midnight-blue",
+    "preset-light/forest-green",
+    "preset-dark/forest-green",
+    "preset-light/rose-pink",
+    "preset-dark/rose-pink",
+    "preset-light/solarized",
+    "preset-dark/solarized",
+    "preset-light/nord",
+    "preset-dark/nord",
+    "preset-light/dracula",
+    "preset-dark/dracula",
+    "preset-light/tokyo-night",
+    "preset-dark/tokyo-night",
+    "preset-light/github",
+    "preset-dark/github",
+    "preset-light/google",
+    "preset-dark/google",
+    "preset-light/gruvbox",
+    "preset-dark/gruvbox",
+    "preset-light/cream",
+    "preset-dark/cream"
+  ],
+  "note": "预设覆盖集排在基线之后:假设 Penpot 后激活/靠后 set 覆盖靠前 set,P1 导入后实测验证"
+}

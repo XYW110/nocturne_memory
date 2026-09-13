@@ -1,0 +1,42 @@
+{
+  "bg.base": {
+    "$type": "color",
+    "$value": "#E8F0E8"
+  },
+  "surface.base": {
+    "$type": "color",
+    "$value": "#F7FAF7"
+  },
+  "surface.2": {
+    "$type": "color",
+    "$value": "#EDF5ED"
+  },
+  "surface.3": {
+    "$type": "color",
+    "$value": "#DCE8DC"
+  },
+  "surface.hover": {
+    "$type": "color",
+    "$value": "#EDF5ED"
+  },
+  "surface.active": {
+    "$type": "color",
+    "$value": "#DCE8DC"
+  },
+  "surface.chrome": {
+    "$type": "color",
+    "$value": "#F5FAF5"
+  },
+  "semantic.success.fg": {
+    "$type": "color",
+    "$value": "#14532D"
+  },
+  "semantic.info.bg": {
+    "$type": "color",
+    "$value": "#CCFBF1"
+  },
+  "semantic.info.fg": {
+    "$type": "color",
+    "$value": "#115E59"
+  }
+}

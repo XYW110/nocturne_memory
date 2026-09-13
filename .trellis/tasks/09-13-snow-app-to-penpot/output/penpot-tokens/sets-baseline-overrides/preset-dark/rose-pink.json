@@ -1,0 +1,82 @@
+{
+  "bg.base": {
+    "$type": "color",
+    "$value": "#120A10"
+  },
+  "surface.base": {
+    "$type": "color",
+    "$value": "#1A0F15"
+  },
+  "surface.2": {
+    "$type": "color",
+    "$value": "#241420"
+  },
+  "surface.3": {
+    "$type": "color",
+    "$value": "#311A28"
+  },
+  "surface.hover": {
+    "$type": "color",
+    "$value": "#2A1622"
+  },
+  "surface.active": {
+    "$type": "color",
+    "$value": "#3A1F2E"
+  },
+  "surface.chrome": {
+    "$type": "color",
+    "$value": "#1F1220"
+  },
+  "border.base": {
+    "$type": "color",
+    "$value": "#3A1F2E"
+  },
+  "border.strong": {
+    "$type": "color",
+    "$value": "#4A2A3A"
+  },
+  "text.primary": {
+    "$type": "color",
+    "$value": "#FDF2F8"
+  },
+  "text.secondary": {
+    "$type": "color",
+    "$value": "#FBCFE8"
+  },
+  "text.muted": {
+    "$type": "color",
+    "$value": "#F9A8D4"
+  },
+  "text.faint": {
+    "$type": "color",
+    "$value": "#F472B6"
+  },
+  "accent.contrast": {
+    "$type": "color",
+    "$value": "#1A0F15"
+  },
+  "semantic.danger.bg": {
+    "$type": "color",
+    "$value": "#F472B62E"
+  },
+  "semantic.danger.fg": {
+    "$type": "color",
+    "$value": "#F9A8D4"
+  },
+  "semantic.info.bg": {
+    "$type": "color",
+    "$value": "#E879F92E"
+  },
+  "semantic.info.fg": {
+    "$type": "color",
+    "$value": "#F0ABFC"
+  },
+  "selection.bg": {
+    "$type": "color",
+    "$value": "#F472B647"
+  },
+  "focus.ring": {
+    "$type": "color",
+    "$value": "#F9A8D424"
+  }
+}

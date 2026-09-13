@@ -1,0 +1,29 @@
+{
+  "tokenSetOrder": [
+    "snow-light",
+    "snow-dark",
+    "midnight-blue-light",
+    "midnight-blue-dark",
+    "forest-green-light",
+    "forest-green-dark",
+    "rose-pink-light",
+    "rose-pink-dark",
+    "solarized-light",
+    "solarized-dark",
+    "nord-light",
+    "nord-dark",
+    "dracula-light",
+    "dracula-dark",
+    "tokyo-night-light",
+    "tokyo-night-dark",
+    "github-light",
+    "github-dark",
+    "google-light",
+    "google-dark",
+    "gruvbox-light",
+    "gruvbox-dark",
+    "cream-light",
+    "cream-dark"
+  ],
+  "note": "单 group Theme,24 主题互斥激活;每 set 即该组合全量 resolved 值"
+}

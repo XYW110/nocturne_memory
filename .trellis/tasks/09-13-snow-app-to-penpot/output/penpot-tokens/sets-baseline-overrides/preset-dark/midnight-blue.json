@@ -1,0 +1,70 @@
+{
+  "bg.base": {
+    "$type": "color",
+    "$value": "#020617"
+  },
+  "surface.base": {
+    "$type": "color",
+    "$value": "#0F172A"
+  },
+  "surface.2": {
+    "$type": "color",
+    "$value": "#1E293B"
+  },
+  "surface.3": {
+    "$type": "color",
+    "$value": "#334155"
+  },
+  "surface.hover": {
+    "$type": "color",
+    "$value": "#1E293B"
+  },
+  "surface.active": {
+    "$type": "color",
+    "$value": "#334155"
+  },
+  "surface.chrome": {
+    "$type": "color",
+    "$value": "#1E293B"
+  },
+  "border.base": {
+    "$type": "color",
+    "$value": "#334155"
+  },
+  "border.strong": {
+    "$type": "color",
+    "$value": "#475569"
+  },
+  "text.primary": {
+    "$type": "color",
+    "$value": "#F1F5F9"
+  },
+  "text.secondary": {
+    "$type": "color",
+    "$value": "#CBD5E1"
+  },
+  "text.muted": {
+    "$type": "color",
+    "$value": "#94A3B8"
+  },
+  "text.faint": {
+    "$type": "color",
+    "$value": "#64748B"
+  },
+  "accent.contrast": {
+    "$type": "color",
+    "$value": "#0F172A"
+  },
+  "semantic.info.bg": {
+    "$type": "color",
+    "$value": "#3B82F633"
+  },
+  "selection.bg": {
+    "$type": "color",
+    "$value": "#3B82F64D"
+  },
+  "focus.ring": {
+    "$type": "color",
+    "$value": "#94A3B824"
+  }
+}

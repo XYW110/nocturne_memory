@@ -27,3 +27,4 @@ backups/
 
 # Runtime databases (SQLite + WAL + backups)
 database/
+temp/

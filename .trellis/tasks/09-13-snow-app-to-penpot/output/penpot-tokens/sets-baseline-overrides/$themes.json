@@ -1,0 +1,123 @@
+[
+  {
+    "id": "mode.light",
+    "name": "light",
+    "group": "Mode",
+    "selectedTokenSets": {
+      "light": "enabled"
+    }
+  },
+  {
+    "id": "mode.dark",
+    "name": "dark",
+    "group": "Mode",
+    "selectedTokenSets": {
+      "dark": "enabled"
+    }
+  },
+  {
+    "id": "preset.snow",
+    "name": "snow",
+    "group": "Preset",
+    "selectedTokenSets": {}
+  },
+  {
+    "id": "preset.midnight-blue",
+    "name": "midnight-blue",
+    "group": "Preset",
+    "selectedTokenSets": {
+      "preset-light/midnight-blue": "enabled",
+      "preset-dark/midnight-blue": "enabled"
+    }
+  },
+  {
+    "id": "preset.forest-green",
+    "name": "forest-green",
+    "group": "Preset",
+    "selectedTokenSets": {
+      "preset-light/forest-green": "enabled",
+      "preset-dark/forest-green": "enabled"
+    }
+  },
+  {
+    "id": "preset.rose-pink",
+    "name": "rose-pink",
+    "group": "Preset",
+    "selectedTokenSets": {
+      "preset-light/rose-pink": "enabled",
+      "preset-dark/rose-pink": "enabled"
+    }
+  },
+  {
+    "id": "preset.solarized",
+    "name": "solarized",
+    "group": "Preset",
+    "selectedTokenSets": {
+      "preset-light/solarized": "enabled",
+      "preset-dark/solarized": "enabled"
+    }
+  },
+  {
+    "id": "preset.nord",
+    "name": "nord",
+    "group": "Preset",
+    "selectedTokenSets": {
+      "preset-light/nord": "enabled",
+      "preset-dark/nord": "enabled"
+    }
+  },
+  {
+    "id": "preset.dracula",
+    "name": "dracula",
+    "group": "Preset",
+    "selectedTokenSets": {
+      "preset-light/dracula": "enabled",
+      "preset-dark/dracula": "enabled"
+    }
+  },
+  {
+    "id": "preset.tokyo-night",
+    "name": "tokyo-night",
+    "group": "Preset",
+    "selectedTokenSets": {
+      "preset-light/tokyo-night": "enabled",
+      "preset-dark/tokyo-night": "enabled"
+    }
+  },
+  {
+    "id": "preset.github",
+    "name": "github",
+    "group": "Preset",
+    "selectedTokenSets": {
+      "preset-light/github": "enabled",
+      "preset-dark/github": "enabled"
+    }
+  },
+  {
+    "id": "preset.google",
+    "name": "google",
+    "group": "Preset",
+    "selectedTokenSets": {
+      "preset-light/google": "enabled",
+      "preset-dark/google": "enabled"
+    }
+  },
+  {
+    "id": "preset.gruvbox",
+    "name": "gruvbox",
+    "group": "Preset",
+    "selectedTokenSets": {
+      "preset-light/gruvbox": "enabled",
+      "preset-dark/gruvbox": "enabled"
+    }
+  },
+  {
+    "id": "preset.cream",
+    "name": "cream",
+    "group": "Preset",
+    "selectedTokenSets": {
+      "preset-light/cream": "enabled",
+      "preset-dark/cream": "enabled"
+    }
+  }
+]

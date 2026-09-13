@@ -1,0 +1,5 @@
+{"file": "temp/Snow-App-Design-System/DESIGN.md", "reason": "设计语言规范:浮动岛/单色accent/圆角阶梯/字阶,组件重建依据"}
+{"file": "temp/Snow-App-Design-System/USAGE.md", "reason": "令牌使用方式与命名约定"}
+{"file": "temp/Snow-App-Design-System/tokens.css", "reason": "令牌唯一完整来源:基线+dark+11预设块+响应式块,转换脚本的输入"}
+{"file": "temp/Snow-App-Design-System/design-tokens.json", "reason": "W3C 结构参考(旧草案格式 value/type,需转 DTCG $value/$type)"}
+{"file": "temp/Snow-App-Design-System/components.manifest.json", "reason": "18 组件片段清单,P2 组件重建的验收清单"}
