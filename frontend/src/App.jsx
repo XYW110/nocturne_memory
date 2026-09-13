@@ -141,7 +141,7 @@ function Layout() {
   return (
     <div className="flex flex-col h-screen bg-[var(--bg-base)] p-[var(--gap-island)] gap-[var(--gap-island)]">
       {/* Top Navigation Bar (island card) */}
-      <div className="h-12 rounded-[var(--radius-xl)] bg-[var(--surface)] shadow-[var(--island-shadow)] border border-[var(--border)] flex items-center px-4 gap-6 flex-shrink-0 z-10 max-[720px]:px-2.5 max-[720px]:gap-3">
+      <div className="h-12 rounded-[var(--radius-xl)] bg-[var(--surface)] shadow-[var(--island-shadow)] border border-[var(--border)] flex items-center px-4 gap-6 flex-shrink-0 z-10 max-[720px]:px-2.5 max-[720px]:gap-3 overflow-hidden">
         <div className="font-bold text-[var(--text-primary)] flex items-center gap-2 mr-4 whitespace-nowrap max-[640px]:mr-0 max-[640px]:hidden">
           <LayoutGrid className="w-5 h-5 text-[var(--text-primary)] flex-shrink-0" />
           <span data-testid="app-brand">{t('app.nav.brand')}</span>
@@ -152,7 +152,7 @@ function Layout() {
             to="/review"
             className={navLinkClass}
           >
-            <ShieldCheck size={16} />
+            <ShieldCheck size={16} className="max-[640px]:hidden" />
             {t('app.nav.review')}
           </NavLink>
 
@@ -160,7 +160,7 @@ function Layout() {
             to="/memory"
             className={navLinkClass}
           >
-            <Database size={16} />
+            <Database size={16} className="max-[640px]:hidden" />
             {t('app.nav.memory')}
           </NavLink>
 
@@ -168,7 +168,7 @@ function Layout() {
             to="/maintenance"
             className={navLinkClass}
           >
-            <Sparkles size={16} />
+            <Sparkles size={16} className="max-[640px]:hidden" />
             {t('app.nav.maintenance')}
           </NavLink>
         </nav>
@@ -180,7 +180,7 @@ function Layout() {
             className="flex items-center gap-2 px-3 py-1.5 min-h-[var(--tap-target)] rounded-[var(--radius-md)] text-sm font-medium whitespace-nowrap transition-colors text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] max-[640px]:px-2.5"
           >
             <Settings size={16} />
-            {t('app.nav.settings')}
+            <span className="max-[640px]:hidden">{t('app.nav.settings')}</span>
           </button>
         </div>
       </div>
