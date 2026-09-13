@@ -25,7 +25,7 @@ function StatusBadge({ status, t }) {
 function RequestCard({ req, onApprove, onReject, t }) {
   const snap = req.emotional_snapshot;
   return (
-    <div className="bg-[var(--surface)] border border-[var(--border)] rounded-lg p-3 space-y-2">
+    <div className="bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-lg)] p-3 space-y-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-sm text-[var(--text-primary)]">
           <span>{req.from_label}</span>
@@ -130,7 +130,7 @@ export default function RelationshipPanel({ refreshTrigger = 0 }) {
   return (
     <div className="space-y-4 pt-4">
       {/* Current relationship */}
-      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-lg p-3">
+      <div className="bg-[var(--surface-solid)] border border-[var(--border)] rounded-[var(--radius-lg)] p-3">
         <div className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)] mb-2">
           <Users size={12} className="text-[var(--text-muted)]" />
           {t('settings.relationship.current_title')}

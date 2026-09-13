@@ -350,7 +350,7 @@ export default function TemplatesSection({ onBorn }) {
         {templates.map(tpl => {
           const desc = i18n.language?.startsWith('zh') ? tpl.description : (tpl.description_en || tpl.description);
           return (
-            <div key={tpl.id} className="bg-[var(--surface)] border border-[var(--border)] hover:border-[var(--border-strong)] rounded-lg p-3 transition-all">
+            <div key={tpl.id} className="bg-[var(--surface-solid)] border border-[var(--border)] hover:border-[var(--text-faint)] rounded-[var(--radius-lg)] p-3 transition-colors duration-150">
               <div className="flex items-start gap-3">
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium text-[var(--text-primary)] flex items-center gap-2">
