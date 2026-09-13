@@ -134,7 +134,7 @@ function Layout() {
   const isMaintenancePage = location.pathname.startsWith('/maintenance');
 
   const navLinkClass = ({ isActive }) => clsx(
-    "flex items-center gap-2 px-3 py-1.5 min-h-[var(--tap-target)] rounded-[var(--radius-md)] text-sm font-medium transition-colors max-[640px]:px-2.5 max-[640px]:text-xs",
+    "flex items-center gap-2 px-3 py-1.5 min-h-[var(--tap-target)] rounded-[var(--radius-md)] text-sm font-medium whitespace-nowrap transition-colors max-[640px]:px-2.5 max-[640px]:text-xs",
     isActive ? "bg-[var(--surface-hover)] text-[var(--text-primary)]" : "text-[var(--text-muted)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-secondary)]"
   );
 
@@ -142,8 +142,8 @@ function Layout() {
     <div className="flex flex-col h-screen bg-[var(--bg-base)] p-[var(--gap-island)] gap-[var(--gap-island)]">
       {/* Top Navigation Bar (island card) */}
       <div className="h-12 rounded-[var(--radius-xl)] bg-[var(--surface)] shadow-[var(--island-shadow)] border border-[var(--border)] flex items-center px-4 gap-6 flex-shrink-0 z-10 max-[720px]:px-2.5 max-[720px]:gap-3">
-        <div className="font-bold text-[var(--text-primary)] flex items-center gap-2 mr-4 max-[640px]:mr-2">
-          <LayoutGrid className="w-5 h-5 text-[var(--text-primary)]" />
+        <div className="font-bold text-[var(--text-primary)] flex items-center gap-2 mr-4 whitespace-nowrap max-[640px]:mr-0 max-[640px]:hidden">
+          <LayoutGrid className="w-5 h-5 text-[var(--text-primary)] flex-shrink-0" />
           <span data-testid="app-brand">{t('app.nav.brand')}</span>
         </div>
 
@@ -177,7 +177,7 @@ function Layout() {
           {!isReviewPage && !isMaintenancePage && <NamespaceSelector />}
           <button
             onClick={() => window.dispatchEvent(new CustomEvent('open-settings'))}
-            className="flex items-center gap-2 px-3 py-1.5 min-h-[var(--tap-target)] rounded-[var(--radius-md)] text-sm font-medium transition-colors text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)]"
+            className="flex items-center gap-2 px-3 py-1.5 min-h-[var(--tap-target)] rounded-[var(--radius-md)] text-sm font-medium whitespace-nowrap transition-colors text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-hover)] max-[640px]:px-2.5"
           >
             <Settings size={16} />
             {t('app.nav.settings')}
