@@ -47,11 +47,14 @@
 ## P3 布局样例(2026-09-13 补做,任务归档后追加)
 
 - **Layouts 页新建 `app-shell-desktop`(1280×800)应用壳样例**:bg.base 底板 + 顶部三岛(brand/nav/actions)+ 侧栏岛(Workspace 导航,active 行 accent 左条)+ 队列岛(内嵌 **lists/list-row 组件实例**,演示复用)+ 聊天主岛(general 频道头、3 条消息气泡、composer 输入条)。全部令牌绑定,随主题换肤
+- **平板/移动壳(同日追加)**:`app-shell-tablet`(800×760,双行顶栏 + nav+main 双列 + **detail-panel 组件实例作滑出层**)、`app-shell-mobile`(390×760,紧凑单行顶栏 + **breadcrumb-select 组件实例作路径选择器** + 单列聊天 + 40px 触达 composer)。三个壳并排放在 Layouts 页,令牌绑定可整体换肤
+- **文件组织决策**:设计体系(令牌+组件+布局)保持在**同一个 Penpot 文件**——令牌目录是文件级的,无跨文件同步/发布;将来做具体产品设计时新建产品文件,把本文件 Publish 成链接库复用组件(组件实例的令牌绑定如何跨库解析未实测,届时先拿一个组件验证)
 - ui_kits/app 的 JSX 是通用脚手架(回退色不是 snow 调色板),布局权威以 DESIGN.md 浮动岛规范为准;样例按其三栏结构(侧栏 ~260 / 列表 ~340 / 主区 ~620,gap 10px)落地
 - **响应式令牌最终结论**:`--content-max`、`--tap-target`、断点值均为 web 实现层令牌,Penpot 无对应物,不迁移(记入 report.md)
-- 布局页踩坑补充:跨页移动 shape 无 API(Page 对象无 appendChild;remove/修改需目标页 active),页重建比搬移省事;`createPage` 忽略名称参数(自动命名),建后需手动 `page.name =`;组件库 `components[].name` 是叶子名,全路径在主实例名上
+- 布局页踩坑补充:跨页移动 shape 无 API(Page 对象无 appendChild;remove/修改需目标页 active),页重建比搬移省事;`createPage` 忽略名称参数(自动命名),建后需手动 `page.name =`;组件库 `components[].name` 是叶子名,全路径在主实例名上;**execute_code 顶层 const 跨调用持久**(被取消的调用也会留下声明),长构建代码用 `storage.result = await (async () => {...})(); return storage.result;` 包裹防重名,并做幂等(开头移除同名旧板)
 
 ## 后续(P3,可选)
 
 - ~~ui_kits/app 的应用级组件(Sidebar/ChatArea)作为页面级 layout 样例~~(已完成,见上)
+- ~~平板/移动布局样例~~(已完成,见上)
 - 响应式令牌(--content-max 等)保持"web 实现层令牌,不迁移"结论
