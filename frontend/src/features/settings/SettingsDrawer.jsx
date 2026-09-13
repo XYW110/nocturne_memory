@@ -113,7 +113,7 @@ export default function SettingsDrawer() {
         className="fixed inset-0 bg-black/50 z-40 animate-in fade-in duration-200"
         onClick={() => setIsOpen(false)}
       />
-      <div className="fixed inset-y-0 right-0 w-[600px] bg-[var(--surface-solid)] border-l border-[var(--border)] shadow-[var(--island-shadow)] z-50 flex flex-col animate-in slide-in-from-right duration-300">
+      <div className="fixed inset-y-0 right-0 w-[600px] bg-[var(--surface-solid)] border-l border-[var(--border)] shadow-[var(--island-shadow)] z-50 flex flex-col animate-in slide-in-from-right duration-300 max-[640px]:inset-x-3 max-[640px]:top-3 max-[640px]:bottom-3 max-[640px]:h-auto max-[640px]:w-auto max-[640px]:rounded-[var(--radius-xl)] max-[640px]:border max-[640px]:slide-in-from-bottom-4">
         <div className="border-b border-[var(--border)] bg-[var(--surface-solid)] px-6 pt-6 flex-shrink-0">
           <div className="flex items-start justify-between mb-6">
             <div>
